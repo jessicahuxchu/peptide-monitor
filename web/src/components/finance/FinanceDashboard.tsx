@@ -7,20 +7,23 @@ import { useDashboard } from "@/components/providers/DashboardProvider";
 import {
   salesRecords as fallbackSales,
   aggregateSales,
+  AU_STATES,
 } from "@/lib/finance/seed-data";
 
-type GroupBy = "country" | "region" | "product" | "category" | "date";
+type GroupBy = "region" | "product" | "category" | "date";
 
 export function FinanceDashboard() {
   const t = useTranslations("finance");
   const { data } = useDashboard();
-  const salesRecords = data.finance.records.length ? data.finance.records : fallbackSales;
-  const financeCountries = [...new Set(salesRecords.map((r) => r.country))];
-  const financeRegions = [...new Set(salesRecords.map((r) => r.region))];
+  const allRecords = data.finance.records.length ? data.finance.records : fallbackSales;
+  const salesRecords = useMemo(
+    () => allRecords.filter((r) => r.country === "AU"),
+    [allRecords],
+  );
   const financeProducts = [...new Set(salesRecords.map((r) => r.product))];
   const financeCategories = [...new Set(salesRecords.map((r) => r.category))];
   const financeMonths = [...new Set(salesRecords.map((r) => r.date))].sort();
-  const [country, setCountry] = useState<string>("all");
+
   const [region, setRegion] = useState<string>("all");
   const [product, setProduct] = useState<string>("all");
   const [category, setCategory] = useState<string>("all");
@@ -29,31 +32,37 @@ export function FinanceDashboard() {
 
   const filtered = useMemo(() => {
     return salesRecords.filter((r) => {
-      if (country !== "all" && r.country !== country) return false;
       if (region !== "all" && r.region !== region) return false;
       if (product !== "all" && r.product !== product) return false;
       if (category !== "all" && r.category !== category) return false;
       if (month !== "all" && r.date !== month) return false;
       return true;
     });
-  }, [country, region, product, category, month]);
+  }, [salesRecords, region, product, category, month]);
 
   const aggregated = useMemo(() => aggregateSales(filtered, groupBy), [filtered, groupBy]);
   const maxRevenue = Math.max(...aggregated.map((a) => a.revenue), 1);
   const totalRevenue = filtered.reduce((s, r) => s + r.revenue, 0);
   const totalQuantity = filtered.reduce((s, r) => s + r.quantity, 0);
 
-  const regionsForCountry =
-    country === "all"
-      ? financeRegions
-      : [...new Set(salesRecords.filter((r) => r.country === country).map((r) => r.region))];
-
   return (
     <CommandCard title={t("title")} subtitle={t("subtitle")}>
-      {/* Filters */}
       <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
-        <FilterSelect label={t("country")} value={country} onChange={setCountry} options={financeCountries} allLabel={t("all")} />
-        <FilterSelect label={t("region")} value={region} onChange={setRegion} options={regionsForCountry} allLabel={t("all")} />
+        <div>
+          <label className="mb-1 block text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
+            {t("country")}
+          </label>
+          <select disabled className="input-field text-xs opacity-70">
+            <option value="AU">{t("australia")}</option>
+          </select>
+        </div>
+        <FilterSelect
+          label={t("region")}
+          value={region}
+          onChange={setRegion}
+          options={[...AU_STATES]}
+          allLabel={t("all")}
+        />
         <FilterSelect label={t("product")} value={product} onChange={setProduct} options={financeProducts} allLabel={t("all")} />
         <FilterSelect label={t("category")} value={category} onChange={setCategory} options={financeCategories} allLabel={t("all")} />
         <FilterSelect label={t("period")} value={month} onChange={setMonth} options={financeMonths} allLabel={t("all")} />
@@ -68,14 +77,12 @@ export function FinanceDashboard() {
           >
             <option value="product">{t("product")}</option>
             <option value="category">{t("category")}</option>
-            <option value="country">{t("country")}</option>
             <option value="region">{t("region")}</option>
             <option value="date">{t("period")}</option>
           </select>
         </div>
       </div>
 
-      {/* Summary KPIs */}
       <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <KpiBox label={t("totalRevenue")} value={formatCurrency(totalRevenue)} />
         <KpiBox label={t("totalQuantity")} value={`${totalQuantity.toLocaleString()} g`} />
@@ -83,7 +90,6 @@ export function FinanceDashboard() {
         <KpiBox label={t("avgOrderValue")} value={filtered.length ? formatCurrency(Math.round(totalRevenue / filtered.length)) : "—"} />
       </div>
 
-      {/* Bar chart */}
       <div className="mb-5 space-y-2">
         <h4 className="text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
           {t("revenueBreakdown")}
@@ -112,13 +118,11 @@ export function FinanceDashboard() {
         )}
       </div>
 
-      {/* Detail table */}
       <div className="w-full max-w-full overflow-x-auto">
         <table className="w-full min-w-0 text-left text-xs">
           <thead>
             <tr className="border-b border-command-border text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
               <th className="pb-2 pr-3">{t("period")}</th>
-              <th className="pb-2 pr-3">{t("country")}</th>
               <th className="pb-2 pr-3">{t("region")}</th>
               <th className="pb-2 pr-3">{t("product")}</th>
               <th className="pb-2 pr-3">{t("category")}</th>
@@ -130,7 +134,6 @@ export function FinanceDashboard() {
             {filtered.map((r) => (
               <tr key={r.id} className="border-b border-command-border/40 hover:bg-command-card-elevated/50">
                 <td className="py-2 pr-3 text-command-text-muted">{r.date}</td>
-                <td className="py-2 pr-3">{r.country}</td>
                 <td className="py-2 pr-3">{r.region}</td>
                 <td className="py-2 pr-3 font-medium text-command-teal-bright">{r.product}</td>
                 <td className="py-2 pr-3 text-command-text-secondary">{r.category}</td>

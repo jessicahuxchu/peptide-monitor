@@ -3,12 +3,14 @@
 import { useTranslations } from "next-intl";
 import { X, Pencil } from "lucide-react";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import type { PathEdge, PathNode } from "@/lib/supply-chain/types";
+import { NodeDocumentList } from "./NodeDocumentList";
+import type { DocumentRecord, PathEdge, PathNode } from "@/lib/supply-chain/types";
 import { cn } from "@/lib/utils";
 
 interface NodeDetailPanelProps {
   node: PathNode;
   incomingEdge?: PathEdge;
+  nodeDocuments?: DocumentRecord[];
   onClose: () => void;
   onEdit: () => void;
 }
@@ -16,6 +18,7 @@ interface NodeDetailPanelProps {
 export function NodeDetailPanel({
   node,
   incomingEdge,
+  nodeDocuments = [],
   onClose,
   onEdit,
 }: NodeDetailPanelProps) {
@@ -125,6 +128,13 @@ export function NodeDetailPanel({
             <p className="text-sm text-command-text-secondary">{node.notes}</p>
           </div>
         )}
+
+        <div>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-command-text-muted">
+            {t("documents.title")}
+          </p>
+          <NodeDocumentList documents={nodeDocuments} />
+        </div>
       </div>
     </aside>
   );

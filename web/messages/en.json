@@ -5,9 +5,9 @@
   },
   "nav": {
     "strategic": "Strategic",
+    "finance": "Finance",
     "supplyChain": "Supply Chain",
     "regulatory": "Regulatory",
-    "documents": "Documents",
     "intelligence": "Intelligence",
     "productMonitor": "SKU Monitor",
     "relations": "Relations",
@@ -127,7 +127,7 @@
     "resetSeed": "Reset to seed data",
     "offlineMode": "Offline mode — configure Supabase in .env.local to persist data.",
     "tabs": {
-      "map": "Unified Map",
+      "map": "Path Map",
       "roles": "Roles & Companies",
       "documents": "Documents"
     },
@@ -233,14 +233,15 @@
       "critical": "Critical"
     },
     "documents": {
-      "title": "Document Tracker",
+      "title": "Document Requirements",
       "subtitle": "GMP, COA, permits, and customer-specific files",
       "all": "All",
       "type": "Type",
       "product": "Product",
       "linkedNode": "Linked Node",
       "status": "Status",
-      "expiry": "Expiry"
+      "expiry": "Expiry",
+      "noDocsForNode": "No document requirements linked to this node"
     },
     "unifiedMap": {
       "title": "Unified Supply Chain Paths",
@@ -356,12 +357,12 @@
       "description": "Multi-source signals: news/legal, insider intel, social media, downstream 2C platforms."
     },
     "productMonitor": {
-      "title": "SKU Monitor",
-      "description": "AU benchmark platform coverage, blends, spec consensus, and three-tier stocking decisions."
+      "title": "Product Analysis",
+      "description": "Peptide coverage, regulatory risk, and opportunity assessment across benchmark platforms."
     },
     "relations": {
       "title": "Suppliers & Customers",
-      "description": "Supplier credentials vs customer demands — click a product to find matching suppliers."
+      "description": "Browse in table view; expand rows for details. One supplier may cover multiple product categories."
     },
     "risk": {
       "title": "Risk Watchtower",
@@ -373,7 +374,7 @@
     },
     "inbox": {
       "title": "Agent Inbox",
-      "description": "Async team input — AI proposes updates for your confirmation."
+      "description": "Pending updates and AI assistant chat."
     }
   },
   "documentsPage": {
@@ -395,6 +396,9 @@
     "heat": "Heat",
     "regulatory": "Regulatory",
     "skuRanking": "SKU Opportunity Ranking",
+    "topOpportunity": "Top Opportunity",
+    "avgOpportunity": "Avg Opportunity",
+    "signalCount": "Signal Count",
     "sources": {
       "news_legal": "News / Legal / Officials",
       "insider": "Insider Intel",
@@ -409,20 +413,20 @@
     }
   },
   "productMonitor": {
-    "title": "SKU Monitor",
-    "subtitle": "12 AU benchmark platforms · 221 peptides · three-tier stocking",
-    "introShort": "23 decision SKUs above; full catalog of 221 expandable below. Coverage ≠ sales.",
-    "intro": "Based on benchmark platform matrix & supplier stocking recommendations (2026-06-22). Platform coverage reflects listing prevalence, not actual sales. Confirm customer volume, credentials, and compliance docs before purchasing.",
+    "title": "Product Analysis",
+    "subtitle": "12 AU benchmark platforms · 221 peptides · three-tier opportunity view",
+    "introShort": "Key conclusions above; 23 priority SKUs for detailed analysis below. Coverage ≠ sales.",
+    "intro": "Multi-dimensional analysis from benchmark platform matrices (2026-06-22). Platform coverage reflects listing prevalence, not actual sales; combine with regulatory risk and customer demand before decisions.",
     "sources": "Sources",
     "tabs": {
-      "matrix": "Decision Matrix",
+      "matrix": "Analysis Matrix",
       "blends": "Blend Formulas",
-      "strategy": "Stocking Strategy"
+      "strategy": "Conclusions"
     },
     "tiers": {
-      "core": "Core Stock",
-      "trial": "Trial Stock",
-      "avoid": "Not Recommended"
+      "core": "Core",
+      "trial": "Watch",
+      "avoid": "Avoid"
     },
     "kpi": {
       "core": "Core SKUs",
@@ -500,10 +504,10 @@
       "regulatory": "AU Regulatory Notes"
     },
     "strategy": {
-      "title": "Three-Tier Stocking",
-      "coreTitle": "Tier 1 · Core Stock",
-      "trialTitle": "Tier 2 · Trial Batch",
-      "avoidTitle": "Tier 3 · Order Only"
+      "title": "Analysis Summary",
+      "coreTitle": "Tier 1 · Core Opportunities",
+      "trialTitle": "Tier 2 · Watch List",
+      "avoidTitle": "Tier 3 · Avoid"
     },
     "catalog": {
       "title": "Full Platform Catalog",
@@ -524,8 +528,9 @@
   },
   "finance": {
     "title": "Financial Data",
-    "subtitle": "Sales details & aggregates by country, region, category, and time",
+    "subtitle": "Sales details & aggregates by Australian state, category, and time",
     "country": "Country",
+    "australia": "Australia (AU)",
     "region": "Region",
     "product": "Product",
     "category": "Category",
@@ -544,6 +549,15 @@
   "relationsPage": {
     "suppliers": "Suppliers",
     "customers": "Customers",
+    "supplierName": "Supplier",
+    "customerName": "Customer",
+    "location": "Location",
+    "productCount": "Categories",
+    "products": "categories",
+    "docCoverage": "Documents",
+    "docs": "docs",
+    "productOffers": "Product Offers",
+    "status": "Status",
     "demandProduct": "Product",
     "demandQuantity": "Quantity",
     "targetPrice": "Target Price",
@@ -610,15 +624,23 @@
     "suggestedActions": "Suggested Actions"
   },
   "inboxPage": {
-    "placeholder": "Paste supplier quote, regulatory update, or customer requirement…",
+    "placeholder": "Paste supplier quote or regulatory update…",
     "send": "Send",
     "proposedUpdates": "Proposed Updates",
     "confirm": "Confirm",
     "reject": "Reject",
     "confirmed": "Confirmed & Applied",
     "rejected": "Rejected",
-    "analyzing": "Analyzing input…",
+    "analyzing": "Thinking…",
     "offlineMode": "Offline mode — configure Supabase to persist inbox submissions.",
-    "dbConnected": "Connected to PostgreSQL via Supabase"
+    "dbConnected": "Connected to PostgreSQL via Supabase",
+    "pendingTitle": "Pending",
+    "pendingSubtitle": "AI-parsed structured updates",
+    "noPending": "No pending items",
+    "chatTitle": "AI Assistant",
+    "chatSubtitle": "Ask about supply chain, regulatory, and product opportunities",
+    "chatWelcome": "Hello, I'm the Peptide Monitor assistant. Ask about supply paths, regulatory updates, SKU opportunities, or supplier matching.",
+    "chatPlaceholder": "Ask a question, e.g. What's the AU opportunity for BPC-157?",
+    "chatError": "Unable to respond right now. Please try again."
   }
 }

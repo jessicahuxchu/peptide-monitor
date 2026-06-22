@@ -1,12 +1,17 @@
+export interface SupplierProductOffer {
+  product: string;
+  price: number;
+  unit: string;
+  moq: string;
+}
+
 export interface SupplierProfile {
   id: string;
   name: string;
   contact: string;
   email: string;
   products: string[];
-  price: number;
-  unit: string;
-  moq: string;
+  productOffers: SupplierProductOffer[];
   documents: string[];
   country: string;
   region: string;
@@ -33,10 +38,12 @@ export const supplierProfiles: SupplierProfile[] = [
     name: "Wuhan PeptideTech Co.",
     contact: "Li Wei",
     email: "li.wei@peptidetech.cn",
-    products: ["BPC-157", "TB-500"],
-    price: 12,
-    unit: "USD/mg",
-    moq: "100g",
+    products: ["BPC-157", "TB-500", "GHK-Cu"],
+    productOffers: [
+      { product: "BPC-157", price: 12, unit: "USD/mg", moq: "100g" },
+      { product: "TB-500", price: 14, unit: "USD/mg", moq: "100g" },
+      { product: "GHK-Cu", price: 9.5, unit: "USD/mg", moq: "50g" },
+    ],
     documents: ["gmp_cert", "coa", "quality_cert"],
     country: "CN",
     region: "Hubei",
@@ -46,10 +53,12 @@ export const supplierProfiles: SupplierProfile[] = [
     name: "Hybio Pharmaceutical",
     contact: "Zhang Hao",
     email: "zhang@hybio.com",
-    products: ["BPC-157", "GHK-Cu"],
-    price: 11.5,
-    unit: "USD/mg",
-    moq: "50g",
+    products: ["BPC-157", "GHK-Cu", "Semaglutide"],
+    productOffers: [
+      { product: "BPC-157", price: 11.5, unit: "USD/mg", moq: "50g" },
+      { product: "GHK-Cu", price: 8.8, unit: "USD/mg", moq: "50g" },
+      { product: "Semaglutide", price: 22, unit: "USD/mg", moq: "20g" },
+    ],
     documents: ["gmp_cert", "coa"],
     country: "CN",
     region: "Jiangsu",
@@ -59,10 +68,11 @@ export const supplierProfiles: SupplierProfile[] = [
     name: "Shanghai BioExport Trading",
     contact: "Chen Ming",
     email: "chen@bioexport.cn",
-    products: ["BPC-157"],
-    price: 14.5,
-    unit: "USD/mg",
-    moq: "50g",
+    products: ["BPC-157", "TB-500"],
+    productOffers: [
+      { product: "BPC-157", price: 14.5, unit: "USD/mg", moq: "50g" },
+      { product: "TB-500", price: 16, unit: "USD/mg", moq: "50g" },
+    ],
     documents: ["coa", "invoice_packing", "certificate_of_origin"],
     country: "CN",
     region: "Shanghai",
@@ -72,10 +82,12 @@ export const supplierProfiles: SupplierProfile[] = [
     name: "Suzhou BioPeptide Labs",
     contact: "Wang Mei",
     email: "wang@biopeptide.cn",
-    products: ["TB-500", "GHK-Cu"],
-    price: 13,
-    unit: "USD/mg",
-    moq: "100g",
+    products: ["TB-500", "GHK-Cu", "BPC-157"],
+    productOffers: [
+      { product: "TB-500", price: 13, unit: "USD/mg", moq: "100g" },
+      { product: "GHK-Cu", price: 10.2, unit: "USD/mg", moq: "100g" },
+      { product: "BPC-157", price: 13.5, unit: "USD/mg", moq: "100g" },
+    ],
     documents: ["coa", "gmp_cert"],
     country: "CN",
     region: "Jiangsu",
@@ -163,4 +175,11 @@ export function matchSuppliersForDemand(
     if (!s.products.includes(demand.product)) return false;
     return demand.requiredDocuments.every((doc) => s.documents.includes(doc));
   });
+}
+
+export function getOfferForProduct(
+  supplier: SupplierProfile,
+  product: string,
+): SupplierProductOffer | undefined {
+  return supplier.productOffers.find((o) => o.product === product);
 }

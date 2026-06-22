@@ -35,6 +35,10 @@ export default function IntelligencePage() {
 
   const sorted = [...skuOpportunities].sort((a, b) => b.opportunityScore - a.opportunityScore);
   const trendIcon = { up: TrendingUp, down: TrendingDown, stable: Minus };
+  const topSku = sorted[0];
+  const avgOpportunity = Math.round(
+    sorted.reduce((s, sku) => s + sku.opportunityScore, 0) / sorted.length,
+  );
 
   const filteredSignals =
     activeSource === "all"
@@ -46,12 +50,76 @@ export default function IntelligencePage() {
   return (
     <div className="w-full max-w-full overflow-x-hidden p-4 md:p-6">
       <div className="space-y-6">
-        {/* Intelligence sources */}
-        <CommandCard
-          title={t("pages.intelligence.title")}
-          subtitle={t("pages.intelligence.description")}
-        >
-          {/* Source tabs */}
+        {/* Key metrics + SKU ranking */}
+        <CommandCard title={t("intelligencePage.skuRanking")} subtitle={t("pages.intelligence.description")}>
+          <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <KpiBox label={t("intelligencePage.topOpportunity")} value={topSku?.product ?? "—"} accent />
+            <KpiBox label={t("intelligencePage.opportunity")} value={String(topSku?.opportunityScore ?? "—")} />
+            <KpiBox label={t("intelligencePage.avgOpportunity")} value={String(avgOpportunity)} />
+            <KpiBox label={t("intelligencePage.signalCount")} value={String(intelligenceSignals.length)} />
+          </div>
+
+          <div className="w-full max-w-full overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-command-border text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
+                  <th className="pb-3 pr-4">#</th>
+                  <th className="pb-3 pr-4">{t("intelligencePage.product")}</th>
+                  <th className="pb-3 pr-4">{t("intelligencePage.opportunity")}</th>
+                  <th className="pb-3 pr-4">{t("intelligencePage.demand")}</th>
+                  <th className="pb-3 pr-4">{t("intelligencePage.localPrice")}</th>
+                  <th className="pb-3 pr-4">{t("intelligencePage.competitive")}</th>
+                  <th className="pb-3 pr-4">{t("intelligencePage.sensitivity")}</th>
+                  <th className="pb-3">{t("intelligencePage.trend")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sorted.map((sku, index) => {
+                  const TrendIcon = trendIcon[sku.trend];
+                  return (
+                    <tr
+                      key={sku.id}
+                      className="border-b border-command-border/50 transition-colors hover:bg-command-card-elevated/50"
+                    >
+                      <td className="py-3 pr-4 text-command-text-muted">{index + 1}</td>
+                      <td className="py-3 pr-4 font-semibold text-command-teal-bright">{sku.product}</td>
+                      <td className="py-3 pr-4">
+                        <span
+                          className={cn(
+                            "text-lg font-bold tabular-nums",
+                            sku.opportunityScore >= 60 ? "text-command-green" : sku.opportunityScore >= 40 ? "text-command-orange" : "text-command-text-secondary",
+                          )}
+                        >
+                          {sku.opportunityScore}
+                        </span>
+                      </td>
+                      <td className="py-3 pr-4 tabular-nums">{sku.demandScore}</td>
+                      <td className="py-3 pr-4 tabular-nums">${sku.localPrice}</td>
+                      <td className="py-3 pr-4 tabular-nums text-command-text-secondary">${sku.competitivePrice}</td>
+                      <td className="py-3 pr-4 tabular-nums">{(sku.regulatorySensitivity * 100).toFixed(0)}%</td>
+                      <td className="py-3">
+                        <div className="flex items-center gap-2">
+                          <TrendIcon
+                            className={cn(
+                              "h-3.5 w-3.5",
+                              sku.trend === "up" && "text-command-green",
+                              sku.trend === "down" && "text-command-red",
+                              sku.trend === "stable" && "text-command-text-muted",
+                            )}
+                          />
+                          <Sparkline data={sku.sparkline} width={64} height={20} />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </CommandCard>
+
+        {/* Market intelligence feed */}
+        <CommandCard title={t("pages.intelligence.title")}>
           <div className="mb-4 flex flex-wrap gap-2">
             <SourceTab
               active={activeSource === "all"}
@@ -79,7 +147,6 @@ export default function IntelligencePage() {
             })}
           </div>
 
-          {/* Source impact summary */}
           <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {sources.map((src) => {
               const signals = getSignalsBySource(src);
@@ -87,19 +154,13 @@ export default function IntelligencePage() {
               const cfg = sourceConfig[src];
               const Icon = cfg.icon;
               return (
-                <div
-                  key={src}
-                  className={cn("rounded-xl border p-3", cfg.border, cfg.bg)}
-                >
+                <div key={src} className={cn("rounded-xl border p-3", cfg.border, cfg.bg)}>
                   <div className="mb-2 flex items-center gap-1.5">
                     <Icon className={cn("h-3.5 w-3.5", cfg.color)} />
                     <span className="text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
                       {t(`intelligencePage.sources.${src}`)}
                     </span>
                   </div>
-                  <p className="text-[10px] text-command-text-muted">
-                    {t(`intelligencePage.sourceOutputs.${src}`)}
-                  </p>
                   <div className="mt-2 flex gap-3 text-xs">
                     <span className="text-command-teal-bright">
                       {t("intelligencePage.heat")}: {impact.heat > 0 ? "+" : ""}{impact.heat}
@@ -113,7 +174,6 @@ export default function IntelligencePage() {
             })}
           </div>
 
-          {/* Signal feed */}
           <div className="space-y-2">
             {filteredSignals.map((signal) => {
               const cfg = sourceConfig[signal.source];
@@ -177,68 +237,31 @@ export default function IntelligencePage() {
             })}
           </div>
         </CommandCard>
-
-        {/* SKU opportunity table */}
-        <CommandCard title={t("intelligencePage.skuRanking")}>
-          <div className="w-full max-w-full overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="border-b border-command-border text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
-                  <th className="pb-3 pr-4">#</th>
-                  <th className="pb-3 pr-4">{t("intelligencePage.product")}</th>
-                  <th className="pb-3 pr-4">{t("intelligencePage.opportunity")}</th>
-                  <th className="pb-3 pr-4">{t("intelligencePage.demand")}</th>
-                  <th className="pb-3 pr-4">{t("intelligencePage.localPrice")}</th>
-                  <th className="pb-3 pr-4">{t("intelligencePage.competitive")}</th>
-                  <th className="pb-3 pr-4">{t("intelligencePage.sensitivity")}</th>
-                  <th className="pb-3">{t("intelligencePage.trend")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sorted.map((sku, index) => {
-                  const TrendIcon = trendIcon[sku.trend];
-                  return (
-                    <tr
-                      key={sku.id}
-                      className="border-b border-command-border/50 transition-colors hover:bg-command-card-elevated/50"
-                    >
-                      <td className="py-3 pr-4 text-command-text-muted">{index + 1}</td>
-                      <td className="py-3 pr-4 font-semibold text-command-teal-bright">{sku.product}</td>
-                      <td className="py-3 pr-4">
-                        <span
-                          className={cn(
-                            "text-lg font-bold tabular-nums",
-                            sku.opportunityScore >= 60 ? "text-command-green" : sku.opportunityScore >= 40 ? "text-command-orange" : "text-command-text-secondary",
-                          )}
-                        >
-                          {sku.opportunityScore}
-                        </span>
-                      </td>
-                      <td className="py-3 pr-4 tabular-nums">{sku.demandScore}</td>
-                      <td className="py-3 pr-4 tabular-nums">${sku.localPrice}</td>
-                      <td className="py-3 pr-4 tabular-nums text-command-text-secondary">${sku.competitivePrice}</td>
-                      <td className="py-3 pr-4 tabular-nums">{(sku.regulatorySensitivity * 100).toFixed(0)}%</td>
-                      <td className="py-3">
-                        <div className="flex items-center gap-2">
-                          <TrendIcon
-                            className={cn(
-                              "h-3.5 w-3.5",
-                              sku.trend === "up" && "text-command-green",
-                              sku.trend === "down" && "text-command-red",
-                              sku.trend === "stable" && "text-command-text-muted",
-                            )}
-                          />
-                          <Sparkline data={sku.sparkline} width={64} height={20} />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </CommandCard>
       </div>
+    </div>
+  );
+}
+
+function KpiBox({
+  label,
+  value,
+  accent,
+}: {
+  label: string;
+  value: string;
+  accent?: boolean;
+}) {
+  return (
+    <div className="rounded-lg border border-command-border bg-command-card-elevated p-3">
+      <p className="text-[10px] text-command-text-muted">{label}</p>
+      <p
+        className={cn(
+          "mt-0.5 text-lg font-bold tabular-nums",
+          accent ? "text-command-teal-bright" : "text-command-text",
+        )}
+      >
+        {value}
+      </p>
     </div>
   );
 }

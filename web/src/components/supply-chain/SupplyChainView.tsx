@@ -4,39 +4,53 @@ import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { RotateCcw } from "lucide-react";
 import { useSupplyChainStore } from "@/hooks/useSupplyChainStore";
-import { supplyChainState } from "@/lib/supply-chain/seed-data";
-import { supplyChainRoles } from "@/lib/supply-chain/role-data";
+import { PATH_PRIMARY } from "@/lib/supply-chain/seed-data";
 import { CommandCard } from "@/components/ui/CommandCard";
-import { UnifiedPathMap } from "./UnifiedPathMap";
+import { PathFlowMap } from "./PathFlowMap";
+import { PathSelector } from "./PathSelector";
+import { NodeDetailPanel } from "./NodeDetailPanel";
+import { NodeEditDialog } from "./NodeEditDialog";
 import { RoleCompanyView } from "./RoleCompanyView";
 import { FeasibilityScore } from "./FeasibilityScore";
-import { DocumentTracker } from "./DocumentTracker";
-import { riskColor } from "@/lib/supply-chain/utils";
 import { cn } from "@/lib/utils";
 
-type Tab = "map" | "roles" | "documents";
+type Tab = "map" | "roles";
 
 export function SupplyChainView() {
   const t = useTranslations("supplyChain");
-  const { state, hydrated, usingDb, error, resetToSeed } = useSupplyChainStore();
+  const { state, hydrated, usingDb, error, resetToSeed, updateNode } =
+    useSupplyChainStore();
 
+  const [activePathId, setActivePathId] = useState(PATH_PRIMARY);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
-  const [selectedUnifiedNodeId, setSelectedUnifiedNodeId] = useState<string | null>(null);
+  const [editNodeId, setEditNodeId] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>("map");
 
-  const selectedRole = supplyChainRoles.find((r) => r.id === selectedRoleId);
-
-  const pathNodes = useMemo(
+  const nodes = useMemo(
     () =>
       state.nodes
-        .filter((n) => n.pathId === supplyChainState.paths[0].id)
+        .filter((n) => n.pathId === activePathId)
         .sort((a, b) => a.sequence - b.sequence),
-    [state.nodes],
+    [state.nodes, activePathId],
   );
 
-  const pathEdges = useMemo(
-    () => state.edges.filter((e) => e.pathId === supplyChainState.paths[0].id),
-    [state.edges],
+  const edges = useMemo(
+    () => state.edges.filter((e) => e.pathId === activePathId),
+    [state.edges, activePathId],
+  );
+
+  const selectedNode = nodes.find((n) => n.id === selectedNodeId);
+  const incomingEdge = selectedNode
+    ? edges.find((e) => e.toNodeId === selectedNode.id)
+    : undefined;
+  const editNode = state.nodes.find((n) => n.id === editNodeId);
+  const nodeDocuments = useMemo(
+    () =>
+      selectedNodeId
+        ? state.documents.filter((d) => d.linkedNodeId === selectedNodeId)
+        : [],
+    [state.documents, selectedNodeId],
   );
 
   if (!hydrated) {
@@ -58,7 +72,7 @@ export function SupplyChainView() {
 
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap gap-1 rounded-full border border-command-border bg-command-card p-1">
-          {(["map", "roles", "documents"] as Tab[]).map((t_key) => (
+          {(["map", "roles"] as Tab[]).map((t_key) => (
             <button
               key={t_key}
               type="button"
@@ -84,90 +98,64 @@ export function SupplyChainView() {
         </button>
       </div>
 
-      {tab === "documents" ? (
-        <DocumentTracker
-          documents={state.documents}
-          nodes={state.nodes.map((n) => ({ id: n.id, displayName: n.displayName }))}
-        />
-      ) : tab === "roles" ? (
+      {tab === "roles" ? (
         <RoleCompanyView
           selectedRoleId={selectedRoleId}
           onSelectRole={setSelectedRoleId}
         />
       ) : (
-        <div className="grid w-full max-w-full gap-4 xl:grid-cols-[1fr_260px]">
-          <div className="min-w-0 space-y-4">
-            <CommandCard title={t("unifiedMap.title")} subtitle={t("unifiedMap.subtitle")}>
-              <UnifiedPathMap
-                selectedNodeId={selectedUnifiedNodeId}
-                onSelectNode={(nodeId, roleId) => {
-                  setSelectedUnifiedNodeId(nodeId);
-                  if (roleId) setSelectedRoleId(roleId);
-                }}
+        <div className="grid w-full max-w-full gap-4 xl:grid-cols-[1fr_280px]">
+          <CommandCard title={t("mapTitle")} subtitle={t("selectNodeHint")}>
+            <PathSelector
+              paths={state.paths}
+              activePathId={activePathId}
+              onChange={(pathId) => {
+                setActivePathId(pathId);
+                setSelectedNodeId(null);
+              }}
+            />
+            <div className="mt-4 min-h-[320px] overflow-hidden rounded-lg border border-command-border grid-map-bg bg-[#050505] p-4 md:min-h-[420px]">
+              <PathFlowMap
+                nodes={nodes}
+                edges={edges}
+                selectedNodeId={selectedNodeId}
+                onSelectNode={setSelectedNodeId}
               />
-            </CommandCard>
-
-            <CommandCard title={t("rolesSection.title")}>
-              <RoleCompanyView
-                selectedRoleId={selectedRoleId}
-                onSelectRole={setSelectedRoleId}
-              />
-            </CommandCard>
-          </div>
+            </div>
+          </CommandCard>
 
           <div className="min-w-0 space-y-4">
-            <FeasibilityScore nodes={pathNodes} edges={pathEdges} />
-            {selectedRole ? (
-              <div className="overflow-hidden rounded-xl border border-command-border bg-command-card-elevated p-4">
-                <h3 className="mb-3 text-sm font-semibold text-command-text">
-                  {t("rolesSection.roleDetail")}
-                </h3>
-                <dl className="space-y-2 text-xs">
-                  <div className="flex justify-between gap-2">
-                    <dt className="text-command-text-muted">{t("nodeDetail.region")}</dt>
-                    <dd>{selectedRole.country} · {selectedRole.region}</dd>
-                  </div>
-                  <div className="flex justify-between gap-2">
-                    <dt className="text-command-text-muted">{t("nodeDetail.docCompletion")}</dt>
-                    <dd className="tabular-nums">{selectedRole.documentCompletion}%</dd>
-                  </div>
-                  <div className="flex justify-between gap-2">
-                    <dt className="text-command-text-muted">{t("nodeEdit.riskLevel")}</dt>
-                    <dd>
-                      <span className={cn("rounded px-1.5 py-0.5 text-[10px] font-semibold", riskColor(selectedRole.riskLevel))}>
-                        {t(`risk.${selectedRole.riskLevel}`)}
-                      </span>
-                    </dd>
-                  </div>
-                </dl>
-                <div className="mt-3">
-                  <p className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
-                    {t("documents.title")}
-                  </p>
-                  <div className="flex flex-wrap gap-1">
-                    {selectedRole.requiredDocuments.map((doc) => (
-                      <span
-                        key={doc}
-                        className="rounded border border-command-border px-1.5 py-0.5 text-[10px] text-command-text-secondary"
-                      >
-                        {t(`docTypes.${doc}`)}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                {selectedRole.riskNotes && (
-                  <p className="mt-3 rounded-lg border border-command-orange/30 bg-command-orange/5 px-3 py-2 text-[11px] text-command-orange">
-                    {selectedRole.riskNotes}
-                  </p>
-                )}
+            <FeasibilityScore nodes={nodes} edges={edges} />
+            {selectedNode ? (
+              <div className="overflow-hidden rounded-xl border border-command-border">
+                <NodeDetailPanel
+                  node={selectedNode}
+                  incomingEdge={incomingEdge}
+                  nodeDocuments={nodeDocuments}
+                  onClose={() => setSelectedNodeId(null)}
+                  onEdit={() => setEditNodeId(selectedNode.id)}
+                />
               </div>
             ) : (
               <CommandCard>
-                <p className="text-sm text-command-text-muted">{t("selectNodeHint")}</p>
+                <p className="text-sm text-command-text-muted">
+                  {t("selectNodeHint")}
+                </p>
               </CommandCard>
             )}
           </div>
         </div>
+      )}
+
+      {editNode && (
+        <NodeEditDialog
+          node={editNode}
+          onSave={(updates) => {
+            updateNode(editNode.id, updates);
+            setEditNodeId(null);
+          }}
+          onClose={() => setEditNodeId(null)}
+        />
       )}
     </div>
   );

@@ -67,9 +67,9 @@ export const agentInsights = [
 
 export const navItems = [
   { key: "strategic" as const, href: "/" },
+  { key: "finance" as const, href: "/finance" },
   { key: "supplyChain" as const, href: "/supply-chain" },
   { key: "regulatory" as const, href: "/regulatory" },
-  { key: "documents" as const, href: "/documents" },
   { key: "intelligence" as const, href: "/intelligence" },
   { key: "productMonitor" as const, href: "/product-monitor" },
   { key: "relations" as const, href: "/relations" },

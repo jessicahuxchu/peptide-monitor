@@ -5,9 +5,9 @@
   },
   "nav": {
     "strategic": "战略",
+    "finance": "财务",
     "supplyChain": "供应链",
     "regulatory": "监管",
-    "documents": "文件",
     "intelligence": "情报",
     "productMonitor": "产品监控",
     "relations": "关系",
@@ -127,7 +127,7 @@
     "resetSeed": "重置为种子数据",
     "offlineMode": "离线模式 — 请在 .env.local 配置 Supabase 以持久化数据。",
     "tabs": {
-      "map": "统一地图",
+      "map": "路径地图",
       "roles": "角色与公司",
       "documents": "文件"
     },
@@ -233,14 +233,15 @@
       "critical": "严重"
     },
     "documents": {
-      "title": "文件追踪",
+      "title": "文件要求",
       "subtitle": "GMP、COA、许可与客户特定文件",
       "all": "全部",
       "type": "类型",
       "product": "产品",
       "linkedNode": "关联节点",
       "status": "状态",
-      "expiry": "有效期"
+      "expiry": "有效期",
+      "noDocsForNode": "该节点暂无关联文件要求"
     },
     "unifiedMap": {
       "title": "统一供应链路径",
@@ -356,12 +357,12 @@
       "description": "多源情报信号：新闻法规、内幕消息、社交媒体、下游 2C 平台。"
     },
     "productMonitor": {
-      "title": "产品监控",
-      "description": "澳洲对标平台 SKU 覆盖率、组合配方、规格共识与三档备货决策。"
+      "title": "产品分析",
+      "description": "基于对标平台的多肽产品覆盖率、监管风险与机会评估。"
     },
     "relations": {
       "title": "供应商与客户",
-      "description": "供应商资质与客户需求对照，点击产品查看匹配供应商。"
+      "description": "表格浏览供应商与客户，点击行展开详情；同一供应商可覆盖多个品类。"
     },
     "risk": {
       "title": "风险瞭望塔",
@@ -373,7 +374,7 @@
     },
     "inbox": {
       "title": "Agent 收件箱",
-      "description": "团队异步输入 — AI 提议更新，等你确认。"
+      "description": "待确认更新与 AI 助手对话。"
     }
   },
   "documentsPage": {
@@ -395,6 +396,9 @@
     "heat": "热度",
     "regulatory": "监管",
     "skuRanking": "SKU 机会排行",
+    "topOpportunity": "最高机会 SKU",
+    "avgOpportunity": "平均机会分",
+    "signalCount": "情报信号数",
     "sources": {
       "news_legal": "新闻 / 法律 / 官员言论",
       "insider": "业务内幕消息",
@@ -409,20 +413,20 @@
     }
   },
   "productMonitor": {
-    "title": "产品监控",
-    "subtitle": "澳洲 12 个对标平台 · 221 种多肽 · 三档备货决策",
-    "introShort": "上方为 23 个决策 SKU；全库 221 种可展开浏览。覆盖率 ≠ 销量。",
-    "intro": "基于对标平台产品矩阵与供应商备货建议（2026-06-22）。平台覆盖率反映上架普遍程度，不等同于真实销量；正式采购前须取得客户用量、资质与合规文件。",
+    "title": "产品分析",
+    "subtitle": "澳洲 12 个对标平台 · 221 种多肽 · 三档机会评估",
+    "introShort": "上方为关键结论指标；下方 23 个重点 SKU 可展开分析。覆盖率 ≠ 销量。",
+    "intro": "基于对标平台产品矩阵的多维度分析（2026-06-22）。平台覆盖率反映上架普遍程度，不等同于真实销量；决策前须结合监管风险与客户需求。",
     "sources": "数据来源",
     "tabs": {
-      "matrix": "产品决策矩阵",
+      "matrix": "产品分析矩阵",
       "blends": "组合配方",
-      "strategy": "备货策略"
+      "strategy": "分析结论"
     },
     "tiers": {
-      "core": "核心库存",
-      "trial": "试销库存",
-      "avoid": "不建议做"
+      "core": "核心品类",
+      "trial": "观察品类",
+      "avoid": "不建议"
     },
     "kpi": {
       "core": "核心 SKU",
@@ -500,9 +504,9 @@
       "regulatory": "澳洲监管备注"
     },
     "strategy": {
-      "title": "三档备货策略",
-      "coreTitle": "第一梯队 · 核心备货",
-      "trialTitle": "第二梯队 · 试销小批量",
+      "title": "分析结论摘要",
+      "coreTitle": "第一梯队 · 核心机会",
+      "trialTitle": "第二梯队 · 观察品类",
       "avoidTitle": "第三梯队 · 订单制"
     },
     "catalog": {
@@ -524,8 +528,9 @@
   },
   "finance": {
     "title": "财务数据",
-    "subtitle": "按国家、地区、品类、时间查看销售详情与汇总",
+    "subtitle": "澳大利亚各州销售详情与汇总",
     "country": "国家",
+    "australia": "澳大利亚 (AU)",
     "region": "地区",
     "product": "产品",
     "category": "品类",
@@ -544,6 +549,15 @@
   "relationsPage": {
     "suppliers": "供应商",
     "customers": "客户",
+    "supplierName": "供应商",
+    "customerName": "客户",
+    "location": "地区",
+    "productCount": "品类数",
+    "products": "个品类",
+    "docCoverage": "资质文件",
+    "docs": "份文件",
+    "productOffers": "品类报价",
+    "status": "状态",
     "demandProduct": "需求产品",
     "demandQuantity": "需求量",
     "targetPrice": "目标价格",
@@ -610,15 +624,23 @@
     "suggestedActions": "建议动作"
   },
   "inboxPage": {
-    "placeholder": "粘贴供应商报价、监管更新或客户文件要求…",
+    "placeholder": "粘贴供应商报价、监管更新…",
     "send": "发送",
     "proposedUpdates": "提议更新",
     "confirm": "确认",
     "reject": "拒绝",
     "confirmed": "已确认并应用",
     "rejected": "已拒绝",
-    "analyzing": "正在分析输入…",
+    "analyzing": "正在思考…",
     "offlineMode": "离线模式 — 配置 Supabase 后收件箱写入将持久化。",
-    "dbConnected": "已通过 Supabase 连接 PostgreSQL"
+    "dbConnected": "已通过 Supabase 连接 PostgreSQL",
+    "pendingTitle": "待确认",
+    "pendingSubtitle": "AI 解析的结构化更新",
+    "noPending": "暂无待确认项",
+    "chatTitle": "AI 助手",
+    "chatSubtitle": "供应链、监管、产品机会问答",
+    "chatWelcome": "你好，我是 Peptide Monitor 助手。可以问我供应链路径、监管动态、SKU 机会或供应商匹配相关问题。",
+    "chatPlaceholder": "输入问题，例如：BPC-157 的 AU 机会如何？",
+    "chatError": "暂时无法回答，请稍后再试。"
   }
 }

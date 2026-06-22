@@ -188,15 +188,24 @@ export function mapSalesRecord(row: SalesRow): SalesRecord {
 }
 
 export function mapSupplier(row: SupplierRow): SupplierProfile {
+  const products = (row.products as string[]) ?? [];
+  const price = Number(row.price);
+  const unit = row.unit;
+  const moq = row.moq;
+  const productOffers = products.map((product) => ({
+    product,
+    price,
+    unit,
+    moq,
+  }));
+
   return {
     id: row.id,
     name: row.name,
     contact: row.contact,
     email: row.email,
-    products: (row.products as string[]) ?? [],
-    price: Number(row.price),
-    unit: row.unit,
-    moq: row.moq,
+    products,
+    productOffers,
     documents: (row.documents as string[]) ?? [],
     country: row.country,
     region: row.region,

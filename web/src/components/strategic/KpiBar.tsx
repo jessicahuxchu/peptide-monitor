@@ -20,7 +20,7 @@ export function KpiBar() {
     {
       label: t("docCompletion"),
       value: `${kpis.docCompletion}%`,
-      href: "/documents",
+      href: "/supply-chain",
     },
     {
       label: t("openAlerts"),

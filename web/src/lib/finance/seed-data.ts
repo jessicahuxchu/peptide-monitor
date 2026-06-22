@@ -11,6 +11,17 @@ export interface SalesRecord {
   currency: string;
 }
 
+export const AU_STATES = [
+  "NSW",
+  "VIC",
+  "QLD",
+  "SA",
+  "WA",
+  "TAS",
+  "NT",
+  "ACT",
+] as const;
+
 export const salesRecords: SalesRecord[] = [
   { id: "s1", date: "2026-01", country: "AU", region: "VIC", product: "BPC-157", category: "Healing", quantity: 1200, unit: "g", revenue: 1010880, currency: "AUD" },
   { id: "s2", date: "2026-01", country: "AU", region: "NSW", product: "BPC-157", category: "Healing", quantity: 800, unit: "g", revenue: 673600, currency: "AUD" },
@@ -23,19 +34,19 @@ export const salesRecords: SalesRecord[] = [
   { id: "s9", date: "2026-03", country: "AU", region: "NSW", product: "TB-500", category: "Recovery", quantity: 300, unit: "g", revenue: 360000, currency: "AUD" },
   { id: "s10", date: "2026-04", country: "AU", region: "VIC", product: "BPC-157", category: "Healing", quantity: 1600, unit: "g", revenue: 1347200, currency: "AUD" },
   { id: "s11", date: "2026-04", country: "AU", region: "NSW", product: "GHK-Cu", category: "Cosmetic", quantity: 450, unit: "g", revenue: 292500, currency: "AUD" },
-  { id: "s12", date: "2026-04", country: "CN", region: "Hubei", product: "BPC-157", category: "Healing", quantity: 5000, unit: "g", revenue: 60000, currency: "USD" },
-  { id: "s13", date: "2026-05", country: "AU", region: "VIC", product: "BPC-157", category: "Healing", quantity: 1750, unit: "g", revenue: 1473500, currency: "AUD" },
-  { id: "s14", date: "2026-05", country: "AU", region: "QLD", product: "BPC-157", category: "Healing", quantity: 700, unit: "g", revenue: 589400, currency: "AUD" },
-  { id: "s15", date: "2026-05", country: "AU", region: "NSW", product: "Semaglutide", category: "Weight Loss", quantity: 200, unit: "g", revenue: 90000, currency: "AUD" },
-  { id: "s16", date: "2026-06", country: "AU", region: "VIC", product: "BPC-157", category: "Healing", quantity: 1900, unit: "g", revenue: 1599800, currency: "AUD" },
-  { id: "s17", date: "2026-06", country: "AU", region: "QLD", product: "TB-500", category: "Recovery", quantity: 550, unit: "g", revenue: 660000, currency: "AUD" },
-  { id: "s18", date: "2026-06", country: "AU", region: "NSW", product: "BPC-157", category: "Healing", quantity: 400, unit: "g", revenue: 336800, currency: "AUD" },
-  { id: "s19", date: "2026-06", country: "GB", region: "London", product: "BPC-157", category: "Healing", quantity: 300, unit: "g", revenue: 285000, currency: "GBP" },
-  { id: "s20", date: "2026-06", country: "CA", region: "Ontario", product: "GHK-Cu", category: "Cosmetic", quantity: 250, unit: "g", revenue: 187500, currency: "CAD" },
+  { id: "s12", date: "2026-05", country: "AU", region: "VIC", product: "BPC-157", category: "Healing", quantity: 1750, unit: "g", revenue: 1473500, currency: "AUD" },
+  { id: "s13", date: "2026-05", country: "AU", region: "QLD", product: "BPC-157", category: "Healing", quantity: 700, unit: "g", revenue: 589400, currency: "AUD" },
+  { id: "s14", date: "2026-05", country: "AU", region: "NSW", product: "Semaglutide", category: "Weight Loss", quantity: 200, unit: "g", revenue: 90000, currency: "AUD" },
+  { id: "s15", date: "2026-06", country: "AU", region: "VIC", product: "BPC-157", category: "Healing", quantity: 1900, unit: "g", revenue: 1599800, currency: "AUD" },
+  { id: "s16", date: "2026-06", country: "AU", region: "QLD", product: "TB-500", category: "Recovery", quantity: 550, unit: "g", revenue: 660000, currency: "AUD" },
+  { id: "s17", date: "2026-06", country: "AU", region: "NSW", product: "BPC-157", category: "Healing", quantity: 400, unit: "g", revenue: 336800, currency: "AUD" },
+  { id: "s18", date: "2026-06", country: "AU", region: "SA", product: "BPC-157", category: "Healing", quantity: 180, unit: "g", revenue: 151560, currency: "AUD" },
+  { id: "s19", date: "2026-06", country: "AU", region: "WA", product: "GHK-Cu", category: "Cosmetic", quantity: 120, unit: "g", revenue: 78000, currency: "AUD" },
+  { id: "s20", date: "2026-06", country: "AU", region: "TAS", product: "TB-500", category: "Recovery", quantity: 80, unit: "g", revenue: 96000, currency: "AUD" },
 ];
 
-export const financeCountries = [...new Set(salesRecords.map((r) => r.country))];
-export const financeRegions = [...new Set(salesRecords.map((r) => r.region))];
+export const financeCountries = ["AU"] as const;
+export const financeRegions = [...AU_STATES];
 export const financeProducts = [...new Set(salesRecords.map((r) => r.product))];
 export const financeCategories = [...new Set(salesRecords.map((r) => r.category))];
 export const financeMonths = [...new Set(salesRecords.map((r) => r.date))].sort();

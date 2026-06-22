@@ -4,7 +4,6 @@ import { StrategicMapPreview } from "@/components/strategic/StrategicMapPreview"
 import { RegulatoryMatrix } from "@/components/strategic/RegulatoryMatrix";
 import { AgentInsights } from "@/components/strategic/AgentInsights";
 import { KpiBar } from "@/components/strategic/KpiBar";
-import { FinanceDashboard } from "@/components/finance/FinanceDashboard";
 import {
   PendingDecisions,
   WeeklyRegulatorySummary,
@@ -15,9 +14,6 @@ export default function StrategicHomePage() {
   return (
     <DashboardProvider>
       <KpiBar />
-      <div className="w-full max-w-full overflow-x-hidden px-4 pb-4 md:px-6 md:pb-6">
-        <FinanceDashboard />
-      </div>
       <div className="mx-auto grid w-full max-w-full gap-4 overflow-x-hidden p-4 md:gap-5 md:p-6 xl:grid-cols-[minmax(200px,1fr)_minmax(360px,2fr)_minmax(200px,1fr)]">
       <aside className="flex flex-col gap-4 md:gap-5">
         <GlobalRiskIndex />

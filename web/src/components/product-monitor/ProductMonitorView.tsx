@@ -37,6 +37,13 @@ export function ProductMonitorView() {
       <ProductMonitorKpiBar records={productMonitorRecords} />
 
       <div className="space-y-4 p-4 md:p-6">
+        <StrategySummary
+          core={productMonitorRecords.filter((r) => r.tier === "core")}
+          trial={productMonitorRecords.filter((r) => r.tier === "trial")}
+          avoid={productMonitorRecords.filter((r) => r.tier === "avoid")}
+          budgets={meta.budgetSplit}
+        />
+
         <CommandCard title={t("title")} subtitle={t("subtitle")}>
           <p className="mb-4 text-xs text-command-text-muted">{t("introShort")}</p>
 
@@ -62,13 +69,6 @@ export function ProductMonitorView() {
             <BlendStrip />
           </div>
         </CommandCard>
-
-        <StrategySummary
-          core={productMonitorRecords.filter((r) => r.tier === "core")}
-          trial={productMonitorRecords.filter((r) => r.tier === "trial")}
-          avoid={productMonitorRecords.filter((r) => r.tier === "avoid")}
-          budgets={meta.budgetSplit}
-        />
 
         <CatalogOverview onSelectDecision={handleSelectDecision} />
 

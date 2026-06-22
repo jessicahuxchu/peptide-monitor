@@ -30,14 +30,9 @@ export function Header() {
         {/* Logo */}
         <Link href="/" className="flex shrink-0 items-center gap-2.5">
           <HexLogo />
-          <div className="hidden sm:block">
-            <span className="text-sm font-bold tracking-wide text-command-teal-bright">
-              {t("header.brand")}
-            </span>
-            <span className="ml-1.5 text-sm font-normal text-command-text-secondary">
-              {t("header.version")}
-            </span>
-          </div>
+          <span className="hidden text-sm font-bold tracking-wide text-command-teal-bright sm:block">
+            {t("header.brand")}
+          </span>
         </Link>
 
         {/* Nav pills */}
@@ -116,13 +111,6 @@ export function Header() {
               }}
             />
           )}
-
-          <button
-            type="button"
-            className="hidden rounded-full bg-command-teal px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-black transition-colors hover:bg-command-teal-bright md:inline-flex md:px-4"
-          >
-            {t("header.deploymentMode")}
-          </button>
         </div>
       </div>
 
