@@ -1,0 +1,41 @@
+# Hermes Agent — Peptide Command integration
+# Copy to ~/.hermes/config.yaml or mount in Docker
+
+profiles:
+  inbox-agent:
+    description: Parse team async input, propose DB changes
+    mcp_servers:
+      - peptide-command
+    system_prompt: |
+      You are the Peptide Command Inbox Agent. When users submit supplier quotes,
+      regulatory updates, or customer requirements, use submit_inbox to parse and
+      queue changes. Never commit without human confirm_inbox_submission.
+
+  regulatory-scout:
+    description: Daily AU regulatory matrix scan
+    mcp_servers:
+      - peptide-command
+    system_prompt: |
+      You are the Regulatory Scout for Peptide Command AU operations.
+      Run trigger_regulatory_scan daily. Review findings for TGA, NSW, VIC updates.
+      Flag P0/P1 items affecting BPC-157 supply chain paths.
+
+mcp_servers:
+  peptide-command:
+    command: node
+    args:
+      - ./mcp-server/dist/index.js
+    env:
+      PEPTIDE_API_URL: http://localhost:3000
+      MCP_API_KEY: ${MCP_API_KEY}
+
+cron:
+  - name: daily-reg-scan
+    schedule: "0 8 * * *"
+    profile: regulatory-scout
+    prompt: Run trigger_regulatory_scan and summarize findings for the team.
+
+  - name: weekly-price-scan
+    schedule: "0 9 * * 1"
+    profile: market-analyst
+    prompt: Review BPC-157 competitive pricing via get_supply_chain and get_inbox.
