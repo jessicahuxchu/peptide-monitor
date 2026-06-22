@@ -1,33 +1,13 @@
 "use client";
 
-import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
-import { clerkAppearance } from "@/lib/clerk/appearance";
+import { UserButton, useAuth } from "@clerk/nextjs";
 import { useLocale, useTranslations } from "next-intl";
 import { Bell, Inbox } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { navItems } from "@/lib/mock-data";
 import { alerts } from "@/lib/supply-chain/seed-data";
+import { HexLogo } from "@/components/ui/HexLogo";
 import { cn } from "@/lib/utils";
-
-function HexLogo() {
-  return (
-    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden>
-      <polygon
-        points="14,2 25,8.5 25,19.5 14,26 3,19.5 3,8.5"
-        fill="none"
-        stroke="#14b8a6"
-        strokeWidth="1.5"
-      />
-      <polygon
-        points="14,7 20,10.5 20,17.5 14,21 8,17.5 8,10.5"
-        fill="#14b8a6"
-        fillOpacity="0.2"
-        stroke="#14b8a6"
-        strokeWidth="1"
-      />
-    </svg>
-  );
-}
 
 export function Header() {
   const t = useTranslations();
@@ -118,14 +98,12 @@ export function Header() {
           </button>
 
           {isLoaded && !isSignedIn && (
-            <SignInButton mode="modal" appearance={clerkAppearance}>
-              <button
-                type="button"
-                className="rounded-full border border-command-teal/40 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-command-teal-bright transition-colors hover:border-command-teal hover:bg-command-teal/10 md:px-4"
-              >
-                {t("header.signIn")}
-              </button>
-            </SignInButton>
+            <Link
+              href="/sign-in"
+              className="rounded-full border border-command-teal/40 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-command-teal-bright transition-colors hover:border-command-teal hover:bg-command-teal/10 md:px-4"
+            >
+              {t("header.signIn")}
+            </Link>
           )}
 
           {isLoaded && isSignedIn && (

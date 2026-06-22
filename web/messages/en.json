@@ -21,6 +21,21 @@
     "deploymentMode": "AU Market",
     "signIn": "Sign In"
   },
+  "auth": {
+    "systemStatus": "SYS.CORE // ON-LINE",
+    "uplinkStatus": "UPLINK_ESTABLISHED",
+    "identityTag": "HEYU.IDENTITY",
+    "heroTitle": "Peptide Supply Chain Intelligence",
+    "heroSubtitle": "Cross-border peptide monitoring, regulatory tracking, and decision support for the Heyu network.",
+    "signInTitle": "Authenticate",
+    "signInSubtitle": "Secure credential access to Peptide Monitor by Heyu.",
+    "signUpTitle": "Create Access",
+    "signUpSubtitle": "Register your credentials to join Peptide Monitor by Heyu.",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signUpLink": "Sign up",
+    "signInLink": "Sign in"
+  },
   "kpi": {
     "feasiblePaths": "Feasible Paths",
     "docCompletion": "Doc Completion",

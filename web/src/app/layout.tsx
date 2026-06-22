@@ -1,5 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { clerkAppearance } from "@/lib/clerk/appearance";
+import { clerkLocalization } from "@/lib/clerk/localization";
 
 export default function RootLayout({
   children,
@@ -7,6 +8,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider appearance={clerkAppearance}>{children}</ClerkProvider>
+    <ClerkProvider appearance={clerkAppearance} localization={clerkLocalization}>
+      {children}
+    </ClerkProvider>
   );
 }

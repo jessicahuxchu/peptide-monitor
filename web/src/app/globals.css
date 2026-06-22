@@ -116,3 +116,42 @@ body {
 .input-field option {
   background: var(--bg-card-elevated);
 }
+
+.auth-glow {
+  pointer-events: none;
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+}
+
+.auth-glow-primary {
+  top: 10%;
+  left: 15%;
+  height: 28rem;
+  width: 28rem;
+  background: radial-gradient(
+    circle,
+    rgba(20, 184, 166, 0.22) 0%,
+    rgba(20, 184, 166, 0.08) 45%,
+    transparent 72%
+  );
+}
+
+.auth-glow-secondary {
+  right: 8%;
+  bottom: 12%;
+  height: 20rem;
+  width: 20rem;
+  background: radial-gradient(
+    circle,
+    rgba(45, 212, 191, 0.12) 0%,
+    transparent 70%
+  );
+}
+
+.auth-clerk-panel .cl-rootBox,
+.auth-clerk-panel .cl-cardBox,
+.auth-clerk-panel .cl-card {
+  width: 100%;
+  max-width: none;
+}

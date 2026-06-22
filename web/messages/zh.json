@@ -21,6 +21,21 @@
     "deploymentMode": "澳洲市场",
     "signIn": "登录"
   },
+  "auth": {
+    "systemStatus": "SYS.CORE // 在线",
+    "uplinkStatus": "UPLINK_已建立",
+    "identityTag": "HEYU.身份验证",
+    "heroTitle": "多肽供应链监测系统",
+    "heroSubtitle": "多肽跨境监控、监管追踪与决策支持，服务 Heyu 业务网络。",
+    "signInTitle": "身份验证",
+    "signInSubtitle": "安全凭证登录 Peptide Monitor by Heyu。",
+    "signUpTitle": "创建访问权限",
+    "signUpSubtitle": "注册凭证以加入 Peptide Monitor by Heyu。",
+    "noAccount": "还没有账号？",
+    "hasAccount": "已有账号？",
+    "signUpLink": "注册",
+    "signInLink": "登录"
+  },
   "kpi": {
     "feasiblePaths": "可行路径",
     "docCompletion": "文件完成度",
