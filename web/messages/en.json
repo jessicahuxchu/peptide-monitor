@@ -1,0 +1,609 @@
+{
+  "meta": {
+    "title": "Peptide Monitor",
+    "description": "Peptide cross-border supply chain intelligence & decision system"
+  },
+  "nav": {
+    "strategic": "Strategic",
+    "supplyChain": "Supply Chain",
+    "regulatory": "Regulatory",
+    "documents": "Documents",
+    "intelligence": "Intelligence",
+    "productMonitor": "SKU Monitor",
+    "relations": "Relations",
+    "risk": "Risk"
+  },
+  "header": {
+    "brand": "PEPTIDE MONITOR",
+    "version": "V1.0",
+    "agentInbox": "Agent Inbox",
+    "alerts": "Alerts",
+    "deploymentMode": "AU Market",
+    "signIn": "Sign In"
+  },
+  "kpi": {
+    "feasiblePaths": "Feasible Paths",
+    "docCompletion": "Doc Completion",
+    "openAlerts": "Open Alerts",
+    "topSku": "Top SKU"
+  },
+  "risk": {
+    "title": "Global Risk Index",
+    "stable": "STABLE",
+    "elevated": "ELEVATED",
+    "critical": "CRITICAL",
+    "auLogistics": "AU Logistics",
+    "suezTransit": "Cold-Chain Transit",
+    "coldChain": "Cold-Chain Integrity",
+    "optimal": "OPTIMAL",
+    "delayed": "DELAYED",
+    "low": "Low Risk",
+    "medium": "Medium Risk",
+    "high": "High Risk"
+  },
+  "riskLevels": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High"
+  },
+  "demand": {
+    "title": "Active Demand",
+    "unitsPerMonth": "units/mo",
+    "currentPrice": "Current Price"
+  },
+  "map": {
+    "title": "Supply Chain Map",
+    "openFullMap": "Open full map"
+  },
+  "regulatory": {
+    "title": "Regulatory Matrix",
+    "subtitle": "Compliance Snapshot",
+    "tga": "TGA",
+    "fda": "FDA",
+    "nmpa": "NMPA",
+    "ema": "EMA",
+    "australia": "AUSTRALIA",
+    "usa": "USA",
+    "china": "CHINA",
+    "europe": "EUROPE"
+  },
+  "regulatoryMatrix": {
+    "title": "Regulatory Matrix",
+    "subtitle": "Australia federal & state compliance by product",
+    "allMarkets": "All Markets",
+    "market": "Market",
+    "region": "Region",
+    "product": "Product",
+    "body": "Regulatory Body",
+    "classification": "Classification",
+    "risk": "Risk",
+    "detailTitle": "Entry Detail",
+    "requirements": "Requirements",
+    "lastUpdated": "Last Updated",
+    "source": "Source"
+  },
+  "insights": {
+    "title": "Agent Insights",
+    "riskAlert": "RISK ALERT",
+    "marketIntel": "MARKET INTEL",
+    "riskAlertBody": "New regulatory update in NSW affects peptide storage protocols. Action required for Batch #992.",
+    "marketIntelBody": "Competitor price drop detected in Melbourne market. Suggesting margin adjustment of 2.1%.",
+    "ago2m": "2m ago",
+    "ago1h": "1h ago"
+  },
+  "decisions": {
+    "title": "Pending Decisions",
+    "none": "No critical decisions pending.",
+    "alertNswStorage": "NSW Storage Protocol Update",
+    "alertNswStorageSummary": "NSW Health issued new peptide storage requirements effective immediately for compounding pharmacies."
+  },
+  "weeklyReg": {
+    "title": "Weekly Regulatory Summary",
+    "item1": "NSW: New storage protocol for compounded peptides (effective Jun 2026)",
+    "item2": "TGA: Import permit renewal window open for BPC-157 holders",
+    "item3": "VIC: Compounding pharmacy registration backlog — avg 3 weeks"
+  },
+  "supplyChain": {
+    "loading": "Loading…",
+    "mapTitle": "Path Flow",
+    "selectNodeHint": "Select a node to view details, documents, and risk.",
+    "filterByType": "Filter by type",
+    "allTypes": "All types",
+    "resetSeed": "Reset to seed data",
+    "offlineMode": "Offline mode — configure Supabase in .env.local to persist data.",
+    "tabs": {
+      "map": "Unified Map",
+      "roles": "Roles & Companies",
+      "documents": "Documents"
+    },
+    "paths": {
+      "b2bCompounding": "B2B → Compounding Pharmacy",
+      "b2bCompoundingDesc": "Primary low-risk bulk path to compounding pharmacies",
+      "clinicPrescriber": "Clinic / Prescriber Path",
+      "clinicPrescriberDesc": "Patient-specific compounding via prescriber",
+      "greyRetail": "Grey Retail (High Risk)",
+      "greyRetailDesc": "Unregulated online channel — monitor enforcement"
+    },
+    "nodeTypes": {
+      "manufacturer": "Manufacturer",
+      "exporter": "Exporter",
+      "freight_forwarder": "Freight Forwarder",
+      "customs_broker_au": "AU Customs Broker",
+      "import_permit_holder": "Import Permit Holder",
+      "warehouse_bonded": "Bonded Warehouse",
+      "quality_testing_lab": "Quality Testing Lab",
+      "compounding_pharmacy": "Compounding Pharmacy",
+      "wholesale_distributor": "Wholesale Distributor",
+      "clinic": "Clinic",
+      "doctor_prescriber": "Prescriber",
+      "hospital": "Hospital",
+      "retail_pharmacy": "Retail Pharmacy",
+      "grey_market_retail": "Grey Market Retail",
+      "online_retailer": "Online Retailer",
+      "end_customer_b2b": "B2B End Customer",
+      "end_customer_b2c": "B2C End Consumer",
+      "regulatory_authority": "Regulatory Authority",
+      "legal_counsel": "Legal Counsel"
+    },
+    "transport": {
+      "air": "Air",
+      "sea": "Sea",
+      "courier": "Courier",
+      "domestic": "Domestic"
+    },
+    "docTypes": {
+      "gmp_cert": "GMP Certificate",
+      "coa": "Certificate of Analysis",
+      "quality_cert": "Quality Certificate",
+      "msds": "MSDS / SDS",
+      "import_permit": "Import Permit",
+      "customs_declaration": "Customs Declaration",
+      "invoice_packing": "Invoice & Packing List",
+      "certificate_of_origin": "Certificate of Origin",
+      "tga_approval": "TGA Approval",
+      "pharmacy_license": "Pharmacy License",
+      "compounding_registration": "Compounding Registration",
+      "warehouse_bonded": "Bonded Warehouse Authorization",
+      "customer_specific": "Customer-Specific Document",
+      "state_specific": "State-Specific Requirement",
+      "other": "Other"
+    },
+    "docStatus": {
+      "valid": "Valid",
+      "expiring_soon": "Expiring Soon",
+      "expired": "Expired",
+      "missing": "Missing",
+      "pending": "Pending"
+    },
+    "risk": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "blocked": "Blocked"
+    },
+    "nodeDetail": {
+      "title": "Node Detail",
+      "edit": "Edit node",
+      "close": "Close panel",
+      "region": "Region",
+      "role": "Role",
+      "entity": "Entity",
+      "docCompletion": "Document Completion",
+      "incomingEdge": "Incoming Segment",
+      "notes": "Notes"
+    },
+    "nodeEdit": {
+      "title": "Edit Node",
+      "displayName": "Display Name",
+      "region": "Region",
+      "role": "Role Description",
+      "entity": "Entity Name",
+      "riskLevel": "Risk Level",
+      "status": "Status",
+      "docCompletion": "Document Completion",
+      "notes": "Notes",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "feasibility": {
+      "title": "Feasibility Score",
+      "docCompletion": "Document Completion",
+      "riskFactor": "Risk Factor",
+      "optimal": "Optimal",
+      "moderate": "Moderate",
+      "critical": "Critical"
+    },
+    "documents": {
+      "title": "Document Tracker",
+      "subtitle": "GMP, COA, permits, and customer-specific files",
+      "all": "All",
+      "type": "Type",
+      "product": "Product",
+      "linkedNode": "Linked Node",
+      "status": "Status",
+      "expiry": "Expiry"
+    },
+    "unifiedMap": {
+      "title": "Unified Supply Chain Paths",
+      "subtitle": "Three paths share upstream nodes, branch out, and converge at patient",
+      "sharedTrunk": "Shared Upstream",
+      "converge": "Converge"
+    },
+    "roles": {
+      "cnManufacturer": "CN Peptide Manufacturer",
+      "cnExporter": "CN Exporter",
+      "freightForwarder": "Freight Forwarder",
+      "auCustomsBroker": "AU Customs Broker",
+      "importPermitHolder": "Import Permit Holder",
+      "bondedWarehouse": "Bonded Warehouse",
+      "testingLab": "Quality Testing Lab",
+      "compoundingPharmacy": "Compounding Pharmacy",
+      "wholesaleDistributor": "Wholesale Distributor",
+      "prescriber": "Prescriber",
+      "clinic": "Clinic",
+      "greyRetail": "Grey Market Retail",
+      "patient": "Patient",
+      "expressCourier": "Express Courier",
+      "b2bCustomer": "B2B End Customer"
+    },
+    "rolesSection": {
+      "title": "Supply Chain Roles & Companies",
+      "companies": "companies",
+      "formedChains": "Formed Supply Chains",
+      "roleDetail": "Role Detail"
+    },
+    "companyStatus": {
+      "active": "Active",
+      "prospect": "Prospect",
+      "paused": "Paused"
+    },
+    "chainStatus": {
+      "active": "Active",
+      "forming": "Forming",
+      "blocked": "Blocked"
+    }
+  },
+  "pathTypes": {
+    "primary": "Primary",
+    "alternative": "Alternative",
+    "high_risk": "High Risk"
+  },
+  "nodeTypes": {
+    "manufacturer": "Manufacturer",
+    "exporter": "Exporter",
+    "freight_forwarder": "Freight Forwarder",
+    "customs_broker_au": "AU Customs Broker",
+    "import_permit_holder": "Import Permit Holder",
+    "warehouse_bonded": "Bonded Warehouse",
+    "quality_testing_lab": "Quality Testing Lab",
+    "compounding_pharmacy": "Compounding Pharmacy",
+    "wholesale_distributor": "Wholesale Distributor",
+    "clinic": "Clinic",
+    "doctor_prescriber": "Prescriber",
+    "hospital": "Hospital",
+    "retail_pharmacy": "Retail Pharmacy",
+    "grey_market_retail": "Grey Market Retail",
+    "online_retailer": "Online Retailer",
+    "end_customer_b2b": "B2B End Customer",
+    "end_customer_b2c": "B2C End Consumer",
+    "regulatory_authority": "Regulatory Authority",
+    "legal_counsel": "Legal Counsel"
+  },
+  "transport": {
+    "air": "Air",
+    "sea": "Sea",
+    "courier": "Courier",
+    "domestic": "Domestic"
+  },
+  "docTypes": {
+    "gmp_cert": "GMP Certificate",
+    "coa": "Certificate of Analysis",
+    "quality_cert": "Quality Certificate",
+    "msds": "MSDS / SDS",
+    "import_permit": "Import Permit",
+    "customs_declaration": "Customs Declaration",
+    "invoice_packing": "Invoice & Packing List",
+    "certificate_of_origin": "Certificate of Origin",
+    "tga_approval": "TGA Approval",
+    "pharmacy_license": "Pharmacy License",
+    "compounding_registration": "Compounding Registration",
+    "warehouse_bonded": "Bonded Warehouse Authorization",
+    "customer_specific": "Customer-Specific Document",
+    "state_specific": "State-Specific Requirement",
+    "other": "Other"
+  },
+  "docStatus": {
+    "valid": "Valid",
+    "expiring_soon": "Expiring Soon",
+    "expired": "Expired",
+    "missing": "Missing",
+    "pending": "Pending"
+  },
+  "pages": {
+    "supplyChain": {
+      "title": "Supply Chain Map",
+      "description": "Interactive path map with named nodes, documents, and risk levels."
+    },
+    "regulatory": {
+      "title": "Regulatory Matrix",
+      "description": "Australia federal and state compliance by product."
+    },
+    "documents": {
+      "title": "Document & Certificate Tracker",
+      "description": "GMP, COA, permits, and customer-specific file status."
+    },
+    "intelligence": {
+      "title": "Market Intelligence",
+      "description": "Multi-source signals: news/legal, insider intel, social media, downstream 2C platforms."
+    },
+    "productMonitor": {
+      "title": "SKU Monitor",
+      "description": "AU benchmark platform coverage, blends, spec consensus, and three-tier stocking decisions."
+    },
+    "relations": {
+      "title": "Suppliers & Customers",
+      "description": "Supplier credentials vs customer demands — click a product to find matching suppliers."
+    },
+    "risk": {
+      "title": "Risk Watchtower",
+      "description": "Active risk signals across paths, nodes, and products."
+    },
+    "alerts": {
+      "title": "Alert & Action Center",
+      "description": "Priority alerts with suggested actions."
+    },
+    "inbox": {
+      "title": "Agent Inbox",
+      "description": "Async team input — AI proposes updates for your confirmation."
+    }
+  },
+  "documentsPage": {
+    "type": "Document Type",
+    "product": "Product",
+    "status": "Status",
+    "expiry": "Expiry",
+    "gap": "Gap / Notes"
+  },
+  "intelligencePage": {
+    "product": "Product",
+    "opportunity": "Opportunity",
+    "demand": "Demand",
+    "localPrice": "Local Price",
+    "competitive": "Competitive",
+    "sensitivity": "Reg. Sensitivity",
+    "trend": "Trend",
+    "allSources": "All Sources",
+    "heat": "Heat",
+    "regulatory": "Regulatory",
+    "skuRanking": "SKU Opportunity Ranking",
+    "sources": {
+      "news_legal": "News / Legal / Officials",
+      "insider": "Insider Intel",
+      "social": "Social Media",
+      "platform_2c": "Downstream 2C Platforms"
+    },
+    "sourceOutputs": {
+      "news_legal": "→ Product heat & regulatory intensity",
+      "insider": "→ Regulatory development trends",
+      "social": "→ Category preference & regulatory trends",
+      "platform_2c": "→ Product listings & market heat"
+    }
+  },
+  "productMonitor": {
+    "title": "SKU Monitor",
+    "subtitle": "12 AU benchmark platforms · 221 peptides · three-tier stocking",
+    "introShort": "23 decision SKUs above; full catalog of 221 expandable below. Coverage ≠ sales.",
+    "intro": "Based on benchmark platform matrix & supplier stocking recommendations (2026-06-22). Platform coverage reflects listing prevalence, not actual sales. Confirm customer volume, credentials, and compliance docs before purchasing.",
+    "sources": "Sources",
+    "tabs": {
+      "matrix": "Decision Matrix",
+      "blends": "Blend Formulas",
+      "strategy": "Stocking Strategy"
+    },
+    "tiers": {
+      "core": "Core Stock",
+      "trial": "Trial Stock",
+      "avoid": "Not Recommended"
+    },
+    "kpi": {
+      "core": "Core SKUs",
+      "trial": "Trial SKUs",
+      "avoid": "Avoid",
+      "avgCoverage": "Avg Coverage",
+      "highRisk": "High Reg. Risk",
+      "benchmarkPlatforms": "Platforms",
+      "asOf": "As of",
+      "productTypes": "peptide types",
+      "listings": "listings"
+    },
+    "filters": {
+      "allTiers": "All Tiers"
+    },
+    "table": {
+      "product": "Product",
+      "tier": "Tier",
+      "score": "Score",
+      "coverage": "Coverage",
+      "spec": "Consensus Spec",
+      "stockMode": "Stock Mode",
+      "leadTime": "Lead Time",
+      "auRisk": "AU Reg."
+    },
+    "stockMode": {
+      "raw_material": "Raw Material",
+      "finished_small_batch": "Small Batch",
+      "delayed_fill": "Delayed Fill",
+      "order_only": "Order Only"
+    },
+    "risk": {
+      "low": "Low",
+      "medium": "Med",
+      "high": "High"
+    },
+    "coverage": {
+      "title": "Platform Coverage",
+      "platformsListed": "platforms listed",
+      "level": {
+        "0": "Not listed",
+        "1": "Weak (1 SKU)",
+        "2": "Moderate (2 SKUs)",
+        "3": "Strong (3+ SKUs)"
+      }
+    },
+    "specs": {
+      "title": "Spec Consensus",
+      "consensus": "Consensus",
+      "primarySpec": "Recommended Stock",
+      "variants": "Market Variants",
+      "forms": "Common Forms"
+    },
+    "blends": {
+      "title": "Blend Formulas",
+      "platforms": "platform coverage"
+    },
+    "detail": {
+      "close": "Close",
+      "selectHint": "Select a product to view details",
+      "scoreBreakdown": "Score Breakdown",
+      "composite": "Composite",
+      "coverage": "Coverage",
+      "demand": "Demand",
+      "supplyFeasibility": "Supply",
+      "turnover": "Turnover",
+      "regRisk": "Reg. Risk",
+      "stockingLogic": "Stocking Logic",
+      "supplyChain": "Supply Chain",
+      "stockWeeks": "Stock Weeks",
+      "stockMode": "Mode",
+      "leadTime": "Lead Time",
+      "days": "days",
+      "reorder": "Reorder Note",
+      "regulatory": "AU Regulatory Notes"
+    },
+    "strategy": {
+      "title": "Three-Tier Stocking",
+      "coreTitle": "Tier 1 · Core Stock",
+      "trialTitle": "Tier 2 · Trial Batch",
+      "avoidTitle": "Tier 3 · Order Only"
+    },
+    "catalog": {
+      "title": "Full Platform Catalog",
+      "types": "peptide types",
+      "inDecision": "in decision set",
+      "searchPlaceholder": "Search product name…",
+      "noResults": "No matching products",
+      "showAll": "Show all {count}",
+      "showLess": "Show less",
+      "decision": "Decision",
+      "bands": {
+        "high": "Wide 10–12",
+        "medium": "Medium 5–9",
+        "low": "Niche 1–4",
+        "none": "Not listed"
+      }
+    }
+  },
+  "finance": {
+    "title": "Financial Data",
+    "subtitle": "Sales details & aggregates by country, region, category, and time",
+    "country": "Country",
+    "region": "Region",
+    "product": "Product",
+    "category": "Category",
+    "period": "Period",
+    "groupBy": "Group By",
+    "all": "All",
+    "totalRevenue": "Total Revenue",
+    "totalQuantity": "Total Quantity",
+    "recordCount": "Records",
+    "avgOrderValue": "Avg Order Value",
+    "revenueBreakdown": "Revenue Breakdown",
+    "quantity": "Quantity",
+    "revenue": "Revenue",
+    "noData": "No data for current filters"
+  },
+  "relationsPage": {
+    "suppliers": "Suppliers",
+    "customers": "Customers",
+    "demandProduct": "Product",
+    "demandQuantity": "Quantity",
+    "targetPrice": "Target Price",
+    "findSuppliers": "Find Matching Suppliers",
+    "matchTitle": "Matching Suppliers",
+    "requiredDocs": "Required Documents",
+    "noMatch": "No suppliers meet all document requirements"
+  },
+  "crm": {
+    "contact": "Contact",
+    "email": "Email",
+    "products": "Products",
+    "latestQuote": "Latest Quote"
+  },
+  "entityTypes": {
+    "supplier": "Suppliers",
+    "customer": "Customers",
+    "intermediary": "Intermediaries"
+  },
+  "cooperationStatus": {
+    "prospect": "Prospect",
+    "negotiating": "Negotiating",
+    "active": "Active",
+    "paused": "Paused",
+    "terminated": "Terminated"
+  },
+  "riskTypes": {
+    "regulatory_tightening": "Regulatory Tightening",
+    "state_new_requirement": "State New Requirement",
+    "product_sensitivity_up": "Product Sensitivity",
+    "supply_node_failure": "Supply Node Failure",
+    "enforcement_action": "Enforcement Action",
+    "document_gap_critical": "Document Gap",
+    "customer_requirement_change": "Customer Requirement Change",
+    "price_pressure": "Price Pressure"
+  },
+  "riskStatus": {
+    "open": "Open",
+    "monitoring": "Monitoring",
+    "resolved": "Resolved"
+  },
+  "riskNswStorage": "NSW Storage Protocol Change",
+  "riskNswStorageBody": "NSW Health requires updated cold storage documentation for all compounded peptides.",
+  "riskCompoundingReg": "Compounding Registration Gap",
+  "riskCompoundingRegBody": "Precision Compounding VIC missing updated state registration — blocks full path activation.",
+  "riskTb500Schedule": "TB-500 Schedule 4 Classification",
+  "riskTb500ScheduleBody": "TB-500 now Schedule 4 — requires prescriber authorization for all import paths.",
+  "riskGreyEnforcement": "Grey Channel Enforcement",
+  "riskGreyEnforcementBody": "TGA increasing scrutiny on online peptide retailers. Grey path risk elevated.",
+  "alertNswStorage": "NSW Storage Protocol Update",
+  "alertNswStorageSummary": "NSW Health issued new peptide storage requirements effective immediately.",
+  "alertImportPermit": "Import Permit Expiring",
+  "alertImportPermitSummary": "AusPharm Import Holdings permit expires Aug 15, 2026. Renewal pending.",
+  "alertCompetitorPrice": "Melbourne Competitor Price Drop",
+  "alertCompetitorPriceSummary": "Competitor BPC-157 pricing down 6% in Melbourne. Review margin strategy.",
+  "alertCompoundingReg": "Compounding Registration Follow-up",
+  "alertCompoundingRegSummary": "Follow up with Precision Compounding VIC on registration timeline.",
+  "alertSource": {
+    "agent": "Agent",
+    "manual": "Manual",
+    "scheduled_scout": "Regulatory Scout"
+  },
+  "alertsPage": {
+    "suggestedActions": "Suggested Actions"
+  },
+  "inboxPage": {
+    "placeholder": "Paste supplier quote, regulatory update, or customer requirement…",
+    "send": "Send",
+    "proposedUpdates": "Proposed Updates",
+    "confirm": "Confirm",
+    "reject": "Reject",
+    "confirmed": "Confirmed & Applied",
+    "rejected": "Rejected",
+    "analyzing": "Analyzing input…",
+    "offlineMode": "Offline mode — configure Supabase to persist inbox submissions.",
+    "dbConnected": "Connected to PostgreSQL via Supabase"
+  }
+}

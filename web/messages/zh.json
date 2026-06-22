@@ -1,0 +1,609 @@
+{
+  "meta": {
+    "title": "Peptide Monitor",
+    "description": "多肽跨境供应链情报与决策系统"
+  },
+  "nav": {
+    "strategic": "战略",
+    "supplyChain": "供应链",
+    "regulatory": "监管",
+    "documents": "文件",
+    "intelligence": "情报",
+    "productMonitor": "产品监控",
+    "relations": "关系",
+    "risk": "风险"
+  },
+  "header": {
+    "brand": "PEPTIDE MONITOR",
+    "version": "V1.0",
+    "agentInbox": "代理收件箱",
+    "alerts": "提醒",
+    "deploymentMode": "澳洲市场",
+    "signIn": "登录"
+  },
+  "kpi": {
+    "feasiblePaths": "可行路径",
+    "docCompletion": "文件完成度",
+    "openAlerts": "开放提醒",
+    "topSku": "热门 SKU"
+  },
+  "risk": {
+    "title": "全球风险指数",
+    "stable": "稳定",
+    "elevated": "升高",
+    "critical": "严重",
+    "auLogistics": "澳洲物流",
+    "suezTransit": "冷链运输",
+    "coldChain": "冷链完整性",
+    "optimal": "最优",
+    "delayed": "延误",
+    "low": "低风险",
+    "medium": "中风险",
+    "high": "高风险"
+  },
+  "riskLevels": {
+    "low": "低",
+    "medium": "中",
+    "high": "高"
+  },
+  "demand": {
+    "title": "活跃需求",
+    "unitsPerMonth": "单位/月",
+    "currentPrice": "当前价格"
+  },
+  "map": {
+    "title": "供应链地图",
+    "openFullMap": "打开完整地图"
+  },
+  "regulatory": {
+    "title": "监管矩阵",
+    "subtitle": "合规快照",
+    "tga": "TGA",
+    "fda": "FDA",
+    "nmpa": "NMPA",
+    "ema": "EMA",
+    "australia": "澳大利亚",
+    "usa": "美国",
+    "china": "中国",
+    "europe": "欧洲"
+  },
+  "regulatoryMatrix": {
+    "title": "监管矩阵",
+    "subtitle": "澳大利亚联邦与各州的产品合规要求",
+    "allMarkets": "全部市场",
+    "market": "市场",
+    "region": "地区",
+    "product": "产品",
+    "body": "监管机构",
+    "classification": "分类",
+    "risk": "风险",
+    "detailTitle": "条目详情",
+    "requirements": "要求",
+    "lastUpdated": "更新日期",
+    "source": "来源"
+  },
+  "insights": {
+    "title": "Agent 洞察",
+    "riskAlert": "风险警报",
+    "marketIntel": "市场情报",
+    "riskAlertBody": "NSW 新监管更新影响多肽存储协议。Batch #992 需立即处理。",
+    "marketIntelBody": "检测到墨尔本市场竞品降价。建议调整利润率 2.1%。",
+    "ago2m": "2 分钟前",
+    "ago1h": "1 小时前"
+  },
+  "decisions": {
+    "title": "待决策事项",
+    "none": "暂无关键决策待处理。",
+    "alertNswStorage": "NSW 存储协议更新",
+    "alertNswStorageSummary": "NSW Health 对配制药房发布新的多肽存储要求，立即生效。"
+  },
+  "weeklyReg": {
+    "title": "本周监管摘要",
+    "item1": "NSW：配制多肽新存储协议（2026年6月生效）",
+    "item2": "TGA：BPC-157 进口许可续期窗口开放",
+    "item3": "VIC：配制药房注册积压 — 平均 3 周"
+  },
+  "supplyChain": {
+    "loading": "加载中…",
+    "mapTitle": "路径流程",
+    "selectNodeHint": "选择节点查看详情、文件与风险。",
+    "filterByType": "按类型筛选",
+    "allTypes": "全部类型",
+    "resetSeed": "重置为种子数据",
+    "offlineMode": "离线模式 — 请在 .env.local 配置 Supabase 以持久化数据。",
+    "tabs": {
+      "map": "统一地图",
+      "roles": "角色与公司",
+      "documents": "文件"
+    },
+    "paths": {
+      "b2bCompounding": "B2B → 配制药房",
+      "b2bCompoundingDesc": "优先低风险批量路径，面向 compounding pharmacy",
+      "clinicPrescriber": "诊所 / 处方医生路径",
+      "clinicPrescriberDesc": "经处方医生的患者定制配制",
+      "greyRetail": "灰色零售（高风险）",
+      "greyRetailDesc": "非监管线上渠道 — 需监控执法动态"
+    },
+    "nodeTypes": {
+      "manufacturer": "生产制造商",
+      "exporter": "出口商",
+      "freight_forwarder": "国际货代",
+      "customs_broker_au": "澳大利亚报关行",
+      "import_permit_holder": "进口许可持有方",
+      "warehouse_bonded": "保税仓库",
+      "quality_testing_lab": "质量检测实验室",
+      "compounding_pharmacy": "配制药房",
+      "wholesale_distributor": "批发分销商",
+      "clinic": "诊所",
+      "doctor_prescriber": "处方医生",
+      "hospital": "医院",
+      "retail_pharmacy": "零售药房",
+      "grey_market_retail": "灰色零售渠道",
+      "online_retailer": "线上零售商",
+      "end_customer_b2b": "B2B 终端客户",
+      "end_customer_b2c": "B2C 终端消费者",
+      "regulatory_authority": "监管机构",
+      "legal_counsel": "法律顾问"
+    },
+    "transport": {
+      "air": "空运",
+      "sea": "海运",
+      "courier": "快递",
+      "domestic": "国内"
+    },
+    "docTypes": {
+      "gmp_cert": "GMP 证书",
+      "coa": "分析证书 (COA)",
+      "quality_cert": "质量证书",
+      "msds": "安全数据表",
+      "import_permit": "进口许可",
+      "customs_declaration": "海关申报",
+      "invoice_packing": "发票箱单",
+      "certificate_of_origin": "原产地证",
+      "tga_approval": "TGA 批准",
+      "pharmacy_license": "药房许可证",
+      "compounding_registration": "配制注册",
+      "warehouse_bonded": "保税仓库资质",
+      "customer_specific": "客户特定文件",
+      "state_specific": "州别要求",
+      "other": "其他"
+    },
+    "docStatus": {
+      "valid": "有效",
+      "expiring_soon": "即将过期",
+      "expired": "已过期",
+      "missing": "缺失",
+      "pending": "待处理"
+    },
+    "risk": {
+      "low": "低",
+      "medium": "中",
+      "high": "高"
+    },
+    "status": {
+      "active": "活跃",
+      "inactive": "停用",
+      "blocked": "阻断"
+    },
+    "nodeDetail": {
+      "title": "节点详情",
+      "edit": "编辑节点",
+      "close": "关闭面板",
+      "region": "地区",
+      "role": "角色",
+      "entity": "关联主体",
+      "docCompletion": "文件完成度",
+      "incomingEdge": "入站段",
+      "notes": "备注"
+    },
+    "nodeEdit": {
+      "title": "编辑节点",
+      "displayName": "显示名称",
+      "region": "地区",
+      "role": "角色描述",
+      "entity": "主体名称",
+      "riskLevel": "风险等级",
+      "status": "状态",
+      "docCompletion": "文件完成度",
+      "notes": "备注",
+      "cancel": "取消",
+      "save": "保存"
+    },
+    "feasibility": {
+      "title": "可行性评分",
+      "docCompletion": "文件完成度",
+      "riskFactor": "风险因子",
+      "optimal": "最优",
+      "moderate": "中等",
+      "critical": "严重"
+    },
+    "documents": {
+      "title": "文件追踪",
+      "subtitle": "GMP、COA、许可与客户特定文件",
+      "all": "全部",
+      "type": "类型",
+      "product": "产品",
+      "linkedNode": "关联节点",
+      "status": "状态",
+      "expiry": "有效期"
+    },
+    "unifiedMap": {
+      "title": "统一供应链路径",
+      "subtitle": "三条路径共享上游节点，分支后汇聚至患者",
+      "sharedTrunk": "共享上游",
+      "converge": "汇聚"
+    },
+    "roles": {
+      "cnManufacturer": "中国多肽工厂",
+      "cnExporter": "中国出口商",
+      "freightForwarder": "国际货代",
+      "auCustomsBroker": "澳洲报关行",
+      "importPermitHolder": "进口许可持有方",
+      "bondedWarehouse": "保税仓库",
+      "testingLab": "质量检测实验室",
+      "compoundingPharmacy": "配制药房",
+      "wholesaleDistributor": "批发分销商",
+      "prescriber": "处方医生",
+      "clinic": "诊所",
+      "greyRetail": "灰色零售渠道",
+      "patient": "患者",
+      "expressCourier": "快递直邮",
+      "b2bCustomer": "B2B 终端客户"
+    },
+    "rolesSection": {
+      "title": "供应链角色与公司",
+      "companies": "家公司",
+      "formedChains": "已形成供应链链路",
+      "roleDetail": "角色详情"
+    },
+    "companyStatus": {
+      "active": "合作中",
+      "prospect": "潜在",
+      "paused": "暂停"
+    },
+    "chainStatus": {
+      "active": "运行中",
+      "forming": "筹建中",
+      "blocked": "已阻断"
+    }
+  },
+  "pathTypes": {
+    "primary": "主路径",
+    "alternative": "替代路径",
+    "high_risk": "高风险"
+  },
+  "nodeTypes": {
+    "manufacturer": "生产制造商",
+    "exporter": "出口商",
+    "freight_forwarder": "国际货代",
+    "customs_broker_au": "澳大利亚报关行",
+    "import_permit_holder": "进口许可持有方",
+    "warehouse_bonded": "保税仓库",
+    "quality_testing_lab": "质量检测实验室",
+    "compounding_pharmacy": "配制药房",
+    "wholesale_distributor": "批发分销商",
+    "clinic": "诊所",
+    "doctor_prescriber": "处方医生",
+    "hospital": "医院",
+    "retail_pharmacy": "零售药房",
+    "grey_market_retail": "灰色零售渠道",
+    "online_retailer": "线上零售商",
+    "end_customer_b2b": "B2B 终端客户",
+    "end_customer_b2c": "B2C 终端消费者",
+    "regulatory_authority": "监管机构",
+    "legal_counsel": "法律顾问"
+  },
+  "transport": {
+    "air": "空运",
+    "sea": "海运",
+    "courier": "快递",
+    "domestic": "国内"
+  },
+  "docTypes": {
+    "gmp_cert": "GMP 证书",
+    "coa": "分析证书 (COA)",
+    "quality_cert": "质量证书",
+    "msds": "安全数据表",
+    "import_permit": "进口许可",
+    "customs_declaration": "海关申报",
+    "invoice_packing": "发票箱单",
+    "certificate_of_origin": "原产地证",
+    "tga_approval": "TGA 批准",
+    "pharmacy_license": "药房许可证",
+    "compounding_registration": "配制注册",
+    "warehouse_bonded": "保税仓库资质",
+    "customer_specific": "客户特定文件",
+    "state_specific": "州别要求",
+    "other": "其他"
+  },
+  "docStatus": {
+    "valid": "有效",
+    "expiring_soon": "即将过期",
+    "expired": "已过期",
+    "missing": "缺失",
+    "pending": "待处理"
+  },
+  "pages": {
+    "supplyChain": {
+      "title": "供应链地图",
+      "description": "具名节点的交互式路径地图，含文件与风险等级。"
+    },
+    "regulatory": {
+      "title": "监管矩阵",
+      "description": "澳大利亚联邦与各州的产品合规要求。"
+    },
+    "documents": {
+      "title": "文件与资质追踪",
+      "description": "GMP、COA、许可与客户特定文件状态。"
+    },
+    "intelligence": {
+      "title": "市场情报",
+      "description": "多源情报信号：新闻法规、内幕消息、社交媒体、下游 2C 平台。"
+    },
+    "productMonitor": {
+      "title": "产品监控",
+      "description": "澳洲对标平台 SKU 覆盖率、组合配方、规格共识与三档备货决策。"
+    },
+    "relations": {
+      "title": "供应商与客户",
+      "description": "供应商资质与客户需求对照，点击产品查看匹配供应商。"
+    },
+    "risk": {
+      "title": "风险瞭望塔",
+      "description": "路径、节点与产品的活跃风险信号。"
+    },
+    "alerts": {
+      "title": "提醒与行动中心",
+      "description": "优先级提醒与建议动作。"
+    },
+    "inbox": {
+      "title": "Agent 收件箱",
+      "description": "团队异步输入 — AI 提议更新，等你确认。"
+    }
+  },
+  "documentsPage": {
+    "type": "文件类型",
+    "product": "产品",
+    "status": "状态",
+    "expiry": "有效期",
+    "gap": "缺口 / 备注"
+  },
+  "intelligencePage": {
+    "product": "产品",
+    "opportunity": "机会分",
+    "demand": "需求",
+    "localPrice": "本地价",
+    "competitive": "竞品价",
+    "sensitivity": "监管敏感度",
+    "trend": "趋势",
+    "allSources": "全部来源",
+    "heat": "热度",
+    "regulatory": "监管",
+    "skuRanking": "SKU 机会排行",
+    "sources": {
+      "news_legal": "新闻 / 法律 / 官员言论",
+      "insider": "业务内幕消息",
+      "social": "社交媒体",
+      "platform_2c": "下游 2C 平台"
+    },
+    "sourceOutputs": {
+      "news_legal": "→ 多肽产品热度、监管强度",
+      "insider": "→ 多肽发展监管趋势",
+      "social": "→ 品类喜好热度、监管趋势",
+      "platform_2c": "→ 产品上线情况、市场热度"
+    }
+  },
+  "productMonitor": {
+    "title": "产品监控",
+    "subtitle": "澳洲 12 个对标平台 · 221 种多肽 · 三档备货决策",
+    "introShort": "上方为 23 个决策 SKU；全库 221 种可展开浏览。覆盖率 ≠ 销量。",
+    "intro": "基于对标平台产品矩阵与供应商备货建议（2026-06-22）。平台覆盖率反映上架普遍程度，不等同于真实销量；正式采购前须取得客户用量、资质与合规文件。",
+    "sources": "数据来源",
+    "tabs": {
+      "matrix": "产品决策矩阵",
+      "blends": "组合配方",
+      "strategy": "备货策略"
+    },
+    "tiers": {
+      "core": "核心库存",
+      "trial": "试销库存",
+      "avoid": "不建议做"
+    },
+    "kpi": {
+      "core": "核心 SKU",
+      "trial": "试销 SKU",
+      "avoid": "不建议",
+      "avgCoverage": "平均覆盖率",
+      "highRisk": "高监管风险",
+      "benchmarkPlatforms": "对标平台",
+      "asOf": "基准日",
+      "productTypes": "种多肽",
+      "listings": "条上架"
+    },
+    "filters": {
+      "allTiers": "全部档位"
+    },
+    "table": {
+      "product": "产品",
+      "tier": "档位",
+      "score": "综合分",
+      "coverage": "平台覆盖",
+      "spec": "共识规格",
+      "stockMode": "备货模式",
+      "leadTime": "交付周期",
+      "auRisk": "AU 监管"
+    },
+    "stockMode": {
+      "raw_material": "母库存原料",
+      "finished_small_batch": "小批量成品",
+      "delayed_fill": "延迟分装",
+      "order_only": "订单制"
+    },
+    "risk": {
+      "low": "低",
+      "medium": "中",
+      "high": "高"
+    },
+    "coverage": {
+      "title": "跨平台覆盖率",
+      "platformsListed": "平台上架",
+      "level": {
+        "0": "未上架",
+        "1": "弱（1 SKU）",
+        "2": "中（2 SKU）",
+        "3": "强（3+ SKU）"
+      }
+    },
+    "specs": {
+      "title": "规格共性",
+      "consensus": "共识规格",
+      "primarySpec": "建议常备",
+      "variants": "市场规格变体",
+      "forms": "常见形态"
+    },
+    "blends": {
+      "title": "组合配方",
+      "platforms": "平台覆盖"
+    },
+    "detail": {
+      "close": "关闭",
+      "selectHint": "选择产品查看详情",
+      "scoreBreakdown": "评分拆解",
+      "composite": "综合分",
+      "coverage": "覆盖率",
+      "demand": "需求",
+      "supplyFeasibility": "供应可行性",
+      "turnover": "周转",
+      "regRisk": "监管风险",
+      "stockingLogic": "备货逻辑",
+      "supplyChain": "供应链周转",
+      "stockWeeks": "库存周数",
+      "stockMode": "模式",
+      "leadTime": "交付周期",
+      "days": "天",
+      "reorder": "补货说明",
+      "regulatory": "澳洲监管备注"
+    },
+    "strategy": {
+      "title": "三档备货策略",
+      "coreTitle": "第一梯队 · 核心备货",
+      "trialTitle": "第二梯队 · 试销小批量",
+      "avoidTitle": "第三梯队 · 订单制"
+    },
+    "catalog": {
+      "title": "平台全库目录",
+      "types": "种多肽",
+      "inDecision": "已纳入决策",
+      "searchPlaceholder": "搜索产品名称…",
+      "noResults": "无匹配产品",
+      "showAll": "展开全部 {count} 种",
+      "showLess": "收起",
+      "decision": "决策",
+      "bands": {
+        "high": "广覆盖 10–12",
+        "medium": "中等 5–9",
+        "low": "小众 1–4",
+        "none": "未上架"
+      }
+    }
+  },
+  "finance": {
+    "title": "财务数据",
+    "subtitle": "按国家、地区、品类、时间查看销售详情与汇总",
+    "country": "国家",
+    "region": "地区",
+    "product": "产品",
+    "category": "品类",
+    "period": "时间",
+    "groupBy": "汇总维度",
+    "all": "全部",
+    "totalRevenue": "总营收",
+    "totalQuantity": "总销量",
+    "recordCount": "记录数",
+    "avgOrderValue": "均单值",
+    "revenueBreakdown": "营收分布",
+    "quantity": "数量",
+    "revenue": "营收",
+    "noData": "当前筛选条件下无数据"
+  },
+  "relationsPage": {
+    "suppliers": "供应商",
+    "customers": "客户",
+    "demandProduct": "需求产品",
+    "demandQuantity": "需求量",
+    "targetPrice": "目标价格",
+    "findSuppliers": "查看符合标准的供应商",
+    "matchTitle": "匹配供应商",
+    "requiredDocs": "客户要求文件",
+    "noMatch": "暂无符合全部文件要求的供应商"
+  },
+  "crm": {
+    "contact": "联系人",
+    "email": "邮箱",
+    "products": "产品",
+    "latestQuote": "最新报价"
+  },
+  "entityTypes": {
+    "supplier": "供应商",
+    "customer": "客户",
+    "intermediary": "中间商"
+  },
+  "cooperationStatus": {
+    "prospect": "潜在",
+    "negotiating": "洽谈中",
+    "active": "合作中",
+    "paused": "暂停",
+    "terminated": "终止"
+  },
+  "riskTypes": {
+    "regulatory_tightening": "监管收紧",
+    "state_new_requirement": "州级新要求",
+    "product_sensitivity_up": "产品敏感度上升",
+    "supply_node_failure": "供应链节点断裂",
+    "enforcement_action": "执法行动",
+    "document_gap_critical": "文件缺口",
+    "customer_requirement_change": "客户要求变更",
+    "price_pressure": "价格竞争"
+  },
+  "riskStatus": {
+    "open": "开放",
+    "monitoring": "监控中",
+    "resolved": "已解决"
+  },
+  "riskNswStorage": "NSW 存储协议变更",
+  "riskNswStorageBody": "NSW Health 要求所有配制多肽更新冷链存储文档。",
+  "riskCompoundingReg": "配制注册缺口",
+  "riskCompoundingRegBody": "Precision Compounding VIC 缺少最新州注册 — 阻碍路径全面激活。",
+  "riskTb500Schedule": "TB-500 Schedule 4 分类",
+  "riskTb500ScheduleBody": "TB-500 现为 Schedule 4 — 所有进口路径需处方医生授权。",
+  "riskGreyEnforcement": "灰色渠道执法",
+  "riskGreyEnforcementBody": "TGA 加强对线上多肽零售商的审查，灰色路径风险升高。",
+  "alertNswStorage": "NSW 存储协议更新",
+  "alertNswStorageSummary": "NSW Health 发布新的多肽存储要求，立即生效。",
+  "alertImportPermit": "进口许可即将过期",
+  "alertImportPermitSummary": "AusPharm Import Holdings 许可将于 2026年8月15日过期，续期待办。",
+  "alertCompetitorPrice": "墨尔本竞品降价",
+  "alertCompetitorPriceSummary": "墨尔本 BPC-157 竞品价下降 6%，建议审查利润率策略。",
+  "alertCompoundingReg": "配制注册跟进",
+  "alertCompoundingRegSummary": "跟进 Precision Compounding VIC 的注册时间线。",
+  "alertSource": {
+    "agent": "Agent",
+    "manual": "手动",
+    "scheduled_scout": "监管侦察"
+  },
+  "alertsPage": {
+    "suggestedActions": "建议动作"
+  },
+  "inboxPage": {
+    "placeholder": "粘贴供应商报价、监管更新或客户文件要求…",
+    "send": "发送",
+    "proposedUpdates": "提议更新",
+    "confirm": "确认",
+    "reject": "拒绝",
+    "confirmed": "已确认并应用",
+    "rejected": "已拒绝",
+    "analyzing": "正在分析输入…",
+    "offlineMode": "离线模式 — 配置 Supabase 后收件箱写入将持久化。",
+    "dbConnected": "已通过 Supabase 连接 PostgreSQL"
+  }
+}

@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+:root {
+  --bg-base: #000000;
+  --bg-card: #0a0a0a;
+  --bg-card-elevated: #1a1a1a;
+  --border-subtle: #2a2a2a;
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --accent-teal: #14b8a6;
+  --accent-teal-bright: #2dd4bf;
+  --accent-orange: #f97316;
+  --accent-green: #22c55e;
+  --accent-red: #ef4444;
+}
+
+@theme inline {
+  --color-command-bg: var(--bg-base);
+  --color-command-card: var(--bg-card);
+  --color-command-card-elevated: var(--bg-card-elevated);
+  --color-command-border: var(--border-subtle);
+  --color-command-text: var(--text-primary);
+  --color-command-text-secondary: var(--text-secondary);
+  --color-command-text-muted: var(--text-muted);
+  --color-command-teal: var(--accent-teal);
+  --color-command-teal-bright: var(--accent-teal-bright);
+  --color-command-orange: var(--accent-orange);
+  --color-command-green: var(--accent-green);
+  --color-command-red: var(--accent-red);
+  --font-sans: var(--font-inter), "PingFang SC", "Noto Sans SC", -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  height: 100%;
+  overflow-x: hidden;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.glow-teal {
+  box-shadow: 0 0 12px rgba(20, 184, 166, 0.4);
+}
+
+.glow-orange {
+  box-shadow: 0 0 12px rgba(249, 115, 22, 0.4);
+}
+
+.grid-map-bg {
+  background-image:
+    linear-gradient(rgba(42, 42, 42, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(42, 42, 42, 0.5) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.card-hover {
+  transition: border-color 150ms ease;
+}
+
+.card-hover:hover {
+  border-color: rgba(20, 184, 166, 0.3);
+}
+
+.input-field {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card-elevated);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 150ms ease;
+}
+
+.input-field:focus {
+  border-color: rgba(20, 184, 166, 0.5);
+}
+
+.input-field option {
+  background: var(--bg-card-elevated);
+}
