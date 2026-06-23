@@ -42,6 +42,11 @@ export function mapRegulatory(row: RegRow): RegulatoryEntry {
     regulatoryBody: row.regulatory_body,
     classification: row.classification,
     requirements: (row.requirements as string[]) ?? [],
+    operationalConsequence:
+      (row as RegRow & { operational_consequence?: string }).operational_consequence ??
+      ((row.requirements as string[])?.[0]
+        ? `Requires: ${(row.requirements as string[]).slice(0, 2).join(", ")}`
+        : "See classification"),
     riskLevel: row.risk_level as RegulatoryEntry["riskLevel"],
     lastUpdated: row.last_updated,
     source: row.source,
@@ -143,16 +148,32 @@ export function mapPlatform(row: PlatformRow): PlatformDefinition {
 }
 
 export function mapIntelSignal(row: SignalRow): IntelSignal {
+  const regulatoryImpact = row.regulatory_impact ?? undefined;
+  const heatImpact = row.heat_impact ?? undefined;
+  const source = row.source as IntelSignal["source"];
+
+  let dimension: IntelSignal["dimension"] = "demand";
+  if (source === "news_legal" || (regulatoryImpact ?? 0) !== 0) {
+    dimension = "regulatory";
+  } else if (source === "insider" && (heatImpact ?? 0) === 0) {
+    dimension = "competitive";
+  }
+
   return {
     id: row.id,
-    source: row.source as IntelSignal["source"],
+    source,
     title: row.title,
     summary: row.summary,
     date: row.signal_date,
     region: row.region ?? undefined,
     products: (row.products as string[]) ?? [],
-    heatImpact: row.heat_impact ?? undefined,
-    regulatoryImpact: row.regulatory_impact ?? undefined,
+    dimension,
+    directionLabel: dimension === "regulatory" ? "Regulatory signal" : "Market signal",
+    pendingMatrixUpdate: dimension === "regulatory" && (regulatoryImpact ?? 0) > 0,
+    credibility: source === "news_legal" ? "high" : "medium",
+    horizon: "weeks",
+    heatImpact,
+    regulatoryImpact,
     trend: (row.trend as IntelSignal["trend"]) ?? undefined,
     url: row.url ?? undefined,
   };

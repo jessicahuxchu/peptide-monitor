@@ -2,15 +2,19 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { ChevronDown, ChevronRight, X } from "lucide-react";
 import { PlatformCoverageMap } from "@/components/product-monitor/PlatformCoverageMap";
 import { SpecConsensusPanel } from "@/components/product-monitor/BlendCompositionView";
 import { TierBadge } from "@/components/product-monitor/TierBadge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { useDbResource } from "@/hooks/useDbResource";
 import {
   getBlendsForProductFromData,
   useProductMonitor,
 } from "@/components/providers/ProductMonitorProvider";
+import { regulatoryEntries as fallbackRegulatory } from "@/lib/supply-chain/seed-data";
+import { getProductRegulatoryRisk } from "@/lib/regulatory/matrix";
 import type { ProductMonitorRecord } from "@/lib/product-monitor/types";
 
 const riskVariant = {
@@ -27,6 +31,11 @@ interface ProductDetailPanelProps {
 export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps) {
   const t = useTranslations("productMonitor");
   const { data } = useProductMonitor();
+  const { data: regulatoryEntries } = useDbResource(
+    "/api/regulatory",
+    fallbackRegulatory,
+  );
+  const matrixRisk = getProductRegulatoryRisk(record.product, regulatoryEntries);
   const blends = getBlendsForProductFromData(data, record.id);
   const [showPlatforms, setShowPlatforms] = useState(false);
 
@@ -36,9 +45,11 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
         <div>
           <div className="mb-1.5 flex flex-wrap items-center gap-2">
             <TierBadge tier={record.tier} />
-            <StatusBadge variant={riskVariant[record.auRegulatoryRisk]}>
-              {t(`risk.${record.auRegulatoryRisk}`)}
-            </StatusBadge>
+            <Link href="/regulatory" className="inline-flex">
+              <StatusBadge variant={riskVariant[matrixRisk]}>
+                {t(`risk.${matrixRisk}`)}
+              </StatusBadge>
+            </Link>
             <span className="text-lg font-bold tabular-nums text-command-teal-bright">
               {record.compositeScore}
             </span>

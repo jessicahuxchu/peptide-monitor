@@ -7,8 +7,8 @@
     "strategic": "战略",
     "finance": "财务",
     "supplyChain": "供应链",
-    "regulatory": "监管",
-    "intelligence": "情报",
+    "intelligence": "市场监测",
+    "regulatory": "合规矩阵",
     "productMonitor": "产品监控",
     "relations": "关系",
     "risk": "风险"
@@ -83,8 +83,42 @@
     "europe": "欧洲"
   },
   "regulatoryMatrix": {
-    "title": "监管矩阵",
-    "subtitle": "澳大利亚联邦与各州的产品合规要求",
+    "title": "合规矩阵",
+    "subtitle": "联邦基线 + 各州增量 — AU 监管风险唯一真相源",
+    "layerHint": "状态层：已确认的法律边界。全站 AU 监管风险均引用此矩阵，情报信号中的监管 delta 需确认后才更新此处。",
+    "disclaimerTitle": "合规声明",
+    "version": "版本",
+    "asOf": "截至",
+    "escalationRule": "升档规则",
+    "lawyerReview": "律师复核项",
+    "tabs": {
+      "matrix": "决策矩阵",
+      "framework": "州法框架",
+      "logic": "产品逻辑",
+      "sources": "来源与状态"
+    },
+    "type": "类型",
+    "jurisdiction": "辖区",
+    "legalBasis": "法律依据",
+    "stateOverlay": "州级叠加分类",
+    "difference": "与联邦差异",
+    "federalClassification": "联邦分类",
+    "baseRisk": "基础风险",
+    "productQualification": "产品定性",
+    "productLogic": "产品逻辑",
+    "s4BasisType": "S4 依据类型",
+    "artgStatus": "ARTG 状态",
+    "basisRef": "依据引用",
+    "reviewStatus": "复核状态",
+    "lawyerPending": "待律师填",
+    "lawyerPendingS4": "S4 依据类型待律师确认",
+    "lawyerPendingArtg": "ARTG 状态待律师确认",
+    "reviewPending": "待复核",
+    "federalBaseline": "联邦 (基线)",
+    "stateDelta": "州级增量",
+    "inheritsFederal": "同联邦",
+    "selectCellHint": "点击矩阵单元格查看分类、风险等级与操作后果",
+    "operationalConsequence": "操作后果",
     "allMarkets": "全部市场",
     "market": "市场",
     "region": "地区",
@@ -92,8 +126,8 @@
     "body": "监管机构",
     "classification": "分类",
     "risk": "风险",
-    "detailTitle": "条目详情",
-    "requirements": "要求",
+    "detailTitle": "合规详情",
+    "requirements": "文件要求",
     "lastUpdated": "更新日期",
     "source": "来源"
   },
@@ -345,20 +379,20 @@
       "description": "具名节点的交互式路径地图，含文件与风险等级。"
     },
     "regulatory": {
-      "title": "监管矩阵",
-      "description": "澳大利亚联邦与各州的产品合规要求。"
+      "title": "合规矩阵",
+      "description": "状态层 — 联邦基线 + 各州增量，AU 监管风险唯一真相源。"
     },
     "documents": {
       "title": "文件与资质追踪",
       "description": "GMP、COA、许可与客户特定文件状态。"
     },
     "intelligence": {
-      "title": "市场情报",
-      "description": "多源情报信号：新闻法规、内幕消息、社交媒体、下游 2C 平台。"
+      "title": "市场监测",
+      "description": "信号层 — 先行指标与舆论监测，监管 delta 确认后写入合规矩阵。"
     },
     "productMonitor": {
       "title": "产品分析",
-      "description": "基于对标平台的多肽产品覆盖率、监管风险与机会评估。"
+      "description": "决策层 — 聚合情报动量、合规约束与平台覆盖，输出 SKU 优先级。"
     },
     "relations": {
       "title": "供应商与客户",
@@ -396,6 +430,26 @@
     "heat": "热度",
     "regulatory": "监管",
     "skuRanking": "SKU 机会排行",
+    "layerHint": "信号层：在监管与财务把变化变成既成事实之前，提前看到可能影响 SKU 的变量。监管 +N 表示待确认矩阵 delta，不是当前合规状态。",
+    "pendingMatrix": "待确认矩阵更新",
+    "matrixDelta": "矩阵 delta",
+    "confirmToMatrix": "确认后更新矩阵 →",
+    "sourceBreakdown": "来源分布",
+    "dimensions": {
+      "demand": "需求侧",
+      "regulatory": "监管侧",
+      "competitive": "竞争侧"
+    },
+    "credibility": {
+      "high": "高可信",
+      "medium": "中可信",
+      "low": "低可信"
+    },
+    "horizon": {
+      "immediate": "即时",
+      "weeks": "数周",
+      "months": "数月"
+    },
     "topOpportunity": "最高机会 SKU",
     "avgOpportunity": "平均机会分",
     "signalCount": "情报信号数",
@@ -508,6 +562,22 @@
       "coreTitle": "第一梯队 · 核心机会",
       "trialTitle": "第二梯队 · 观察品类",
       "avoidTitle": "第三梯队 · 订单制"
+    },
+    "opportunity": {
+      "title": "SKU 机会排行",
+      "subtitle": "决策层输出 — 综合需求动量、价格差与监管约束",
+      "layerHint": "机会分由情报层变量驱动；AU 监管风险引用合规矩阵，点击可 drill 至监管页。",
+      "topSku": "最高机会",
+      "topScore": "机会分",
+      "formula": "评分公式",
+      "formulaShort": "需求 × 价格 × 合规",
+      "product": "产品",
+      "score": "机会分",
+      "demand": "需求",
+      "priceGap": "价差",
+      "trend": "趋势",
+      "regulatoryRef": "监管风险见",
+      "regulatoryLink": "合规矩阵 →"
     },
     "catalog": {
       "title": "平台全库目录",

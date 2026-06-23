@@ -7,8 +7,8 @@
     "strategic": "Strategic",
     "finance": "Finance",
     "supplyChain": "Supply Chain",
-    "regulatory": "Regulatory",
-    "intelligence": "Intelligence",
+    "intelligence": "Monitor",
+    "regulatory": "Compliance",
     "productMonitor": "SKU Monitor",
     "relations": "Relations",
     "risk": "Risk"
@@ -83,8 +83,42 @@
     "europe": "EUROPE"
   },
   "regulatoryMatrix": {
-    "title": "Regulatory Matrix",
-    "subtitle": "Australia federal & state compliance by product",
+    "title": "Compliance Matrix",
+    "subtitle": "Federal baseline + state deltas — single source of AU regulatory risk",
+    "layerHint": "State layer: confirmed legal boundaries. All AU risk badges site-wide reference this matrix. Intelligence regulatory deltas update here only after confirmation.",
+    "disclaimerTitle": "Compliance notice",
+    "version": "Version",
+    "asOf": "As of",
+    "escalationRule": "Escalation rule",
+    "lawyerReview": "Lawyer review items",
+    "tabs": {
+      "matrix": "Decision Matrix",
+      "framework": "State Framework",
+      "logic": "Product Logic",
+      "sources": "Sources & Status"
+    },
+    "type": "Type",
+    "jurisdiction": "Jurisdiction",
+    "legalBasis": "Legal basis",
+    "stateOverlay": "State overlay",
+    "difference": "Delta vs federal",
+    "federalClassification": "Federal classification",
+    "baseRisk": "Base risk",
+    "productQualification": "Product qualification",
+    "productLogic": "Product logic",
+    "s4BasisType": "S4 basis type",
+    "artgStatus": "ARTG status",
+    "basisRef": "Basis reference",
+    "reviewStatus": "Review status",
+    "lawyerPending": "Pending lawyer",
+    "lawyerPendingS4": "S4 basis type pending lawyer review",
+    "lawyerPendingArtg": "ARTG status pending lawyer review",
+    "reviewPending": "Pending review",
+    "federalBaseline": "Federal (baseline)",
+    "stateDelta": "State delta",
+    "inheritsFederal": "Same as federal",
+    "selectCellHint": "Click a cell for classification, risk level, and operational consequence",
+    "operationalConsequence": "Operational consequence",
     "allMarkets": "All Markets",
     "market": "Market",
     "region": "Region",
@@ -92,8 +126,8 @@
     "body": "Regulatory Body",
     "classification": "Classification",
     "risk": "Risk",
-    "detailTitle": "Entry Detail",
-    "requirements": "Requirements",
+    "detailTitle": "Compliance Detail",
+    "requirements": "Document requirements",
     "lastUpdated": "Last Updated",
     "source": "Source"
   },
@@ -345,20 +379,20 @@
       "description": "Interactive path map with named nodes, documents, and risk levels."
     },
     "regulatory": {
-      "title": "Regulatory Matrix",
-      "description": "Australia federal and state compliance by product."
+      "title": "Compliance Matrix",
+      "description": "State layer — federal baseline + state deltas. Single source of AU regulatory risk."
     },
     "documents": {
       "title": "Document & Certificate Tracker",
       "description": "GMP, COA, permits, and customer-specific file status."
     },
     "intelligence": {
-      "title": "Market Intelligence",
-      "description": "Multi-source signals: news/legal, insider intel, social media, downstream 2C platforms."
+      "title": "Market Monitor",
+      "description": "Signal layer — leading indicators and sentiment. Regulatory deltas write to matrix after confirmation."
     },
     "productMonitor": {
       "title": "Product Analysis",
-      "description": "Peptide coverage, regulatory risk, and opportunity assessment across benchmark platforms."
+      "description": "Decision layer — aggregates intel momentum, compliance constraints, and platform coverage into SKU priority."
     },
     "relations": {
       "title": "Suppliers & Customers",
@@ -396,6 +430,26 @@
     "heat": "Heat",
     "regulatory": "Regulatory",
     "skuRanking": "SKU Opportunity Ranking",
+    "layerHint": "Signal layer: see variable shifts before regulatory and finance turn them into facts. Regulatory +N is a pending matrix delta, not current compliance status.",
+    "pendingMatrix": "Pending matrix updates",
+    "matrixDelta": "Matrix Δ",
+    "confirmToMatrix": "Confirm → update matrix",
+    "sourceBreakdown": "Source breakdown",
+    "dimensions": {
+      "demand": "Demand",
+      "regulatory": "Regulatory",
+      "competitive": "Competitive"
+    },
+    "credibility": {
+      "high": "High confidence",
+      "medium": "Medium",
+      "low": "Low"
+    },
+    "horizon": {
+      "immediate": "Immediate",
+      "weeks": "Weeks",
+      "months": "Months"
+    },
     "topOpportunity": "Top Opportunity",
     "avgOpportunity": "Avg Opportunity",
     "signalCount": "Signal Count",
@@ -508,6 +562,22 @@
       "coreTitle": "Tier 1 · Core Opportunities",
       "trialTitle": "Tier 2 · Watch List",
       "avoidTitle": "Tier 3 · Avoid"
+    },
+    "opportunity": {
+      "title": "SKU Opportunity Ranking",
+      "subtitle": "Decision layer output — demand momentum, price gap, and compliance constraints",
+      "layerHint": "Opportunity score is driven by intel-layer variables. AU regulatory risk references the compliance matrix — click to drill down.",
+      "topSku": "Top SKU",
+      "topScore": "Opportunity",
+      "formula": "Formula",
+      "formulaShort": "Demand × Price × Compliance",
+      "product": "Product",
+      "score": "Score",
+      "demand": "Demand",
+      "priceGap": "Price gap",
+      "trend": "Trend",
+      "regulatoryRef": "Regulatory risk:",
+      "regulatoryLink": "Compliance matrix →"
     },
     "catalog": {
       "title": "Full Platform Catalog",

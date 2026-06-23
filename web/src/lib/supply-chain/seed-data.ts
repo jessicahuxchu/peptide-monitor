@@ -1,8 +1,10 @@
 import type {
   DocumentRecord,
-  RegulatoryEntry,
   SupplyChainState,
 } from "./types";
+import { matrixRowsToRegulatoryEntries } from "@/lib/regulatory/compliance-matrix-v6";
+
+export const regulatoryEntries = matrixRowsToRegulatoryEntries();
 
 export const supplyChainState: SupplyChainState = {
   paths: [
@@ -542,57 +544,6 @@ export const supplyChainState: SupplyChainState = {
     },
   ],
 };
-
-export const regulatoryEntries: RegulatoryEntry[] = [
-  {
-    id: "r1",
-    market: "AU",
-    region: "Federal",
-    product: "BPC-157",
-    regulatoryBody: "TGA",
-    classification: "Unregistered therapeutic good",
-    requirements: ["Import permit", "GMP evidence", "COA per batch"],
-    riskLevel: "medium",
-    lastUpdated: "2026-06-10",
-    source: "TGA Guidance",
-  },
-  {
-    id: "r2",
-    market: "AU",
-    region: "VIC",
-    product: "BPC-157",
-    regulatoryBody: "DHHS Victoria",
-    classification: "Compounded medicine",
-    requirements: ["Pharmacy license", "Compounding registration", "Prescriber oversight"],
-    riskLevel: "medium",
-    lastUpdated: "2026-05-28",
-    source: "State pharmacy board",
-  },
-  {
-    id: "r3",
-    market: "AU",
-    region: "NSW",
-    product: "BPC-157",
-    regulatoryBody: "NSW Health",
-    classification: "Compounded medicine",
-    requirements: ["Storage protocol update (2026)", "Batch traceability"],
-    riskLevel: "high",
-    lastUpdated: "2026-06-15",
-    source: "NSW regulatory bulletin",
-  },
-  {
-    id: "r4",
-    market: "AU",
-    region: "Federal",
-    product: "TB-500",
-    regulatoryBody: "TGA",
-    classification: "Schedule 4 (Prescription only)",
-    requirements: ["TGA approval", "Import permit", "Prescriber authorization"],
-    riskLevel: "high",
-    lastUpdated: "2026-04-20",
-    source: "TGA Scheduling",
-  },
-];
 
 export function getPathNodes(pathId: string) {
   return supplyChainState.nodes

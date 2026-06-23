@@ -9,6 +9,7 @@ import {
   StrategySummary,
 } from "@/components/product-monitor/CompactSections";
 import { ProductMonitorKpiBar } from "@/components/product-monitor/ProductMonitorKpiBar";
+import { SkuOpportunitySection } from "@/components/product-monitor/SkuOpportunitySection";
 import { ProductDecisionMatrix } from "@/components/product-monitor/ProductDecisionMatrix";
 import { ProductDetailPanel } from "@/components/product-monitor/ProductDetailPanel";
 import { useProductMonitor } from "@/components/providers/ProductMonitorProvider";
@@ -37,6 +38,8 @@ export function ProductMonitorView() {
       <ProductMonitorKpiBar records={productMonitorRecords} />
 
       <div className="space-y-4 p-4 md:p-6">
+        <SkuOpportunitySection />
+
         <StrategySummary
           core={productMonitorRecords.filter((r) => r.tier === "core")}
           trial={productMonitorRecords.filter((r) => r.tier === "trial")}

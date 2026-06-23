@@ -96,6 +96,7 @@ export interface RegulatoryEntry {
   regulatoryBody: string;
   classification: string;
   requirements: string[];
+  operationalConsequence: string;
   riskLevel: RiskLevel;
   lastUpdated: string;
   source: string;

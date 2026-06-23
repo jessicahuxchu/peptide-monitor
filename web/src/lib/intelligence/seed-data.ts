@@ -1,3 +1,7 @@
+export type SignalDimension = "demand" | "regulatory" | "competitive";
+export type SignalCredibility = "high" | "medium" | "low";
+export type SignalHorizon = "immediate" | "weeks" | "months";
+
 export interface IntelSignal {
   id: string;
   source: "news_legal" | "insider" | "social" | "platform_2c";
@@ -6,6 +10,14 @@ export interface IntelSignal {
   date: string;
   region?: string;
   products: string[];
+  /** Which decision variable this signal may move */
+  dimension: SignalDimension;
+  /** Human-readable impact direction */
+  directionLabel: string;
+  /** True when regulatory dimension — pending matrix confirmation */
+  pendingMatrixUpdate: boolean;
+  credibility: SignalCredibility;
+  horizon: SignalHorizon;
   heatImpact?: number;
   regulatoryImpact?: number;
   trend?: "up" | "down" | "stable";
@@ -21,6 +33,11 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-15",
     region: "AU Federal",
     products: ["BPC-157"],
+    dimension: "regulatory",
+    directionLabel: "监管利好 · 许可续期窗口",
+    pendingMatrixUpdate: true,
+    credibility: "high",
+    horizon: "weeks",
     heatImpact: 15,
     regulatoryImpact: -10,
     trend: "up",
@@ -29,10 +46,15 @@ export const intelligenceSignals: IntelSignal[] = [
     id: "il2",
     source: "news_legal",
     title: "NSW Health 更新配制药房多肽存储协议",
-    summary: "新协议要求冷链存储文档升级，立即生效。监管强度显著上升。",
+    summary: "新协议要求冷链存储文档升级，立即生效。确认后将更新 NSW × BPC-157 矩阵单元格。",
     date: "2026-06-12",
     region: "NSW",
     products: ["BPC-157", "TB-500"],
+    dimension: "regulatory",
+    directionLabel: "监管收紧 · 文档门槛上升",
+    pendingMatrixUpdate: true,
+    credibility: "high",
+    horizon: "immediate",
     heatImpact: -5,
     regulatoryImpact: 35,
     trend: "down",
@@ -41,10 +63,15 @@ export const intelligenceSignals: IntelSignal[] = [
     id: "il3",
     source: "news_legal",
     title: "TB-500 列入 Schedule 4 处方药分类",
-    summary: "所有进口路径需处方医生授权，合规门槛提高。",
+    summary: "所有进口路径需处方医生授权，合规门槛提高。已反映于联邦矩阵。",
     date: "2026-04-20",
     region: "AU Federal",
     products: ["TB-500"],
+    dimension: "regulatory",
+    directionLabel: "监管收紧 · S4 分类",
+    pendingMatrixUpdate: false,
+    credibility: "high",
+    horizon: "immediate",
     heatImpact: -20,
     regulatoryImpact: 50,
     trend: "down",
@@ -57,6 +84,11 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-10",
     region: "AU Federal",
     products: ["Semaglutide"],
+    dimension: "regulatory",
+    directionLabel: "监管利好 · 合法化预期",
+    pendingMatrixUpdate: true,
+    credibility: "medium",
+    horizon: "months",
     heatImpact: 40,
     regulatoryImpact: -25,
     trend: "up",
@@ -69,6 +101,11 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-08",
     region: "NSW → QLD",
     products: ["BPC-157", "GHK-Cu"],
+    dimension: "regulatory",
+    directionLabel: "渠道迁移 · 州际路径变化",
+    pendingMatrixUpdate: true,
+    credibility: "medium",
+    horizon: "weeks",
     heatImpact: 10,
     regulatoryImpact: 20,
     trend: "stable",
@@ -81,6 +118,11 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-05",
     region: "VIC",
     products: ["BPC-157"],
+    dimension: "competitive",
+    directionLabel: "竞争压力 · 价格下行",
+    pendingMatrixUpdate: false,
+    credibility: "high",
+    horizon: "immediate",
     heatImpact: 5,
     regulatoryImpact: 0,
     trend: "stable",
@@ -93,6 +135,11 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-14",
     region: "AU",
     products: ["BPC-157", "TB-500"],
+    dimension: "demand",
+    directionLabel: "需求利好 · 讨论量上升",
+    pendingMatrixUpdate: false,
+    credibility: "medium",
+    horizon: "weeks",
     heatImpact: 32,
     regulatoryImpact: 5,
     trend: "up",
@@ -105,6 +152,11 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-11",
     region: "AU",
     products: ["GHK-Cu"],
+    dimension: "demand",
+    directionLabel: "需求利好 · 护肤场景",
+    pendingMatrixUpdate: false,
+    credibility: "medium",
+    horizon: "weeks",
     heatImpact: 45,
     regulatoryImpact: 0,
     trend: "up",
@@ -113,10 +165,15 @@ export const intelligenceSignals: IntelSignal[] = [
     id: "il9",
     source: "social",
     title: "PeptideDirect AU 遭 TGA 查封传闻在社媒扩散",
-    summary: "灰色渠道用户恐慌性转向 B2B 合规路径，短期需求波动。",
+    summary: "灰色渠道用户恐慌性转向 B2B 合规路径，短期需求波动。待核实后可能更新监管矩阵。",
     date: "2026-06-09",
     region: "AU",
     products: ["BPC-157"],
+    dimension: "regulatory",
+    directionLabel: "执法传闻 · 灰色渠道风险",
+    pendingMatrixUpdate: true,
+    credibility: "low",
+    horizon: "immediate",
     heatImpact: -15,
     regulatoryImpact: 40,
     trend: "down",
@@ -129,6 +186,11 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-13",
     region: "AU",
     products: ["BPC-157", "TB-500"],
+    dimension: "demand",
+    directionLabel: "需求信号 · 2C 上新",
+    pendingMatrixUpdate: false,
+    credibility: "high",
+    horizon: "weeks",
     heatImpact: 20,
     regulatoryImpact: 10,
     trend: "up",
@@ -141,14 +203,29 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-07",
     region: "AU",
     products: ["GHK-Cu"],
+    dimension: "demand",
+    directionLabel: "需求信号 · 美容品类扩展",
+    pendingMatrixUpdate: false,
+    credibility: "high",
+    horizon: "weeks",
     heatImpact: 25,
     regulatoryImpact: 0,
     trend: "up",
   },
 ];
 
-export function getSignalsBySource(source: IntelSignal["source"]) {
-  return intelligenceSignals.filter((s) => s.source === source);
+export function getSignalsBySource(
+  source: IntelSignal["source"],
+  signals: IntelSignal[] = intelligenceSignals,
+) {
+  return signals.filter((s) => s.source === source);
+}
+
+export function getSignalsByDimension(
+  dimension: SignalDimension,
+  signals: IntelSignal[] = intelligenceSignals,
+) {
+  return signals.filter((s) => s.dimension === dimension);
 }
 
 export function calcAggregateImpact(signals: IntelSignal[]) {
@@ -160,4 +237,8 @@ export function calcAggregateImpact(signals: IntelSignal[]) {
     signals.reduce((s, i) => s + (i.regulatoryImpact ?? 0), 0) / signals.length,
   );
   return { heat, regulatory };
+}
+
+export function countPendingMatrixUpdates(signals: IntelSignal[] = intelligenceSignals) {
+  return signals.filter((s) => s.pendingMatrixUpdate).length;
 }

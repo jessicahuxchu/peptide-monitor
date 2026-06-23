@@ -2,9 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { TierBadge } from "@/components/product-monitor/TierBadge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { useProductMonitor } from "@/components/providers/ProductMonitorProvider";
+import { useDbResource } from "@/hooks/useDbResource";
+import { regulatoryEntries as fallbackRegulatory } from "@/lib/supply-chain/seed-data";
+import { getProductRegulatoryRisk } from "@/lib/regulatory/matrix";
 import type { InventoryTier, ProductMonitorRecord } from "@/lib/product-monitor/types";
 import { cn } from "@/lib/utils";
 
@@ -27,7 +31,10 @@ export function ProductDecisionMatrix({
 }: ProductDecisionMatrixProps) {
   const t = useTranslations("productMonitor");
   const { data } = useProductMonitor();
-  const platforms = data.platforms;
+  const { data: regulatoryEntries } = useDbResource(
+    "/api/regulatory",
+    fallbackRegulatory,
+  );
   const [tierFilter, setTierFilter] = useState<InventoryTier | "all">("all");
 
   const filtered = useMemo(() => {
@@ -103,10 +110,12 @@ export function ProductDecisionMatrix({
                 <td className="py-3 pr-3">
                   <CoverageMiniBar record={record} />
                 </td>
-                <td className="py-3">
-                  <StatusBadge variant={riskVariant[record.auRegulatoryRisk]}>
-                    {t(`risk.${record.auRegulatoryRisk}`)}
-                  </StatusBadge>
+                <td className="py-3" onClick={(e) => e.stopPropagation()}>
+                  <RegulatoryRiskLink
+                    product={record.product}
+                    entries={regulatoryEntries}
+                    label={t(`risk.${getProductRegulatoryRisk(record.product, regulatoryEntries)}`)}
+                  />
                 </td>
               </tr>
             ))}
@@ -114,6 +123,27 @@ export function ProductDecisionMatrix({
         </table>
       </div>
     </div>
+  );
+}
+
+function RegulatoryRiskLink({
+  product,
+  entries,
+  label,
+}: {
+  product: string;
+  entries: typeof fallbackRegulatory;
+  label: string;
+}) {
+  const risk = getProductRegulatoryRisk(product, entries);
+  return (
+    <Link
+      href="/regulatory"
+      className="inline-flex"
+      title={product}
+    >
+      <StatusBadge variant={riskVariant[risk]}>{label}</StatusBadge>
+    </Link>
   );
 }
 

@@ -8,7 +8,6 @@ import {
   mapPlatform,
   mapProductBlend,
   mapProductMonitorRecord,
-  mapRegulatory,
   mapRiskSignal,
   mapSalesRecord,
   mapSkuOpportunity,
@@ -35,16 +34,11 @@ import type {
 } from "@/lib/supply-chain/seed-data";
 import type { RegulatoryEntry } from "@/lib/supply-chain/types";
 import type { SupplyChainState } from "@/lib/supply-chain/types";
+import { matrixRowsToRegulatoryEntries } from "@/lib/regulatory/compliance-matrix-v6";
 
+/** v6 Excel matrix is the canonical AU regulatory source until DB sync workflow exists. */
 export async function fetchRegulatoryEntries(): Promise<RegulatoryEntry[]> {
-  const supabase = createServiceClient();
-  const { data, error } = await supabase
-    .from("regulatory_entries")
-    .select("*")
-    .order("market")
-    .order("product");
-  if (error) throw error;
-  return (data ?? []).map(mapRegulatory);
+  return matrixRowsToRegulatoryEntries();
 }
 
 export async function fetchAlerts(): Promise<AlertItem[]> {
