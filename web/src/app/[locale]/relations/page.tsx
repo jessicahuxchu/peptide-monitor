@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { CommandCard } from "@/components/ui/CommandCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -10,7 +10,10 @@ import {
   customerDemands as fallbackDemands,
   matchSuppliersForDemand,
   getOfferForProduct,
+  groupCustomerDemands,
+  demandForProduct,
   type CustomerDemand,
+  type CustomerProfile,
   type SupplierProfile,
 } from "@/lib/relations/matching";
 import { ChevronDown, ChevronRight, X, ArrowRight } from "lucide-react";
@@ -31,6 +34,11 @@ export default function RelationsPage() {
   const t = useTranslations();
   const { data } = useDbResource("/api/relations", relationsFallback);
   const { suppliers: supplierProfiles, demands: customerDemands } = data;
+  const customerProfiles = useMemo(
+    () => groupCustomerDemands(customerDemands),
+    [customerDemands],
+  );
+
   const [expandedSupplierId, setExpandedSupplierId] = useState<string | null>(null);
   const [expandedCustomerId, setExpandedCustomerId] = useState<string | null>(null);
   const [selectedDemand, setSelectedDemand] = useState<CustomerDemand | null>(null);
@@ -39,20 +47,9 @@ export default function RelationsPage() {
     ? matchSuppliersForDemand(selectedDemand, supplierProfiles)
     : [];
 
-  const toggleSupplier = (id: string) => {
-    setExpandedSupplierId((prev) => (prev === id ? null : id));
-  };
-
-  const toggleCustomer = (id: string) => {
-    setExpandedCustomerId((prev) => (prev === id ? null : id));
-  };
-
   return (
     <div className="w-full max-w-full overflow-x-hidden p-4 md:p-6">
-      <CommandCard
-        title={t("pages.relations.title")}
-        subtitle={t("pages.relations.description")}
-      >
+      <CommandCard title={t("pages.relations.title")}>
         <section className="mb-8">
           <h3 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-command-text-muted">
             <span className="h-2 w-2 rounded-full bg-command-teal" />
@@ -76,7 +73,9 @@ export default function RelationsPage() {
                     key={sup.id}
                     supplier={sup}
                     expanded={expandedSupplierId === sup.id}
-                    onToggle={() => toggleSupplier(sup.id)}
+                    onToggle={() =>
+                      setExpandedSupplierId((prev) => (prev === sup.id ? null : sup.id))
+                    }
                     t={t}
                   />
                 ))}
@@ -97,19 +96,23 @@ export default function RelationsPage() {
                   <th className="w-8 p-3" />
                   <th className="p-3">{t("relationsPage.customerName")}</th>
                   <th className="p-3">{t("relationsPage.location")}</th>
-                  <th className="p-3">{t("relationsPage.demandProduct")}</th>
-                  <th className="p-3">{t("relationsPage.demandQuantity")}</th>
+                  <th className="p-3">{t("relationsPage.productCount")}</th>
+                  <th className="p-3">{t("crm.contact")}</th>
                   <th className="p-3">{t("relationsPage.status")}</th>
                 </tr>
               </thead>
               <tbody>
-                {customerDemands.map((cust) => (
+                {customerProfiles.map((cust) => (
                   <CustomerRow
-                    key={cust.id}
+                    key={`${cust.id}-${cust.email}`}
                     customer={cust}
                     expanded={expandedCustomerId === cust.id}
-                    onToggle={() => toggleCustomer(cust.id)}
-                    onMatch={() => setSelectedDemand(cust)}
+                    onToggle={() =>
+                      setExpandedCustomerId((prev) => (prev === cust.id ? null : cust.id))
+                    }
+                    onMatch={(product) =>
+                      setSelectedDemand(demandForProduct(cust, product))
+                    }
                     t={t}
                   />
                 ))}
@@ -283,10 +286,10 @@ function CustomerRow({
   onMatch,
   t,
 }: {
-  customer: CustomerDemand;
+  customer: CustomerProfile;
   expanded: boolean;
   onToggle: () => void;
-  onMatch: () => void;
+  onMatch: (product: string) => void;
   t: ReturnType<typeof useTranslations>;
 }) {
   return (
@@ -302,8 +305,10 @@ function CustomerRow({
         <td className="p-3 text-xs text-command-text-muted">
           {customer.country} · {customer.region}
         </td>
-        <td className="p-3 text-xs text-command-teal-bright">{customer.product}</td>
-        <td className="p-3 text-xs">{customer.quantity}</td>
+        <td className="p-3 text-xs text-command-teal-bright">
+          {customer.products.length} {t("relationsPage.products")}
+        </td>
+        <td className="p-3 text-xs">{customer.contact}</td>
         <td className="p-3">
           <StatusBadge variant={statusVariant[customer.status] ?? "default"}>
             {t(`cooperationStatus.${customer.status}`)}
@@ -313,50 +318,76 @@ function CustomerRow({
       {expanded && (
         <tr className="border-b border-command-border/50 bg-command-card-elevated/20">
           <td colSpan={6} className="p-4">
-            <dl className="grid gap-3 text-xs sm:grid-cols-2">
-              <Detail label={t("crm.contact")} value={customer.contact} />
-              <Detail label={t("crm.email")} value={customer.email} highlight />
-              <Detail
-                label={t("relationsPage.targetPrice")}
-                value={`$${customer.targetPrice} ${customer.priceUnit}`}
-                highlight
-              />
-              <Detail
-                label={t("relationsPage.requiredDocs")}
-                value={customer.requiredDocuments.map((d) => t(`docTypes.${d}`)).join(" · ")}
-              />
-            </dl>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onMatch();
-              }}
-              className="mt-4 flex items-center gap-1.5 rounded-lg border border-command-teal/30 bg-command-teal/5 px-3 py-2 text-xs font-medium text-command-teal-bright transition-colors hover:bg-command-teal/10"
-            >
-              {t("relationsPage.findSuppliers")}
-              <ArrowRight className="h-3 w-3" />
-            </button>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
+                  {t("relationsPage.demandProducts")}
+                </p>
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="text-command-text-muted">
+                      <th className="pb-1 text-left">{t("relationsPage.demandProduct")}</th>
+                      <th className="pb-1 text-left">{t("relationsPage.demandQuantity")}</th>
+                      <th className="pb-1 text-left">{t("relationsPage.targetPrice")}</th>
+                      <th className="pb-1 text-right" />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {customer.productDemands.map((line) => (
+                      <tr key={line.product} className="border-t border-command-border/40">
+                        <td className="py-1.5 font-medium text-command-teal-bright">{line.product}</td>
+                        <td className="py-1.5">{line.quantity}</td>
+                        <td className="py-1.5 tabular-nums">
+                          ${line.targetPrice} {line.priceUnit}
+                        </td>
+                        <td className="py-1.5 text-right">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onMatch(line.product);
+                            }}
+                            className="inline-flex items-center gap-1 rounded border border-command-teal/30 px-2 py-0.5 text-[10px] text-command-teal-bright hover:bg-command-teal/10"
+                          >
+                            {t("relationsPage.findSuppliers")}
+                            <ArrowRight className="h-3 w-3" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
+                  {t("crm.email")}
+                </p>
+                <p className="text-xs text-command-teal-bright">{customer.email}</p>
+                <p className="mb-2 mt-3 text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
+                  {t("relationsPage.requiredDocs")}
+                </p>
+                <div className="space-y-2">
+                  {customer.productDemands.map((line) => (
+                    <div key={`docs-${line.product}`}>
+                      <p className="text-[10px] font-medium text-command-text-secondary">{line.product}</p>
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {line.requiredDocuments.map((doc) => (
+                          <span
+                            key={doc}
+                            className="rounded border border-command-border px-1.5 py-0.5 text-[9px] text-command-text-muted"
+                          >
+                            {t(`docTypes.${doc}`)}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </td>
         </tr>
       )}
     </>
-  );
-}
-
-function Detail({
-  label,
-  value,
-  highlight,
-}: {
-  label: string;
-  value: string;
-  highlight?: boolean;
-}) {
-  return (
-    <div>
-      <dt className="text-command-text-muted">{label}</dt>
-      <dd className={cn("mt-0.5", highlight && "text-command-teal-bright")}>{value}</dd>
-    </div>
   );
 }

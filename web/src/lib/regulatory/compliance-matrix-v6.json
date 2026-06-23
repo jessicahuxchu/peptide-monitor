@@ -1097,7 +1097,7 @@
       "product": "GHK-Cu 外用",
       "type": "单体/剂型",
       "federalClassification": "Cosmetic boundary（待定性）",
-      "baseRisk": "橙(中)；若被认定 S4 → 红",
+      "baseRisk": "橙(中)",
       "productQualification": "仅限外用且无治疗宣称；需先做化妆品 vs 治疗品定性，再决定是否套用州 S4 overlay。",
       "classificationBasis": "TGA therapeutic claim 边界；外用化妆品路径需标签/宣称、成分浓度和剂型依据。",
       "inheritance": "剂型条件：外用；不得机械套 S4 州叠加",

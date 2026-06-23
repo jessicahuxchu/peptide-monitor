@@ -7,7 +7,7 @@
     "strategic": "Strategic",
     "finance": "Finance",
     "supplyChain": "Supply Chain",
-    "intelligence": "Monitor",
+    "intelligence": "Public Intel",
     "regulatory": "Compliance",
     "productMonitor": "SKU Monitor",
     "relations": "Relations",
@@ -16,7 +16,7 @@
   "header": {
     "brand": "PEPTIDE MONITOR",
     "version": "V1.0",
-    "agentInbox": "Agent Inbox",
+    "agentInbox": "AI Agent",
     "alerts": "Alerts",
     "deploymentMode": "AU Market",
     "signIn": "Sign In"
@@ -118,6 +118,11 @@
     "stateDelta": "State delta",
     "inheritsFederal": "Same as federal",
     "selectCellHint": "Click a cell for classification, risk level, and operational consequence",
+    "selectSourceHint": "Click a source to view excerpt with highlights",
+    "sourceDocumentTitle": "Legal Text",
+    "sourceExcerptTitle": "Excerpt",
+    "sourceAnnotations": "Annotations",
+    "openOfficialSource": "Open official source",
     "operationalConsequence": "Operational consequence",
     "allMarkets": "All Markets",
     "market": "Market",
@@ -189,8 +194,11 @@
       "retail_pharmacy": "Retail Pharmacy",
       "grey_market_retail": "Grey Market Retail",
       "online_retailer": "Online Retailer",
+      "telehealth_platform": "Telehealth Prescriber Platform",
+      "ruo_platform": "RUO Platform",
+      "research_end_user": "Research Platform / Personnel",
       "end_customer_b2b": "B2B End Customer",
-      "end_customer_b2c": "B2C End Consumer",
+      "end_customer_b2c": "C-End Patient",
       "regulatory_authority": "Regulatory Authority",
       "legal_counsel": "Legal Counsel"
     },
@@ -396,7 +404,7 @@
     },
     "relations": {
       "title": "Suppliers & Customers",
-      "description": "Browse in table view; expand rows for details. One supplier may cover multiple product categories."
+      "description": ""
     },
     "risk": {
       "title": "Risk Watchtower",
@@ -407,8 +415,8 @@
       "description": "Priority alerts with suggested actions."
     },
     "inbox": {
-      "title": "Agent Inbox",
-      "description": "Pending updates and AI assistant chat."
+      "title": "AI Agent",
+      "description": ""
     }
   },
   "documentsPage": {
@@ -614,6 +622,10 @@
     "revenueBreakdown": "Revenue Breakdown",
     "quantity": "Quantity",
     "revenue": "Revenue",
+    "costUnitPrice": "Unit Cost",
+    "totalCost": "Total Cost",
+    "salesUnitPrice": "Unit Price",
+    "share": "Share",
     "noData": "No data for current filters"
   },
   "relationsPage": {
@@ -629,6 +641,7 @@
     "productOffers": "Product Offers",
     "status": "Status",
     "demandProduct": "Product",
+    "demandProducts": "Demand products",
     "demandQuantity": "Quantity",
     "targetPrice": "Target Price",
     "findSuppliers": "Find Matching Suppliers",
@@ -694,23 +707,31 @@
     "suggestedActions": "Suggested Actions"
   },
   "inboxPage": {
-    "placeholder": "Paste supplier quote or regulatory update…",
     "send": "Send",
     "proposedUpdates": "Proposed Updates",
     "confirm": "Confirm",
     "reject": "Reject",
     "confirmed": "Confirmed & Applied",
     "rejected": "Rejected",
-    "analyzing": "Thinking…",
-    "offlineMode": "Offline mode — configure Supabase to persist inbox submissions.",
+    "analyzing": "Hermes Agent thinking…",
+    "offlineMode": "Offline mode — configure Supabase to persist pending items.",
     "dbConnected": "Connected to PostgreSQL via Supabase",
-    "pendingTitle": "Pending",
+    "pendingTitle": "Pending Review",
     "pendingSubtitle": "AI-parsed structured updates",
     "noPending": "No pending items",
-    "chatTitle": "AI Assistant",
-    "chatSubtitle": "Ask about supply chain, regulatory, and product opportunities",
-    "chatWelcome": "Hello, I'm the Peptide Monitor assistant. Ask about supply paths, regulatory updates, SKU opportunities, or supplier matching.",
-    "chatPlaceholder": "Ask a question, e.g. What's the AU opportunity for BPC-157?",
-    "chatError": "Unable to respond right now. Please try again."
+    "reviewRestricted": "Only users with review permission can confirm or reject.",
+    "chatTitle": "AI Agent",
+    "chatSubtitle": "Hermes + Qwen — chat to submit quotes, inquiries, and regulatory updates",
+    "chatWelcome": "Hello, I'm Peptide Monitor AI Agent (Hermes + Qwen). Chat freely or use quick-action buttons, add attachments, then send.",
+    "chatPlaceholder": "Type a message, or pick a quick action and fill in details…",
+    "chatError": "Unable to reach Agent. Check Hermes/Qwen configuration.",
+    "attachFile": "Attach file",
+    "inboxQueued": "Structured update queued for review on the left.",
+    "promptQuoteLabel": "Send quote",
+    "promptInquiryLabel": "Send inquiry",
+    "promptRegulatoryLabel": "Regulatory update",
+    "promptQuote": "[Supplier Quote]\nSupplier:\nProduct:\nSpec/Purity:\nUnit price:\nMOQ:\nValidity:\n\nParse into structured quote and queue for review.",
+    "promptInquiry": "[Customer Inquiry]\nCustomer:\nProduct:\nQuantity/Cadence:\nTarget price:\nRequired docs:\n\nParse demand and suggest matching suppliers.",
+    "promptRegulatory": "[Regulatory Update]\nJurisdiction:\nSource:\nChange summary:\nAffected SKU:\nSuggested matrix action:\n\nAssess alert or matrix delta."
   }
 }

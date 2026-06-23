@@ -1,19 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { dbUnavailableResponse } from "@/lib/api/auth";
+import { requireInboxReviewer } from "@/lib/api/inbox-auth";
 import { confirmSubmission } from "@/lib/db/inbox";
 
 export async function POST(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   if (!isSupabaseConfigured()) return dbUnavailableResponse();
 
+  const auth = await requireInboxReviewer();
+  if (!auth.ok) return auth.response;
+
   try {
     const { id } = await params;
-    const body = await request.json().catch(() => ({}));
-    const actor = (body.actor as string) || "user";
-    const result = await confirmSubmission(id, actor);
+    const result = await confirmSubmission(id, auth.actor);
     return NextResponse.json({ ok: true, ...result });
   } catch (err) {
     return NextResponse.json(

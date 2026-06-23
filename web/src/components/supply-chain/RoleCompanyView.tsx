@@ -4,10 +4,10 @@ import { useTranslations } from "next-intl";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import {
-  supplyChainRoles,
-  supplyChainCompanies,
-  formedChains,
   getCompaniesForRole,
+  getRolesForPath,
+  getChainsForPath,
+  supplyChainCompanies,
 } from "@/lib/supply-chain/role-data";
 import { riskColor } from "@/lib/supply-chain/utils";
 import { cn } from "@/lib/utils";
@@ -19,13 +19,17 @@ const pathTypeColors = {
 };
 
 interface RoleCompanyViewProps {
+  activePathId: string;
   selectedRoleId: string | null;
   onSelectRole: (roleId: string) => void;
 }
 
-export function RoleCompanyView({ selectedRoleId, onSelectRole }: RoleCompanyViewProps) {
+export function RoleCompanyView({ activePathId, selectedRoleId, onSelectRole }: RoleCompanyViewProps) {
   const t = useTranslations("supplyChain");
   const [expandedRoles, setExpandedRoles] = useState<Set<string>>(new Set());
+
+  const pathRoles = getRolesForPath(activePathId).filter((r) => r.id !== "role-patient");
+  const pathChains = getChainsForPath(activePathId);
 
   const toggleRole = (roleId: string) => {
     setExpandedRoles((prev) => {
@@ -44,9 +48,7 @@ export function RoleCompanyView({ selectedRoleId, onSelectRole }: RoleCompanyVie
           {t("rolesSection.title")}
         </h3>
         <div className="max-h-[480px] space-y-2 overflow-y-auto pr-1">
-          {supplyChainRoles
-            .filter((r) => r.id !== "role-patient")
-            .map((role) => {
+          {pathRoles.map((role) => {
               const companies = getCompaniesForRole(role.id);
               const isExpanded = expandedRoles.has(role.id) || selectedRoleId === role.id;
               const isSelected = selectedRoleId === role.id;
@@ -162,7 +164,7 @@ export function RoleCompanyView({ selectedRoleId, onSelectRole }: RoleCompanyVie
           {t("rolesSection.formedChains")}
         </h3>
         <div className="space-y-3">
-          {formedChains.map((chain) => (
+          {pathChains.map((chain) => (
             <article
               key={chain.id}
               className={cn(

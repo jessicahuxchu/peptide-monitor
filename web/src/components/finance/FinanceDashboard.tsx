@@ -1,19 +1,21 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { CommandCard } from "@/components/ui/CommandCard";
 import { useDashboard } from "@/components/providers/DashboardProvider";
 import {
   salesRecords as fallbackSales,
   aggregateSales,
   AU_STATES,
+  AU_REGION_LABELS,
 } from "@/lib/finance/seed-data";
 
 type GroupBy = "region" | "product" | "category" | "date";
 
 export function FinanceDashboard() {
   const t = useTranslations("finance");
+  const locale = useLocale();
   const { data } = useDashboard();
   const allRecords = data.finance.records.length ? data.finance.records : fallbackSales;
   const salesRecords = useMemo(
@@ -45,8 +47,19 @@ export function FinanceDashboard() {
   const totalRevenue = filtered.reduce((s, r) => s + r.revenue, 0);
   const totalQuantity = filtered.reduce((s, r) => s + r.quantity, 0);
 
+  const formatRegion = (code: string) => {
+    const labels = AU_REGION_LABELS[code as keyof typeof AU_REGION_LABELS];
+    if (!labels) return code;
+    return locale.startsWith("zh") ? labels.zh : labels.en;
+  };
+
+  const formatGroupKey = (key: string) => {
+    if (groupBy === "region") return formatRegion(key);
+    return key;
+  };
+
   return (
-    <CommandCard title={t("title")} subtitle={t("subtitle")}>
+    <CommandCard title={t("title")}>
       <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
         <div>
           <label className="mb-1 block text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
@@ -62,6 +75,7 @@ export function FinanceDashboard() {
           onChange={setRegion}
           options={[...AU_STATES]}
           allLabel={t("all")}
+          formatOption={formatRegion}
         />
         <FilterSelect label={t("product")} value={product} onChange={setProduct} options={financeProducts} allLabel={t("all")} />
         <FilterSelect label={t("category")} value={category} onChange={setCategory} options={financeCategories} allLabel={t("all")} />
@@ -97,24 +111,30 @@ export function FinanceDashboard() {
         {aggregated.length === 0 ? (
           <p className="text-sm text-command-text-muted">{t("noData")}</p>
         ) : (
-          aggregated.slice(0, 8).map((item) => (
-            <div key={item.key} className="flex items-center gap-2">
-              <span className="w-20 shrink-0 truncate text-[11px] text-command-text-secondary sm:w-28">
-                {item.key}
-              </span>
-              <div className="h-5 min-w-0 flex-1 overflow-hidden rounded bg-command-border">
-                <div
-                  className="flex h-full items-center rounded bg-command-teal/70 pl-2 text-[9px] font-medium text-black transition-all"
-                  style={{ width: `${Math.max((item.revenue / maxRevenue) * 100, 8)}%` }}
-                >
-                  {item.revenue >= maxRevenue * 0.15 && formatCurrency(item.revenue)}
+          aggregated.slice(0, 8).map((item) => {
+            const pct = totalRevenue > 0 ? (item.revenue / totalRevenue) * 100 : 0;
+            return (
+              <div key={item.key} className="flex items-center gap-2">
+                <span className="w-24 shrink-0 truncate text-[11px] text-command-text-secondary sm:w-32">
+                  {formatGroupKey(item.key)}
+                </span>
+                <div className="h-5 min-w-0 flex-1 overflow-hidden rounded bg-command-border">
+                  <div
+                    className="flex h-full items-center rounded bg-command-teal/70 pl-2 text-[9px] font-medium text-black transition-all"
+                    style={{ width: `${Math.max((item.revenue / maxRevenue) * 100, 8)}%` }}
+                  >
+                    {item.revenue >= maxRevenue * 0.12 && formatCurrency(item.revenue)}
+                  </div>
                 </div>
+                <span className="w-14 shrink-0 text-right text-[10px] tabular-nums text-command-teal-bright">
+                  {pct.toFixed(1)}%
+                </span>
+                <span className="hidden w-20 shrink-0 text-right text-[10px] tabular-nums text-command-text-muted sm:block">
+                  {item.quantity.toLocaleString()} g
+                </span>
               </div>
-              <span className="hidden w-20 shrink-0 text-right text-[10px] tabular-nums text-command-text-muted sm:block">
-                {item.quantity.toLocaleString()} g
-              </span>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 
@@ -127,6 +147,9 @@ export function FinanceDashboard() {
               <th className="pb-2 pr-3">{t("product")}</th>
               <th className="pb-2 pr-3">{t("category")}</th>
               <th className="pb-2 pr-3 text-right">{t("quantity")}</th>
+              <th className="pb-2 pr-3 text-right">{t("costUnitPrice")}</th>
+              <th className="pb-2 pr-3 text-right">{t("totalCost")}</th>
+              <th className="pb-2 pr-3 text-right">{t("salesUnitPrice")}</th>
               <th className="pb-2 text-right">{t("revenue")}</th>
             </tr>
           </thead>
@@ -134,10 +157,19 @@ export function FinanceDashboard() {
             {filtered.map((r) => (
               <tr key={r.id} className="border-b border-command-border/40 hover:bg-command-card-elevated/50">
                 <td className="py-2 pr-3 text-command-text-muted">{r.date}</td>
-                <td className="py-2 pr-3">{r.region}</td>
+                <td className="py-2 pr-3">{formatRegion(r.region)}</td>
                 <td className="py-2 pr-3 font-medium text-command-teal-bright">{r.product}</td>
                 <td className="py-2 pr-3 text-command-text-secondary">{r.category}</td>
                 <td className="py-2 pr-3 text-right tabular-nums">{r.quantity} {r.unit}</td>
+                <td className="py-2 pr-3 text-right tabular-nums text-command-text-muted">
+                  {r.currency} {r.costUnitPrice.toLocaleString()}
+                </td>
+                <td className="py-2 pr-3 text-right tabular-nums text-command-text-muted">
+                  {r.currency} {r.totalCost.toLocaleString()}
+                </td>
+                <td className="py-2 pr-3 text-right tabular-nums">
+                  {r.currency} {r.salesUnitPrice.toLocaleString()}
+                </td>
                 <td className="py-2 text-right tabular-nums font-medium">
                   {r.currency} {r.revenue.toLocaleString()}
                 </td>
@@ -156,12 +188,14 @@ function FilterSelect({
   onChange,
   options,
   allLabel,
+  formatOption,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   options: string[];
   allLabel: string;
+  formatOption?: (value: string) => string;
 }) {
   return (
     <div>
@@ -171,7 +205,7 @@ function FilterSelect({
       <select value={value} onChange={(e) => onChange(e.target.value)} className="input-field text-xs">
         <option value="all">{allLabel}</option>
         {options.map((o) => (
-          <option key={o} value={o}>{o}</option>
+          <option key={o} value={o}>{formatOption ? formatOption(o) : o}</option>
         ))}
       </select>
     </div>

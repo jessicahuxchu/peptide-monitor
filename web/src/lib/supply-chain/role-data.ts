@@ -1,8 +1,8 @@
-import type { RiskLevel } from "./types";
+import type { NodeType, RiskLevel } from "./types";
 
 export interface SupplyChainRole {
   id: string;
-  roleType: string;
+  roleType: NodeType;
   roleLabelKey: string;
   region: string;
   country: string;
@@ -23,11 +23,40 @@ export interface SupplyChainCompany {
 export interface FormedChain {
   id: string;
   name: string;
+  pathId: string;
   pathType: "primary" | "alternative" | "high_risk";
   companyIds: string[];
   status: "active" | "forming" | "blocked";
   notes?: string;
 }
+
+/** Role types included in each supply chain path */
+export const PATH_ROLE_TYPES: Record<string, NodeType[]> = {
+  "path-b2b-compounding": [
+    "manufacturer",
+    "exporter",
+    "import_permit_holder",
+    "quality_testing_lab",
+    "compounding_pharmacy",
+    "telehealth_platform",
+    "end_customer_b2c",
+  ],
+  "path-clinic-prescriber": [
+    "manufacturer",
+    "exporter",
+    "import_permit_holder",
+    "quality_testing_lab",
+    "compounding_pharmacy",
+    "ruo_platform",
+    "research_end_user",
+  ],
+  "path-grey-retail": [
+    "manufacturer",
+    "exporter",
+    "quality_testing_lab",
+    "end_customer_b2c",
+  ],
+};
 
 export const supplyChainRoles: SupplyChainRole[] = [
   {
@@ -51,28 +80,6 @@ export const supplyChainRoles: SupplyChainRole[] = [
     requiredDocuments: ["invoice_packing", "certificate_of_origin"],
   },
   {
-    id: "role-freight",
-    roleType: "freight_forwarder",
-    roleLabelKey: "freightForwarder",
-    region: "CN → AU",
-    country: "CN/AU",
-    riskLevel: "medium",
-    documentCompletion: 90,
-    requiredDocuments: ["customs_declaration", "msds"],
-    riskNotes: "Cold-chain integrity monitoring required",
-  },
-  {
-    id: "role-customs-au",
-    roleType: "customs_broker_au",
-    roleLabelKey: "auCustomsBroker",
-    region: "VIC / NSW",
-    country: "AU",
-    riskLevel: "medium",
-    documentCompletion: 75,
-    requiredDocuments: ["import_permit", "customs_declaration"],
-    riskNotes: "NSW stricter than VIC for peptide imports",
-  },
-  {
     id: "role-import-permit",
     roleType: "import_permit_holder",
     roleLabelKey: "importPermitHolder",
@@ -81,16 +88,6 @@ export const supplyChainRoles: SupplyChainRole[] = [
     riskLevel: "medium",
     documentCompletion: 80,
     requiredDocuments: ["tga_approval", "import_permit"],
-  },
-  {
-    id: "role-warehouse",
-    roleType: "warehouse_bonded",
-    roleLabelKey: "bondedWarehouse",
-    region: "VIC",
-    country: "AU",
-    riskLevel: "low",
-    documentCompletion: 100,
-    requiredDocuments: ["warehouse_bonded"],
   },
   {
     id: "role-lab",
@@ -114,45 +111,34 @@ export const supplyChainRoles: SupplyChainRole[] = [
     riskNotes: "NSW storage protocol update — several pharmacies relocating to QLD",
   },
   {
-    id: "role-wholesale",
-    roleType: "wholesale_distributor",
-    roleLabelKey: "wholesaleDistributor",
+    id: "role-telehealth",
+    roleType: "telehealth_platform",
+    roleLabelKey: "telehealthPlatform",
     region: "AU",
     country: "AU",
-    riskLevel: "low",
-    documentCompletion: 90,
-    requiredDocuments: ["customer_specific"],
-  },
-  {
-    id: "role-doctor",
-    roleType: "doctor_prescriber",
-    roleLabelKey: "prescriber",
-    region: "VIC / NSW",
-    country: "AU",
     riskLevel: "medium",
-    documentCompletion: 100,
+    documentCompletion: 90,
     requiredDocuments: ["state_specific"],
   },
   {
-    id: "role-clinic",
-    roleType: "clinic",
-    roleLabelKey: "clinic",
-    region: "VIC / NSW",
+    id: "role-ruo",
+    roleType: "ruo_platform",
+    roleLabelKey: "ruoPlatform",
+    region: "AU",
     country: "AU",
-    riskLevel: "low",
-    documentCompletion: 100,
-    requiredDocuments: [],
+    riskLevel: "medium",
+    documentCompletion: 75,
+    requiredDocuments: ["customer_specific"],
   },
   {
-    id: "role-grey-retail",
-    roleType: "grey_market_retail",
-    roleLabelKey: "greyRetail",
-    region: "AU Online",
+    id: "role-research",
+    roleType: "research_end_user",
+    roleLabelKey: "researchEndUser",
+    region: "AU",
     country: "AU",
-    riskLevel: "high",
-    documentCompletion: 20,
+    riskLevel: "medium",
+    documentCompletion: 85,
     requiredDocuments: [],
-    riskNotes: "TGA enforcement risk — monitor closely",
   },
   {
     id: "role-patient",
@@ -169,61 +155,57 @@ export const supplyChainRoles: SupplyChainRole[] = [
 export const supplyChainCompanies: SupplyChainCompany[] = [
   { id: "co-wuhan", roleId: "role-manufacturer-cn", name: "Wuhan PeptideTech Co.", contact: "Li Wei", status: "active" },
   { id: "co-hybio", roleId: "role-manufacturer-cn", name: "Hybio Pharmaceutical", contact: "Zhang Hao", status: "active" },
-  { id: "co-suzhou", roleId: "role-manufacturer-cn", name: "Suzhou BioPeptide Labs", contact: "Wang Mei", status: "prospect" },
   { id: "co-shanghai-export", roleId: "role-exporter-cn", name: "Shanghai BioExport Trading", contact: "Chen Ming", status: "active" },
-  { id: "co-pacific", roleId: "role-freight", name: "Pacific Cold Chain Logistics", contact: "Tom Richards", status: "active" },
-  { id: "co-express", roleId: "role-freight", name: "Express Courier AU", contact: "Sarah Kim", status: "active" },
-  { id: "co-melbourne-customs", roleId: "role-customs-au", name: "Melbourne Customs Partners", contact: "David Lee", status: "active" },
-  { id: "co-sydney-customs", roleId: "role-customs-au", name: "Sydney Border Services", contact: "Emma Wilson", status: "active" },
   { id: "co-auspharm", roleId: "role-import-permit", name: "AusPharm Import Holdings", contact: "Michael Chen", status: "active" },
-  { id: "co-port-melb", roleId: "role-warehouse", name: "Port Melbourne Licensed Storage", contact: "James O'Brien", status: "active" },
   { id: "co-nal", roleId: "role-lab", name: "National Analytical Labs", contact: "Dr. Patel", status: "active" },
   { id: "co-precision-vic", roleId: "role-compounding", name: "Precision Compounding VIC", contact: "James O'Brien", status: "active" },
-  { id: "co-compound-nsw", roleId: "role-compounding", name: "Sydney Compounding Hub", contact: "Lisa Tran", status: "paused" },
   { id: "co-compound-qld", roleId: "role-compounding", name: "Brisbane Peptide Pharmacy", contact: "Mark Stevens", status: "prospect" },
-  { id: "co-medsupply", roleId: "role-wholesale", name: "MedSupply Australia Wholesale", contact: "Anna Park", status: "active" },
-  { id: "co-mitchell", roleId: "role-doctor", name: "Dr. Sarah Mitchell — Sports Med", contact: "Dr. Mitchell", status: "active" },
-  { id: "co-metro-clinic", roleId: "role-clinic", name: "Melbourne Sports Recovery Clinic", contact: "Dr. Anna Park", status: "active" },
-  { id: "co-peptide-direct", roleId: "role-grey-retail", name: "PeptideDirect AU (Online)", contact: "—", status: "active" },
+  { id: "co-telehealth", roleId: "role-telehealth", name: "MedConnect Telehealth AU", contact: "Dr. Lee", status: "active" },
+  { id: "co-ruo-hub", roleId: "role-ruo", name: "PeptideRUO Supply Hub", contact: "Alex Turner", status: "active" },
+  { id: "co-research-lab", roleId: "role-research", name: "Melbourne Peptide Research Lab", contact: "Dr. Kim", status: "active" },
 ];
 
 export const formedChains: FormedChain[] = [
   {
-    id: "chain-b2b-primary",
-    name: "B2B 主路径",
+    id: "chain-b2b2c-prescriber",
+    name: "B2B2C-处方医生",
+    pathId: "path-b2b-compounding",
     pathType: "primary",
-    companyIds: ["co-wuhan", "co-shanghai-export", "co-pacific", "co-melbourne-customs", "co-auspharm", "co-port-melb", "co-nal", "co-precision-vic", "co-medsupply"],
+    companyIds: ["co-wuhan", "co-shanghai-export", "co-auspharm", "co-nal", "co-precision-vic", "co-telehealth"],
     status: "active",
-    notes: "优先低风险批量路径",
+    notes: "生产制造商 → 出口商 → 进口许可 → 质检 → 配制药房 → 问诊平台",
   },
   {
-    id: "chain-clinic",
-    name: "诊所 / 处方路径",
+    id: "chain-ruo",
+    name: "B2B2C-RUO平台",
+    pathId: "path-clinic-prescriber",
     pathType: "alternative",
-    companyIds: ["co-wuhan", "co-shanghai-export", "co-pacific", "co-melbourne-customs", "co-precision-vic", "co-mitchell", "co-metro-clinic"],
+    companyIds: ["co-wuhan", "co-shanghai-export", "co-auspharm", "co-nal", "co-precision-vic", "co-ruo-hub", "co-research-lab"],
     status: "active",
-    notes: "患者定制配制",
+    notes: "研究用途供应路径",
   },
   {
-    id: "chain-grey",
-    name: "灰色零售路径",
+    id: "chain-b2c-retail",
+    name: "B2C-跨境零售",
+    pathId: "path-grey-retail",
     pathType: "high_risk",
-    companyIds: ["co-wuhan", "co-express", "co-peptide-direct"],
+    companyIds: ["co-wuhan", "co-shanghai-export"],
     status: "blocked",
-    notes: "监管执法风险高",
-  },
-  {
-    id: "chain-hybio-qld",
-    name: "Hybio → QLD 药房（筹建中）",
-    pathType: "alternative",
-    companyIds: ["co-hybio", "co-shanghai-export", "co-pacific", "co-sydney-customs", "co-compound-qld"],
-    status: "forming",
-    notes: "NSW 监管收紧后药房迁移趋势",
+    notes: "跨境直邮 — 质量检测实验室可选",
   },
 ];
 
 export function getCompaniesForRole(roleId: string) {
   return supplyChainCompanies.filter((c) => c.roleId === roleId);
+}
+
+export function getRolesForPath(pathId: string) {
+  const types = PATH_ROLE_TYPES[pathId] ?? [];
+  return supplyChainRoles.filter((r) => types.includes(r.roleType));
+}
+
+export function getChainsForPath(pathId: string) {
+  return formedChains.filter((c) => c.pathId === pathId);
 }
 
 export function getRoleForCompany(companyId: string) {

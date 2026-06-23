@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { CommandCard } from "@/components/ui/CommandCard";
 import { useDbResource } from "@/hooks/useDbResource";
@@ -10,7 +10,7 @@ import {
   getSignalsByDimension,
   countPendingMatrixUpdates,
 } from "@/lib/intelligence/seed-data";
-import type { SignalDimension } from "@/lib/intelligence/seed-data";
+import type { IntelSignal, SignalDimension } from "@/lib/intelligence/seed-data";
 import { Link } from "@/i18n/navigation";
 import {
   Newspaper,
@@ -47,6 +47,20 @@ const intelligenceFallback = {
 
 const trendIcon = { up: TrendingUp, down: TrendingDown, stable: Minus };
 
+function buildDimensionSummary(
+  dimension: SignalDimension,
+  signals: IntelSignal[],
+  emptyLabel: string,
+): string {
+  const dimSignals = getSignalsByDimension(dimension, signals);
+  if (dimSignals.length === 0) return emptyLabel;
+  const highlights = dimSignals
+    .slice(0, 2)
+    .map((s) => s.directionLabel)
+    .join("；");
+  return `${dimSignals.length} 条信号 — ${highlights}`;
+}
+
 export default function IntelligencePage() {
   const t = useTranslations();
   const { data } = useDbResource("/api/intelligence", intelligenceFallback);
@@ -66,10 +80,54 @@ export default function IntelligencePage() {
   const pendingCount = countPendingMatrixUpdates(intelligenceSignals);
   const sources = ["news_legal", "insider", "social", "platform_2c"] as const;
 
+  const summaries = useMemo(
+    () => ({
+      demand: buildDimensionSummary(
+        "demand",
+        intelligenceSignals,
+        t("intelligencePage.summaryEmpty"),
+      ),
+      regulatory: buildDimensionSummary(
+        "regulatory",
+        intelligenceSignals,
+        t("intelligencePage.summaryEmpty"),
+      ),
+      competitive: buildDimensionSummary(
+        "competitive",
+        intelligenceSignals,
+        t("intelligencePage.summaryEmpty"),
+      ),
+    }),
+    [intelligenceSignals, t],
+  );
+
   return (
     <div className="w-full max-w-full overflow-x-hidden p-4 md:p-6">
       <div className="space-y-6">
-        <CommandCard title={t("pages.intelligence.title")}>
+        <CommandCard>
+          <div className="mb-5 space-y-3">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-command-text-muted">
+              {t("intelligencePage.dimensionSummariesTitle")}
+            </h3>
+            <div className="grid gap-3 md:grid-cols-3">
+              <SummaryCard
+                label={t("intelligencePage.summaryDemand")}
+                body={summaries.demand}
+                border="border-command-teal/30"
+              />
+              <SummaryCard
+                label={t("intelligencePage.summaryRegulatory")}
+                body={summaries.regulatory}
+                border="border-command-orange/30"
+              />
+              <SummaryCard
+                label={t("intelligencePage.summaryCompetitive")}
+                body={summaries.competitive}
+                border="border-purple-500/30"
+              />
+            </div>
+          </div>
+
           <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <BriefKpi label={t("intelligencePage.signalCount")} value={String(intelligenceSignals.length)} />
             <BriefKpi label={t("intelligencePage.pendingMatrix")} value={String(pendingCount)} accent={pendingCount > 0} />
@@ -207,6 +265,25 @@ export default function IntelligencePage() {
           </div>
         </CommandCard>
       </div>
+    </div>
+  );
+}
+
+function SummaryCard({
+  label,
+  body,
+  border,
+}: {
+  label: string;
+  body: string;
+  border: string;
+}) {
+  return (
+    <div className={cn("rounded-xl border bg-command-card-elevated/40 p-3", border)}>
+      <p className="text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
+        {label}
+      </p>
+      <p className="mt-1.5 text-xs leading-relaxed text-command-text-secondary">{body}</p>
     </div>
   );
 }

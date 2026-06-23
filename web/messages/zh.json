@@ -7,7 +7,7 @@
     "strategic": "战略",
     "finance": "财务",
     "supplyChain": "供应链",
-    "intelligence": "市场监测",
+    "intelligence": "舆论情报",
     "regulatory": "合规矩阵",
     "productMonitor": "产品监控",
     "relations": "关系",
@@ -16,7 +16,7 @@
   "header": {
     "brand": "PEPTIDE MONITOR",
     "version": "V1.0",
-    "agentInbox": "代理收件箱",
+    "agentInbox": "AI Agent",
     "alerts": "提醒",
     "deploymentMode": "澳洲市场",
     "signIn": "登录"
@@ -84,8 +84,8 @@
   },
   "regulatoryMatrix": {
     "title": "合规矩阵",
-    "subtitle": "联邦基线 + 各州增量 — AU 监管风险唯一真相源",
-    "layerHint": "状态层：已确认的法律边界。全站 AU 监管风险均引用此矩阵，情报信号中的监管 delta 需确认后才更新此处。",
+    "subtitle": "",
+    "layerHint": "",
     "disclaimerTitle": "合规声明",
     "version": "版本",
     "asOf": "截至",
@@ -118,6 +118,11 @@
     "stateDelta": "州级增量",
     "inheritsFederal": "同联邦",
     "selectCellHint": "点击矩阵单元格查看分类、风险等级与操作后果",
+    "selectSourceHint": "点击左侧来源查看法规摘录与高亮标注",
+    "sourceDocumentTitle": "法规文本",
+    "sourceExcerptTitle": "摘录正文",
+    "sourceAnnotations": "标注解读",
+    "openOfficialSource": "打开官方法源",
     "operationalConsequence": "操作后果",
     "allMarkets": "全部市场",
     "market": "市场",
@@ -166,19 +171,19 @@
       "documents": "文件"
     },
     "paths": {
-      "b2bCompounding": "B2B → 配制药房",
-      "b2bCompoundingDesc": "优先低风险批量路径，面向 compounding pharmacy",
-      "clinicPrescriber": "诊所 / 处方医生路径",
-      "clinicPrescriberDesc": "经处方医生的患者定制配制",
-      "greyRetail": "灰色零售（高风险）",
-      "greyRetailDesc": "非监管线上渠道 — 需监控执法动态"
+      "b2bCompounding": "B2B2C-处方医生",
+      "b2bCompoundingDesc": "生产制造商 → 出口商 → 澳大利亚进口许可持有方 → 质量检测实验室 → 配制药房 → 处方医生问诊平台 → C端患者",
+      "clinicPrescriber": "B2B2C-RUO平台",
+      "clinicPrescriberDesc": "生产制造商 → 出口商 → 澳大利亚进口许可持有方 → 质量检测实验室 → 配制药房 → RUO平台 → 研究平台/人员",
+      "greyRetail": "B2C-跨境零售",
+      "greyRetailDesc": "生产制造商 → 出口商 → 质量检测实验室* → C端个人（*可选节点）"
     },
     "nodeTypes": {
       "manufacturer": "生产制造商",
       "exporter": "出口商",
       "freight_forwarder": "国际货代",
       "customs_broker_au": "澳大利亚报关行",
-      "import_permit_holder": "进口许可持有方",
+      "import_permit_holder": "澳大利亚进口许可持有方",
       "warehouse_bonded": "保税仓库",
       "quality_testing_lab": "质量检测实验室",
       "compounding_pharmacy": "配制药房",
@@ -189,8 +194,11 @@
       "retail_pharmacy": "零售药房",
       "grey_market_retail": "灰色零售渠道",
       "online_retailer": "线上零售商",
+      "telehealth_platform": "处方医生问诊平台",
+      "ruo_platform": "RUO平台",
+      "research_end_user": "研究平台/人员",
       "end_customer_b2b": "B2B 终端客户",
-      "end_customer_b2c": "B2C 终端消费者",
+      "end_customer_b2c": "C端患者",
       "regulatory_authority": "监管机构",
       "legal_counsel": "法律顾问"
     },
@@ -288,12 +296,15 @@
       "cnExporter": "中国出口商",
       "freightForwarder": "国际货代",
       "auCustomsBroker": "澳洲报关行",
-      "importPermitHolder": "进口许可持有方",
+      "importPermitHolder": "澳大利亚进口许可持有方",
       "bondedWarehouse": "保税仓库",
       "testingLab": "质量检测实验室",
       "compoundingPharmacy": "配制药房",
       "wholesaleDistributor": "批发分销商",
       "prescriber": "处方医生",
+      "telehealthPlatform": "处方医生问诊平台",
+      "ruoPlatform": "RUO平台",
+      "researchEndUser": "研究平台/人员",
       "clinic": "诊所",
       "greyRetail": "灰色零售渠道",
       "patient": "患者",
@@ -387,8 +398,8 @@
       "description": "GMP、COA、许可与客户特定文件状态。"
     },
     "intelligence": {
-      "title": "市场监测",
-      "description": "信号层 — 先行指标与舆论监测，监管 delta 确认后写入合规矩阵。"
+      "title": "舆论情报",
+      "description": ""
     },
     "productMonitor": {
       "title": "产品分析",
@@ -396,7 +407,7 @@
     },
     "relations": {
       "title": "供应商与客户",
-      "description": "表格浏览供应商与客户，点击行展开详情；同一供应商可覆盖多个品类。"
+      "description": ""
     },
     "risk": {
       "title": "风险瞭望塔",
@@ -407,8 +418,8 @@
       "description": "优先级提醒与建议动作。"
     },
     "inbox": {
-      "title": "Agent 收件箱",
-      "description": "待确认更新与 AI 助手对话。"
+      "title": "AI Agent",
+      "description": ""
     }
   },
   "documentsPage": {
@@ -430,7 +441,12 @@
     "heat": "热度",
     "regulatory": "监管",
     "skuRanking": "SKU 机会排行",
-    "layerHint": "信号层：在监管与财务把变化变成既成事实之前，提前看到可能影响 SKU 的变量。监管 +N 表示待确认矩阵 delta，不是当前合规状态。",
+    "layerHint": "",
+    "dimensionSummariesTitle": "情报总结",
+    "summaryDemand": "需求侧",
+    "summaryRegulatory": "监管侧",
+    "summaryCompetitive": "竞争侧",
+    "summaryEmpty": "暂无相关信号",
     "pendingMatrix": "待确认矩阵更新",
     "matrixDelta": "矩阵 delta",
     "confirmToMatrix": "确认后更新矩阵 →",
@@ -598,12 +614,12 @@
   },
   "finance": {
     "title": "财务数据",
-    "subtitle": "澳大利亚各州销售详情与汇总",
+    "subtitle": "",
     "country": "国家",
     "australia": "澳大利亚 (AU)",
     "region": "地区",
     "product": "产品",
-    "category": "品类",
+    "category": "用途",
     "period": "时间",
     "groupBy": "汇总维度",
     "all": "全部",
@@ -614,6 +630,10 @@
     "revenueBreakdown": "营收分布",
     "quantity": "数量",
     "revenue": "营收",
+    "costUnitPrice": "成本单价",
+    "totalCost": "总成本",
+    "salesUnitPrice": "销售单价",
+    "share": "占比",
     "noData": "当前筛选条件下无数据"
   },
   "relationsPage": {
@@ -629,6 +649,7 @@
     "productOffers": "品类报价",
     "status": "状态",
     "demandProduct": "需求产品",
+    "demandProducts": "需求产品列表",
     "demandQuantity": "需求量",
     "targetPrice": "目标价格",
     "findSuppliers": "查看符合标准的供应商",
@@ -694,23 +715,31 @@
     "suggestedActions": "建议动作"
   },
   "inboxPage": {
-    "placeholder": "粘贴供应商报价、监管更新…",
     "send": "发送",
     "proposedUpdates": "提议更新",
     "confirm": "确认",
     "reject": "拒绝",
     "confirmed": "已确认并应用",
     "rejected": "已拒绝",
-    "analyzing": "正在思考…",
-    "offlineMode": "离线模式 — 配置 Supabase 后收件箱写入将持久化。",
+    "analyzing": "Hermes Agent 思考中…",
+    "offlineMode": "离线模式 — 配置 Supabase 后待确认项将持久化。",
     "dbConnected": "已通过 Supabase 连接 PostgreSQL",
     "pendingTitle": "待确认",
     "pendingSubtitle": "AI 解析的结构化更新",
     "noPending": "暂无待确认项",
-    "chatTitle": "AI 助手",
-    "chatSubtitle": "供应链、监管、产品机会问答",
-    "chatWelcome": "你好，我是 Peptide Monitor 助手。可以问我供应链路径、监管动态、SKU 机会或供应商匹配相关问题。",
-    "chatPlaceholder": "输入问题，例如：BPC-157 的 AU 机会如何？",
-    "chatError": "暂时无法回答，请稍后再试。"
+    "reviewRestricted": "仅审核权限用户可确认或拒绝更新。",
+    "chatTitle": "AI Agent",
+    "chatSubtitle": "Hermes + Qwen — 对话提交报价、询盘与监管更新",
+    "chatWelcome": "你好，我是 Peptide Monitor AI Agent（Hermes + Qwen）。可直接对话，或使用下方快捷按钮填入模板后添加附件发送。",
+    "chatPlaceholder": "输入消息，或选择快捷按钮后补充细节…",
+    "chatError": "暂时无法连接 Agent，请检查 Hermes/Qwen 配置后重试。",
+    "attachFile": "添加附件",
+    "inboxQueued": "已生成待确认的结构化更新，请左侧审核。",
+    "promptQuoteLabel": "发送报价",
+    "promptInquiryLabel": "发送询盘",
+    "promptRegulatoryLabel": "监管更新",
+    "promptQuote": "【供应商报价】\n供应商：\n产品：\n规格/纯度：\n单价：\nMOQ：\n有效期：\n\n请解析为结构化报价并生成待确认更新。",
+    "promptInquiry": "【客户询盘】\n客户：\n需求产品：\n数量/周期：\n目标价格：\n要求文件：\n\n请解析需求并匹配可行供应商。",
+    "promptRegulatory": "【监管更新】\n辖区：\n来源：\n变化摘要：\n影响产品/SKU：\n建议矩阵动作：\n\n请评估是否生成监管警报或矩阵 delta。"
   }
 }

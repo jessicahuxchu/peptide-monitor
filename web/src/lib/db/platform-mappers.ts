@@ -194,6 +194,10 @@ export function mapSkuOpportunity(row: SkuRow): SkuOpportunity {
 }
 
 export function mapSalesRecord(row: SalesRow): SalesRecord {
+  const quantity = Number(row.quantity);
+  const revenue = Number(row.revenue);
+  const salesUnitPrice = quantity > 0 ? Math.round(revenue / quantity) : 0;
+  const costUnitPrice = Math.round(salesUnitPrice * 0.58);
   return {
     id: row.id,
     date: row.sale_date,
@@ -201,10 +205,13 @@ export function mapSalesRecord(row: SalesRow): SalesRecord {
     region: row.region,
     product: row.product,
     category: row.category,
-    quantity: Number(row.quantity),
+    quantity,
     unit: row.unit,
-    revenue: Number(row.revenue),
+    revenue,
     currency: row.currency,
+    salesUnitPrice,
+    costUnitPrice,
+    totalCost: costUnitPrice * quantity,
   };
 }
 

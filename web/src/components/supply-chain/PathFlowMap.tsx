@@ -77,7 +77,7 @@ export function PathFlowMap({
                   )}
                 >
                   {roleOnly
-                    ? t(`nodeTypes.${node.nodeType}`)
+                    ? `${t(`nodeTypes.${node.nodeType}`)}${node.optional ? "*" : ""}`
                     : node.displayName}
                 </p>
 

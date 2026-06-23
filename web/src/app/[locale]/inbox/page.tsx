@@ -1,36 +1,56 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useUser } from "@clerk/nextjs";
 import { useLocale, useTranslations } from "next-intl";
 import { CommandCard } from "@/components/ui/CommandCard";
 import { useInboxStore } from "@/hooks/useInboxStore";
+import { canReviewInbox } from "@/lib/auth/reviewers";
 import { formatDateTime } from "@/lib/utils";
 import type { ChatMessage } from "@/lib/agent/chat-responder";
-import { Bot, Check, Loader2, Send, User, X } from "lucide-react";
+import type { ChatIntent } from "@/lib/agent/hermes-client";
+import {
+  Bot,
+  Check,
+  FileText,
+  Loader2,
+  Paperclip,
+  Send,
+  User,
+  X,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const PROMPT_INTENTS: { intent: ChatIntent; key: string }[] = [
+  { intent: "quote", key: "promptQuote" },
+  { intent: "inquiry", key: "promptInquiry" },
+  { intent: "regulatory", key: "promptRegulatory" },
+];
 
 export default function InboxPage() {
   const t = useTranslations();
   const locale = useLocale() as "en" | "zh";
-  const { submissions, loading, usingDb, error, submit, confirm, reject } =
+  const { user } = useUser();
+  const userEmail = user?.primaryEmailAddress?.emailAddress;
+  const canReview = canReviewInbox(userEmail);
+
+  const { submissions, loading, usingDb, error, confirm, reject, reload, submit } =
     useInboxStore();
 
-  const [inboxInput, setInboxInput] = useState("");
-  const [submitting, setSubmitting] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
-
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState("");
+  const [chatIntent, setChatIntent] = useState<ChatIntent>("chat");
+  const [attachmentName, setAttachmentName] = useState<string | null>(null);
+  const [attachmentText, setAttachmentText] = useState<string | null>(null);
   const [chatLoading, setChatLoading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (chatMessages.length === 0) {
       setChatMessages([
-        {
-          role: "assistant",
-          content: t("inboxPage.chatWelcome"),
-        },
+        { role: "assistant", content: t("inboxPage.chatWelcome") },
       ]);
     }
   }, [chatMessages.length, t]);
@@ -41,18 +61,25 @@ export default function InboxPage() {
 
   const pendingSubmissions = submissions.filter((s) => s.status === "pending");
 
-  const handleInboxSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inboxInput.trim()) return;
-    setSubmitting(true);
-    try {
-      await submit("You", inboxInput.trim());
-      setInboxInput("");
-    } catch (err) {
-      alert(err instanceof Error ? err.message : "Submit failed");
-    } finally {
-      setSubmitting(false);
+  const handleFile = async (file: File | null) => {
+    if (!file) {
+      setAttachmentName(null);
+      setAttachmentText(null);
+      return;
     }
+    const text = await file.text().catch(() => null);
+    if (!text) {
+      setAttachmentName(file.name);
+      setAttachmentText(`[附件: ${file.name} — 无法解析为文本，请粘贴主要内容到对话框]`);
+      return;
+    }
+    setAttachmentName(file.name);
+    setAttachmentText(text.slice(0, 12000));
+  };
+
+  const applyPrompt = (intent: ChatIntent, key: string) => {
+    setChatIntent(intent);
+    setChatInput(t(`inboxPage.${key}`));
   };
 
   const handleChatSubmit = async (e: React.FormEvent) => {
@@ -62,18 +89,42 @@ export default function InboxPage() {
     const userMsg: ChatMessage = { role: "user", content: chatInput.trim() };
     const nextMessages = [...chatMessages, userMsg];
     setChatMessages(nextMessages);
+    const intent = chatIntent;
     setChatInput("");
+    setChatIntent("chat");
     setChatLoading(true);
 
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: nextMessages, locale }),
+        body: JSON.stringify({
+          messages: nextMessages,
+          locale,
+          intent,
+          attachmentText: attachmentText ?? undefined,
+        }),
       });
       if (!res.ok) throw new Error("Chat failed");
-      const data = (await res.json()) as { reply: string };
-      setChatMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
+      const data = (await res.json()) as {
+        reply: string;
+        inboxQueued?: boolean;
+      };
+      let reply = data.reply;
+      if (data.inboxQueued) {
+        reply += `\n\n${t("inboxPage.inboxQueued")}`;
+        await reload();
+      } else if (intent !== "chat" && !usingDb) {
+        const payload = attachmentText
+          ? `${userMsg.content}\n\n--- 附件 ---\n${attachmentText}`
+          : userMsg.content;
+        await submit(user?.fullName ?? userEmail ?? "User", payload);
+        reply += `\n\n${t("inboxPage.inboxQueued")}`;
+      }
+      setChatMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+      setAttachmentName(null);
+      setAttachmentText(null);
+      if (fileRef.current) fileRef.current.value = "";
     } catch {
       setChatMessages((prev) => [
         ...prev,
@@ -115,27 +166,13 @@ export default function InboxPage() {
       )}
       {error && <p className="mb-4 text-xs text-command-red">{error}</p>}
 
-      <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
-        {/* Simplified inbox */}
+      <div className="grid gap-4 lg:grid-cols-[300px_1fr]">
         <CommandCard title={t("inboxPage.pendingTitle")} subtitle={t("inboxPage.pendingSubtitle")}>
-          <form onSubmit={handleInboxSubmit} className="mb-4 flex gap-2">
-            <input
-              type="text"
-              value={inboxInput}
-              onChange={(e) => setInboxInput(e.target.value)}
-              placeholder={t("inboxPage.placeholder")}
-              disabled={submitting}
-              className="flex-1 rounded-lg border border-command-border bg-command-bg px-3 py-2 text-xs text-command-text placeholder:text-command-text-muted focus:border-command-teal/50 focus:outline-none disabled:opacity-50"
-            />
-            <button
-              type="submit"
-              disabled={submitting}
-              className="rounded-lg bg-command-teal px-3 py-2 text-command-bg transition-colors hover:bg-command-teal-bright disabled:opacity-50"
-            >
-              {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-            </button>
-          </form>
-
+          {!canReview && (
+            <p className="mb-3 rounded-lg border border-command-border bg-command-card-elevated px-3 py-2 text-[10px] text-command-text-muted">
+              {t("inboxPage.reviewRestricted")}
+            </p>
+          )}
           {loading ? (
             <div className="flex justify-center py-8">
               <Loader2 className="h-5 w-5 animate-spin text-command-teal" />
@@ -145,13 +182,13 @@ export default function InboxPage() {
               {t("inboxPage.noPending")}
             </p>
           ) : (
-            <ul className="max-h-[420px] space-y-2 overflow-y-auto">
+            <ul className="max-h-[520px] space-y-2 overflow-y-auto">
               {pendingSubmissions.map((msg) => (
                 <li
                   key={msg.id}
                   className="rounded-lg border border-command-border bg-command-card-elevated p-3"
                 >
-                  <p className="line-clamp-2 text-xs text-command-text">{msg.content}</p>
+                  <p className="line-clamp-3 text-xs text-command-text">{msg.content}</p>
                   <p className="mt-1 text-[10px] text-command-text-muted">
                     {formatDateTime(msg.createdAt, locale)}
                   </p>
@@ -164,35 +201,54 @@ export default function InboxPage() {
                       ))}
                     </div>
                   )}
-                  <div className="mt-2 flex gap-1.5">
-                    <button
-                      type="button"
-                      disabled={busyId === msg.id}
-                      onClick={() => handleConfirm(msg.id)}
-                      className="inline-flex items-center gap-1 rounded border border-command-green/40 bg-command-green/10 px-2 py-1 text-[10px] font-medium text-command-green disabled:opacity-50"
-                    >
-                      <Check className="h-3 w-3" />
-                      {t("inboxPage.confirm")}
-                    </button>
-                    <button
-                      type="button"
-                      disabled={busyId === msg.id}
-                      onClick={() => handleReject(msg.id)}
-                      className="inline-flex items-center gap-1 rounded border border-command-border px-2 py-1 text-[10px] font-medium text-command-text-secondary disabled:opacity-50"
-                    >
-                      <X className="h-3 w-3" />
-                      {t("inboxPage.reject")}
-                    </button>
-                  </div>
+                  {canReview && (
+                    <div className="mt-2 flex gap-1.5">
+                      <button
+                        type="button"
+                        disabled={busyId === msg.id}
+                        onClick={() => handleConfirm(msg.id)}
+                        className="inline-flex items-center gap-1 rounded border border-command-green/40 bg-command-green/10 px-2 py-1 text-[10px] font-medium text-command-green disabled:opacity-50"
+                      >
+                        <Check className="h-3 w-3" />
+                        {t("inboxPage.confirm")}
+                      </button>
+                      <button
+                        type="button"
+                        disabled={busyId === msg.id}
+                        onClick={() => handleReject(msg.id)}
+                        className="inline-flex items-center gap-1 rounded border border-command-border px-2 py-1 text-[10px] font-medium text-command-text-secondary disabled:opacity-50"
+                      >
+                        <X className="h-3 w-3" />
+                        {t("inboxPage.reject")}
+                      </button>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
           )}
         </CommandCard>
 
-        {/* AI chat */}
         <CommandCard title={t("inboxPage.chatTitle")} subtitle={t("inboxPage.chatSubtitle")}>
-          <div className="flex h-[480px] flex-col">
+          <div className="mb-3 flex flex-wrap gap-2">
+            {PROMPT_INTENTS.map(({ intent, key }) => (
+              <button
+                key={intent}
+                type="button"
+                onClick={() => applyPrompt(intent, key)}
+                className={cn(
+                  "rounded-full border px-3 py-1 text-[11px] font-medium transition-colors",
+                  chatIntent === intent
+                    ? "border-command-teal/40 bg-command-teal/10 text-command-teal-bright"
+                    : "border-command-border text-command-text-muted hover:text-command-text-secondary",
+                )}
+              >
+                {t(`inboxPage.${key}Label`)}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex h-[440px] flex-col">
             <div className="flex-1 space-y-3 overflow-y-auto rounded-lg border border-command-border bg-[#050505] p-4">
               {chatMessages.map((msg, i) => (
                 <div
@@ -233,23 +289,54 @@ export default function InboxPage() {
               <div ref={chatEndRef} />
             </div>
 
-            <form onSubmit={handleChatSubmit} className="mt-3 flex gap-2">
-              <input
-                type="text"
+            {attachmentName && (
+              <div className="mt-2 flex items-center gap-2 rounded-lg border border-command-border bg-command-card-elevated px-3 py-2 text-xs text-command-text-secondary">
+                <FileText className="h-3.5 w-3.5 text-command-teal-bright" />
+                {attachmentName}
+                <button
+                  type="button"
+                  onClick={() => handleFile(null)}
+                  className="ml-auto text-command-text-muted hover:text-command-text"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            )}
+
+            <form onSubmit={handleChatSubmit} className="mt-3 space-y-2">
+              <textarea
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 placeholder={t("inboxPage.chatPlaceholder")}
                 disabled={chatLoading}
-                className="flex-1 rounded-lg border border-command-border bg-command-bg px-4 py-2.5 text-sm text-command-text placeholder:text-command-text-muted focus:border-command-teal/50 focus:outline-none disabled:opacity-50"
+                rows={3}
+                className="w-full resize-none rounded-lg border border-command-border bg-command-bg px-4 py-2.5 text-sm text-command-text placeholder:text-command-text-muted focus:border-command-teal/50 focus:outline-none disabled:opacity-50"
               />
-              <button
-                type="submit"
-                disabled={chatLoading || !chatInput.trim()}
-                className="flex items-center gap-1.5 rounded-lg bg-command-teal px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-command-teal-bright disabled:opacity-50"
-              >
-                <Send className="h-4 w-4" />
-                {t("inboxPage.send")}
-              </button>
+              <div className="flex items-center gap-2">
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept=".txt,.md,.csv,.json,.pdf"
+                  className="hidden"
+                  onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
+                />
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-command-border px-3 py-2 text-xs text-command-text-muted hover:text-command-text-secondary"
+                >
+                  <Paperclip className="h-3.5 w-3.5" />
+                  {t("inboxPage.attachFile")}
+                </button>
+                <button
+                  type="submit"
+                  disabled={chatLoading || !chatInput.trim()}
+                  className="ml-auto flex items-center gap-1.5 rounded-lg bg-command-teal px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-command-teal-bright disabled:opacity-50"
+                >
+                  <Send className="h-4 w-4" />
+                  {t("inboxPage.send")}
+                </button>
+              </div>
             </form>
           </div>
         </CommandCard>

@@ -84,6 +84,7 @@ export function SupplyChainView() {
             onChange={(pathId) => {
               setActivePathId(pathId);
               setSelectedNodeId(null);
+              setSelectedRoleId(null);
             }}
           />
           <div className="mt-4 overflow-hidden rounded-lg border border-command-border grid-map-bg bg-[#050505] p-4">
@@ -98,6 +99,7 @@ export function SupplyChainView() {
 
           <div className="mt-6 border-t border-command-border pt-6">
             <RoleCompanyView
+              activePathId={activePathId}
               selectedRoleId={selectedRoleId}
               onSelectRole={setSelectedRoleId}
             />

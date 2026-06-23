@@ -32,6 +32,26 @@ export interface CustomerDemand {
   status: "active" | "negotiating" | "prospect";
 }
 
+export interface CustomerProductDemand {
+  product: string;
+  quantity: string;
+  targetPrice: number;
+  priceUnit: string;
+  requiredDocuments: string[];
+}
+
+export interface CustomerProfile {
+  id: string;
+  name: string;
+  contact: string;
+  email: string;
+  products: string[];
+  productDemands: CustomerProductDemand[];
+  country: string;
+  region: string;
+  status: "active" | "negotiating" | "prospect";
+}
+
 export const supplierProfiles: SupplierProfile[] = [
   {
     id: "sup1",
@@ -114,6 +134,20 @@ export const customerDemands: CustomerDemand[] = [
     name: "Metro Clinic Group",
     contact: "Dr. Anna Park",
     email: "anna@metroclinic.au",
+    product: "TB-500",
+    quantity: "50g/month",
+    targetPrice: 1150,
+    priceUnit: "AUD/g",
+    requiredDocuments: ["coa", "tga_approval", "import_permit"],
+    country: "AU",
+    region: "VIC",
+    status: "active",
+  },
+  {
+    id: "cust4",
+    name: "Metro Clinic Group",
+    contact: "Dr. Anna Park",
+    email: "anna@metroclinic.au",
     product: "BPC-157",
     quantity: "200g/month",
     targetPrice: 842,
@@ -138,18 +172,18 @@ export const customerDemands: CustomerDemand[] = [
     status: "prospect",
   },
   {
-    id: "cust4",
+    id: "cust6",
     name: "Melbourne Sports Recovery Clinic",
     contact: "Dr. Anna Park",
     email: "anna@metroclinic.au",
     product: "TB-500",
-    quantity: "50g/month",
-    targetPrice: 1150,
+    quantity: "30g/month",
+    targetPrice: 1100,
     priceUnit: "AUD/g",
-    requiredDocuments: ["coa", "tga_approval", "import_permit"],
+    requiredDocuments: ["coa", "import_permit"],
     country: "AU",
     region: "VIC",
-    status: "active",
+    status: "negotiating",
   },
   {
     id: "cust5",
@@ -182,4 +216,71 @@ export function getOfferForProduct(
   product: string,
 ): SupplierProductOffer | undefined {
   return supplier.productOffers.find((o) => o.product === product);
+}
+
+export function groupCustomerDemands(
+  demands: CustomerDemand[],
+): CustomerProfile[] {
+  const map = new Map<string, CustomerProfile>();
+
+  for (const row of demands) {
+    const key = `${row.name}::${row.email}`;
+    const demand: CustomerProductDemand = {
+      product: row.product,
+      quantity: row.quantity,
+      targetPrice: row.targetPrice,
+      priceUnit: row.priceUnit,
+      requiredDocuments: row.requiredDocuments,
+    };
+
+    const existing = map.get(key);
+    if (existing) {
+      if (!existing.products.includes(row.product)) {
+        existing.products.push(row.product);
+      }
+      existing.productDemands.push(demand);
+      const priority = { active: 3, negotiating: 2, prospect: 1 } as const;
+      if (priority[row.status] > priority[existing.status]) {
+        existing.status = row.status;
+      }
+    } else {
+      map.set(key, {
+        id: row.id,
+        name: row.name,
+        contact: row.contact,
+        email: row.email,
+        products: [row.product],
+        productDemands: [demand],
+        country: row.country,
+        region: row.region,
+        status: row.status,
+      });
+    }
+  }
+
+  return [...map.values()];
+}
+
+export function demandForProduct(
+  customer: CustomerProfile,
+  product: string,
+): CustomerDemand {
+  const line = customer.productDemands.find((d) => d.product === product);
+  if (!line) {
+    throw new Error(`No demand for product ${product}`);
+  }
+  return {
+    id: customer.id,
+    name: customer.name,
+    contact: customer.contact,
+    email: customer.email,
+    product: line.product,
+    quantity: line.quantity,
+    targetPrice: line.targetPrice,
+    priceUnit: line.priceUnit,
+    requiredDocuments: line.requiredDocuments,
+    country: customer.country,
+    region: customer.region,
+    status: customer.status,
+  };
 }

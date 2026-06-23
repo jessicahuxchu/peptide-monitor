@@ -14,6 +14,9 @@ export const NODE_TYPES = [
   "retail_pharmacy",
   "grey_market_retail",
   "online_retailer",
+  "telehealth_platform",
+  "ruo_platform",
+  "research_end_user",
   "end_customer_b2b",
   "end_customer_b2c",
   "regulatory_authority",
@@ -46,6 +49,8 @@ export interface PathNode {
   status: NodeStatus;
   notes?: string;
   entityName?: string;
+  /** Optional step in path (shown with * on map). */
+  optional?: boolean;
   documentCompletion: number;
 }
 

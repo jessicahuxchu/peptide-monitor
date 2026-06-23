@@ -14,6 +14,8 @@ import {
 import { REGULATORY_COLUMNS, type RegulatoryColumn } from "@/lib/regulatory/matrix";
 import type { RiskLevel } from "@/lib/supply-chain/types";
 import { cn } from "@/lib/utils";
+import { SourceDocumentPanel } from "./SourceDocumentPanel";
+import type { SourceStatusRow } from "@/lib/regulatory/compliance-matrix-v6";
 
 type TabId = "matrix" | "framework" | "logic" | "sources";
 
@@ -35,6 +37,7 @@ export function RegulatoryMatrixView() {
   const t = useTranslations("regulatoryMatrix");
   const [tab, setTab] = useState<TabId>("matrix");
   const [selected, setSelected] = useState<SelectedCell | null>(null);
+  const [selectedSource, setSelectedSource] = useState<SourceStatusRow | null>(null);
 
   const { matrixRows, stateFramework, productLogic, sources } = COMPLIANCE_MATRIX_V6;
 
@@ -49,40 +52,21 @@ export function RegulatoryMatrixView() {
   return (
     <div className="grid w-full max-w-full gap-4 overflow-x-hidden p-4 md:gap-5 md:p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,280px)]">
       <div className="min-w-0 space-y-4">
-        <CommandCard title={t("title")} subtitle={t("subtitle")}>
-          <div className="mb-4 space-y-2 rounded-lg border border-command-orange/30 bg-command-orange/5 p-3 text-xs">
-            <p className="font-medium text-command-orange">{t("disclaimerTitle")}</p>
-            <p className="text-command-text-secondary">{COMPLIANCE_MATRIX_V6.disclaimer}</p>
-            <p className="text-command-text-muted">
-              {t("version")}: {COMPLIANCE_MATRIX_V6.version} · {t("asOf")}:{" "}
-              {COMPLIANCE_MATRIX_V6.asOf}
-            </p>
-            {COMPLIANCE_MATRIX_V6.escalationRule && (
-              <p className="text-command-text-muted">
-                <span className="font-medium text-command-text-secondary">
-                  {t("escalationRule")}:
-                </span>{" "}
-                {COMPLIANCE_MATRIX_V6.escalationRule}
-              </p>
-            )}
-            {COMPLIANCE_MATRIX_V6.lawyerReviewItems && (
-              <p className="text-command-text-muted">
-                <span className="font-medium text-command-text-secondary">
-                  {t("lawyerReview")}:
-                </span>{" "}
-                {COMPLIANCE_MATRIX_V6.lawyerReviewItems}
-              </p>
-            )}
+        <CommandCard title={t("title")}>
+          <div className="mb-4 rounded-lg border border-command-orange/30 bg-command-orange/5 p-3 text-xs text-command-text-secondary">
+            {COMPLIANCE_MATRIX_V6.disclaimer}
           </div>
-
-          <p className="mb-3 text-xs text-command-text-muted">{t("layerHint")}</p>
 
           <div className="mb-4 flex flex-wrap gap-1 border-b border-command-border pb-2">
             {TABS.map((id) => (
               <button
                 key={id}
                 type="button"
-                onClick={() => setTab(id)}
+                onClick={() => {
+                  setTab(id);
+                  if (id !== "matrix") setSelected(null);
+                  if (id !== "sources") setSelectedSource(null);
+                }}
                 className={cn(
                   "rounded-md px-3 py-1.5 text-xs font-medium transition-colors",
                   tab === id
@@ -227,43 +211,44 @@ export function RegulatoryMatrixView() {
 
           {tab === "sources" && (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[720px] border-collapse text-left text-xs">
+              <table className="w-full min-w-[520px] border-collapse text-left text-xs">
                 <thead>
                   <tr className="border-b border-command-border text-command-text-muted">
                     <th className="pb-2 pr-2">{t("jurisdiction")}</th>
                     <th className="pb-2 pr-2">{t("source")}</th>
                     <th className="pb-2 pr-2">{t("purpose")}</th>
                     <th className="pb-2 pr-2">{t("reviewStatus")}</th>
-                    <th className="pb-2 pr-2">{t("asOf")}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {sources.map((s, i) => (
-                    <tr key={`${s.jurisdiction}-${i}`} className="border-b border-command-border/40">
-                      <td className="py-2 pr-2 font-medium text-command-teal-bright">
-                        {s.jurisdiction}
-                      </td>
-                      <td className="max-w-[240px] py-2 pr-2">
-                        {s.url ? (
-                          <a
-                            href={s.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-command-teal-bright hover:underline"
-                          >
-                            {s.source}
-                          </a>
-                        ) : (
-                          <span className="text-command-text-secondary">{s.source}</span>
+                  {sources.map((s, i) => {
+                    const isActive =
+                      selectedSource?.jurisdiction === s.jurisdiction &&
+                      selectedSource?.source === s.source;
+                    return (
+                      <tr
+                        key={`${s.jurisdiction}-${i}`}
+                        className={cn(
+                          "cursor-pointer border-b border-command-border/40 transition-colors hover:bg-command-card-elevated/40",
+                          isActive && "bg-command-teal/5",
                         )}
-                      </td>
-                      <td className="py-2 pr-2 text-command-text-secondary">{s.purpose}</td>
-                      <td className="py-2 pr-2">
-                        <ReviewStatusBadge status={s.reviewStatus} t={t} />
-                      </td>
-                      <td className="py-2 pr-2 text-command-text-muted">{s.asOf}</td>
-                    </tr>
-                  ))}
+                        onClick={() => setSelectedSource(s)}
+                      >
+                        <td className="py-2 pr-2 font-medium text-command-teal-bright">
+                          {s.jurisdiction}
+                        </td>
+                        <td className="max-w-[220px] py-2 pr-2 text-command-text-secondary">
+                          {s.source}
+                        </td>
+                        <td className="max-w-[200px] py-2 pr-2 text-command-text-muted">
+                          {s.purpose}
+                        </td>
+                        <td className="py-2 pr-2">
+                          <ReviewStatusBadge status={s.reviewStatus} t={t} />
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -271,7 +256,19 @@ export function RegulatoryMatrixView() {
         </CommandCard>
       </div>
 
-      {selected ? (
+      {tab === "sources" && selectedSource ? (
+        <CommandCard
+          title={t("sourceDocumentTitle")}
+          className="h-fit min-w-0 overflow-hidden lg:sticky lg:top-20"
+        >
+          <SourceDocumentPanel
+            source={selectedSource}
+            title={t("sourceExcerptTitle")}
+            annotationLabel={t("sourceAnnotations")}
+            openUrlLabel={t("openOfficialSource")}
+          />
+        </CommandCard>
+      ) : selected ? (
         <CommandCard
           title={t("detailTitle")}
           className="h-fit min-w-0 overflow-hidden lg:sticky lg:top-20"
@@ -318,7 +315,9 @@ export function RegulatoryMatrixView() {
         </CommandCard>
       ) : (
         <CommandCard className="hidden h-fit min-w-0 overflow-hidden lg:block lg:sticky lg:top-20">
-          <p className="text-xs text-command-text-muted">{t("selectCellHint")}</p>
+          <p className="text-xs text-command-text-muted">
+            {tab === "sources" ? t("selectSourceHint") : t("selectCellHint")}
+          </p>
         </CommandCard>
       )}
     </div>
@@ -355,7 +354,11 @@ function MatrixCell({
           "w-full rounded-lg border p-2 text-left transition-colors hover:border-command-teal/40",
           cell.isIncremental
             ? "border-command-orange/30 bg-command-orange/5"
-            : "border-command-border bg-command-card-elevated/40",
+            : cell.riskLabel.includes("红")
+              ? "border-command-red/40 bg-command-red/10"
+              : cell.riskLabel.includes("橙")
+                ? "border-command-orange/35 bg-command-orange/8"
+                : "border-command-border bg-command-card-elevated/40",
         )}
       >
         <p className="line-clamp-2 text-[10px] text-command-text-secondary">
@@ -383,9 +386,24 @@ function RiskLabelBadge({ label, compact }: { label: string; compact?: boolean }
   else if (label.includes("橙")) level = "medium";
   else if (label.includes("红")) level = "high";
 
+  if (compact) {
+    return (
+      <span
+        className={cn(
+          "inline-block rounded px-1.5 py-0.5 text-[9px] font-semibold",
+          level === "low" && "bg-command-green/15 text-command-green",
+          level === "medium" && "bg-command-orange/20 text-command-orange ring-1 ring-command-orange/40",
+          level === "high" && "bg-command-red/25 text-command-red ring-1 ring-command-red/50",
+        )}
+      >
+        {level === "low" ? "Low" : level === "medium" ? "Med" : "High"}
+      </span>
+    );
+  }
+
   return (
     <StatusBadge variant={riskVariant[level]}>
-      {compact ? level : label}
+      {label}
     </StatusBadge>
   );
 }
