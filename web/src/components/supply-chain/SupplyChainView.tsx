@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { RotateCcw } from "lucide-react";
 import { useSupplyChainStore } from "@/hooks/useSupplyChainStore";
 import { PATH_PRIMARY } from "@/lib/supply-chain/seed-data";
+import { getChainNodeOverrides, formedChains } from "@/lib/supply-chain/role-data";
 import { CommandCard } from "@/components/ui/CommandCard";
 import { PathFlowMap } from "./PathFlowMap";
 import { PathSelector } from "./PathSelector";
@@ -20,6 +21,7 @@ export function SupplyChainView() {
   const [activePathId, setActivePathId] = useState(PATH_PRIMARY);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
+  const [selectedChainId, setSelectedChainId] = useState<string | null>(null);
   const [editNodeId, setEditNodeId] = useState<string | null>(null);
 
   const nodes = useMemo(
@@ -47,6 +49,13 @@ export function SupplyChainView() {
         : [],
     [state.documents, selectedNodeId],
   );
+
+  const chainOverrides = useMemo(() => {
+    if (!selectedChainId) return undefined;
+    const formed = formedChains.find((c) => c.id === selectedChainId);
+    if (!formed) return undefined;
+    return getChainNodeOverrides(formed, nodes);
+  }, [selectedChainId, nodes]);
 
   if (!hydrated) {
     return (
@@ -85,6 +94,7 @@ export function SupplyChainView() {
               setActivePathId(pathId);
               setSelectedNodeId(null);
               setSelectedRoleId(null);
+              setSelectedChainId(null);
             }}
           />
           <div className="mt-4 overflow-hidden rounded-lg border border-command-border grid-map-bg bg-[#050505] p-4">
@@ -94,6 +104,7 @@ export function SupplyChainView() {
               selectedNodeId={selectedNodeId}
               onSelectNode={setSelectedNodeId}
               roleOnly
+              chainOverrides={chainOverrides}
             />
           </div>
 
@@ -102,6 +113,8 @@ export function SupplyChainView() {
               activePathId={activePathId}
               selectedRoleId={selectedRoleId}
               onSelectRole={setSelectedRoleId}
+              selectedChainId={selectedChainId}
+              onSelectChain={setSelectedChainId}
             />
           </div>
         </CommandCard>

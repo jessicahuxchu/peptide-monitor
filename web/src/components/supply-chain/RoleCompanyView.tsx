@@ -22,9 +22,17 @@ interface RoleCompanyViewProps {
   activePathId: string;
   selectedRoleId: string | null;
   onSelectRole: (roleId: string) => void;
+  selectedChainId: string | null;
+  onSelectChain: (chainId: string | null) => void;
 }
 
-export function RoleCompanyView({ activePathId, selectedRoleId, onSelectRole }: RoleCompanyViewProps) {
+export function RoleCompanyView({
+  activePathId,
+  selectedRoleId,
+  onSelectRole,
+  selectedChainId,
+  onSelectChain,
+}: RoleCompanyViewProps) {
   const t = useTranslations("supplyChain");
   const [expandedRoles, setExpandedRoles] = useState<Set<string>>(new Set());
 
@@ -164,12 +172,17 @@ export function RoleCompanyView({ activePathId, selectedRoleId, onSelectRole }: 
           {t("rolesSection.formedChains")}
         </h3>
         <div className="space-y-3">
-          {pathChains.map((chain) => (
-            <article
+          {pathChains.map((chain) => {
+            const isSelected = selectedChainId === chain.id;
+            return (
+            <button
               key={chain.id}
+              type="button"
+              onClick={() => onSelectChain(isSelected ? null : chain.id)}
               className={cn(
-                "rounded-xl border bg-command-card-elevated p-3",
+                "w-full rounded-xl border bg-command-card-elevated p-3 text-left transition-colors",
                 pathTypeColors[chain.pathType],
+                isSelected && "ring-2 ring-command-teal/50",
               )}
             >
               <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
@@ -206,8 +219,9 @@ export function RoleCompanyView({ activePathId, selectedRoleId, onSelectRole }: 
                   );
                 })}
               </div>
-            </article>
-          ))}
+            </button>
+            );
+          })}
         </div>
       </div>
     </div>

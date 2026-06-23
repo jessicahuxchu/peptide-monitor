@@ -213,3 +213,37 @@ export function getRoleForCompany(companyId: string) {
   if (!company) return undefined;
   return supplyChainRoles.find((r) => r.id === company.roleId);
 }
+
+export interface ChainNodeOverride {
+  companyName: string;
+  documentCompletion: number;
+}
+
+/** Map path nodes to companies from a formed chain (matched by role type). */
+export function getChainNodeOverrides(
+  chain: FormedChain,
+  nodes: { id: string; nodeType: NodeType }[],
+): Map<string, ChainNodeOverride> {
+  const map = new Map<string, ChainNodeOverride>();
+  const companies = chain.companyIds
+    .map((id) => supplyChainCompanies.find((c) => c.id === id))
+    .filter((c): c is SupplyChainCompany => Boolean(c));
+  const usedCompanyIds = new Set<string>();
+
+  for (const node of nodes) {
+    const company = companies.find((c) => {
+      if (usedCompanyIds.has(c.id)) return false;
+      const role = supplyChainRoles.find((r) => r.id === c.roleId);
+      return role?.roleType === node.nodeType;
+    });
+    if (!company) continue;
+    usedCompanyIds.add(company.id);
+    const role = supplyChainRoles.find((r) => r.id === company.roleId);
+    map.set(node.id, {
+      companyName: company.name,
+      documentCompletion: role?.documentCompletion ?? 0,
+    });
+  }
+
+  return map;
+}

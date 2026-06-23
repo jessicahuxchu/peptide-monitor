@@ -517,6 +517,7 @@
       "tier": "档位",
       "score": "综合分",
       "coverage": "平台覆盖",
+      "conclusion": "分析结论",
       "spec": "共识规格",
       "stockMode": "备货模式",
       "leadTime": "交付周期",

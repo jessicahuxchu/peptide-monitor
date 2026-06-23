@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useLocale, useTranslations } from "next-intl";
+import { ChatMarkdown } from "@/components/chat/ChatMarkdown";
 import { CommandCard } from "@/components/ui/CommandCard";
 import { useInboxStore } from "@/hooks/useInboxStore";
 import { canReviewInbox } from "@/lib/auth/reviewers";
@@ -265,13 +266,17 @@ export default function InboxPage() {
                   )}
                   <div
                     className={cn(
-                      "max-w-[85%] rounded-xl px-3 py-2 text-sm whitespace-pre-wrap",
+                      "max-w-[85%] rounded-xl px-3 py-2 text-sm",
                       msg.role === "user"
-                        ? "bg-command-teal/20 text-command-text"
+                        ? "whitespace-pre-wrap bg-command-teal/20 text-command-text"
                         : "bg-command-card-elevated text-command-text-secondary",
                     )}
                   >
-                    {msg.content}
+                    {msg.role === "assistant" ? (
+                      <ChatMarkdown content={msg.content} />
+                    ) : (
+                      msg.content
+                    )}
                   </div>
                   {msg.role === "user" && (
                     <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-command-border">

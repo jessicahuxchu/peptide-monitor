@@ -509,6 +509,7 @@
       "tier": "Tier",
       "score": "Score",
       "coverage": "Coverage",
+      "conclusion": "Conclusion",
       "spec": "Consensus Spec",
       "stockMode": "Stock Mode",
       "leadTime": "Lead Time",
