@@ -47,8 +47,8 @@ export function RegulatoryMatrixView() {
   );
 
   return (
-    <div className="grid gap-4 p-4 md:gap-5 md:p-6 lg:grid-cols-[1fr_300px]">
-      <div className="space-y-4">
+    <div className="grid w-full max-w-full gap-4 overflow-x-hidden p-4 md:gap-5 md:p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,280px)]">
+      <div className="min-w-0 space-y-4">
         <CommandCard title={t("title")} subtitle={t("subtitle")}>
           <div className="mb-4 space-y-2 rounded-lg border border-command-orange/30 bg-command-orange/5 p-3 text-xs">
             <p className="font-medium text-command-orange">{t("disclaimerTitle")}</p>
@@ -272,9 +272,12 @@ export function RegulatoryMatrixView() {
       </div>
 
       {selected ? (
-        <CommandCard title={t("detailTitle")} className="h-fit lg:sticky lg:top-20">
-          <div className="space-y-3 text-sm">
-            <p className="text-xs text-command-teal-bright">
+        <CommandCard
+          title={t("detailTitle")}
+          className="h-fit min-w-0 overflow-hidden lg:sticky lg:top-20"
+        >
+          <div className="space-y-3 overflow-hidden text-sm">
+            <p className="break-words text-xs text-command-teal-bright">
               {selected.row.product} · {selected.region}
             </p>
             <DetailRow label={t("body")} value={selected.cell.regulator} />
@@ -314,7 +317,7 @@ export function RegulatoryMatrixView() {
           </div>
         </CommandCard>
       ) : (
-        <CommandCard className="hidden h-fit lg:block lg:sticky lg:top-20">
+        <CommandCard className="hidden h-fit min-w-0 overflow-hidden lg:block lg:sticky lg:top-20">
           <p className="text-xs text-command-text-muted">{t("selectCellHint")}</p>
         </CommandCard>
       )}
@@ -428,9 +431,9 @@ function ReviewStatusBadge({
 
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
-    <div>
+    <div className="min-w-0">
       <p className="text-xs text-command-text-muted">{label}</p>
-      <p className="text-sm text-command-text-secondary">{value}</p>
+      <p className="break-words text-sm text-command-text-secondary">{value}</p>
     </div>
   );
 }

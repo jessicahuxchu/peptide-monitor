@@ -12,6 +12,8 @@ interface PathFlowMapProps {
   onSelectNode: (id: string) => void;
   compact?: boolean;
   typeFilter?: NodeType | "all";
+  /** When true, show role label only (hide company / display name). */
+  roleOnly?: boolean;
 }
 
 export function PathFlowMap({
@@ -21,6 +23,7 @@ export function PathFlowMap({
   onSelectNode,
   compact = false,
   typeFilter = "all",
+  roleOnly = false,
 }: PathFlowMapProps) {
   const t = useTranslations();
 
@@ -30,26 +33,24 @@ export function PathFlowMap({
       : nodes.filter((n) => n.nodeType === typeFilter);
 
   return (
-    <div className="overflow-x-auto pb-2">
-      <div
-        className={cn(
-          "flex min-w-max items-stretch gap-0 px-1",
-          compact ? "py-2" : "py-4",
-        )}
-      >
+    <div className={cn("px-1", compact ? "py-2" : "py-4")}>
+      <div className="flex flex-wrap items-center gap-y-3">
         {visibleNodes.map((node, index) => {
           const edge = edges.find((e) => e.fromNodeId === node.id);
           const isSelected = selectedNodeId === node.id;
           const dimmed = typeFilter !== "all" && node.nodeType !== typeFilter;
 
           return (
-            <div key={node.id} className={cn("flex items-center", dimmed && "opacity-40")}>
+            <div
+              key={node.id}
+              className={cn("flex items-center", dimmed && "opacity-40")}
+            >
               <button
                 type="button"
                 onClick={() => onSelectNode(node.id)}
                 className={cn(
                   "group relative flex flex-col rounded-xl border text-left transition-all duration-150",
-                  compact ? "w-[140px] p-2.5" : "w-[168px] p-3",
+                  compact ? "w-[128px] p-2.5" : "w-[148px] p-3",
                   isSelected
                     ? "border-command-teal bg-command-teal/10 shadow-[0_0_16px_rgba(20,184,166,0.15)]"
                     : "border-command-border bg-command-card-elevated hover:border-command-teal/30",
@@ -75,12 +76,16 @@ export function PathFlowMap({
                     compact ? "text-[11px]" : "text-xs",
                   )}
                 >
-                  {node.displayName}
+                  {roleOnly
+                    ? t(`nodeTypes.${node.nodeType}`)
+                    : node.displayName}
                 </p>
 
-                <p className="mt-1 text-[10px] text-command-teal-bright">
-                  {t(`nodeTypes.${node.nodeType}`)}
-                </p>
+                {!roleOnly && (
+                  <p className="mt-1 text-[10px] text-command-teal-bright">
+                    {t(`nodeTypes.${node.nodeType}`)}
+                  </p>
+                )}
 
                 {node.region && (
                   <p className="mt-0.5 text-[10px] text-command-text-muted">
@@ -104,8 +109,8 @@ export function PathFlowMap({
               {index < visibleNodes.length - 1 && (
                 <div
                   className={cn(
-                    "flex shrink-0 flex-col items-center justify-center px-1",
-                    compact ? "w-8" : "w-12",
+                    "flex shrink-0 flex-col items-center justify-center px-0.5",
+                    compact ? "w-6" : "w-8",
                   )}
                 >
                   <div className="relative h-px w-full bg-command-border">
@@ -117,7 +122,7 @@ export function PathFlowMap({
                     />
                   </div>
                   {edge && !compact && (
-                    <span className="mt-1 whitespace-nowrap text-[9px] text-command-text-muted">
+                    <span className="mt-1 text-center text-[9px] leading-tight text-command-text-muted">
                       {edge.estimatedDays}d · {t(`transport.${edge.transportMode}`)}
                     </span>
                   )}

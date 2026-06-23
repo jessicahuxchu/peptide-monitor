@@ -69,14 +69,7 @@ export default function IntelligencePage() {
   return (
     <div className="w-full max-w-full overflow-x-hidden p-4 md:p-6">
       <div className="space-y-6">
-        <CommandCard
-          title={t("pages.intelligence.title")}
-          subtitle={t("pages.intelligence.description")}
-        >
-          <p className="mb-4 text-xs leading-relaxed text-command-text-muted">
-            {t("intelligencePage.layerHint")}
-          </p>
-
+        <CommandCard title={t("pages.intelligence.title")}>
           <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <BriefKpi label={t("intelligencePage.signalCount")} value={String(intelligenceSignals.length)} />
             <BriefKpi label={t("intelligencePage.pendingMatrix")} value={String(pendingCount)} accent={pendingCount > 0} />
