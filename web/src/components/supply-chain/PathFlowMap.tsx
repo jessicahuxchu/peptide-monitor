@@ -7,6 +7,14 @@ import type { ChainNodeOverride } from "@/lib/supply-chain/role-data";
 import { riskColor, riskDotColor } from "@/lib/supply-chain/utils";
 import { cn } from "@/lib/utils";
 
+function chunkIndices(count: number, perRow: number): number[][] {
+  const rows: number[][] = [];
+  for (let i = 0; i < count; i += perRow) {
+    rows.push(Array.from({ length: Math.min(perRow, count - i) }, (_, j) => i + j));
+  }
+  return rows;
+}
+
 interface PathFlowMapProps {
   nodes: PathNode[];
   edges: PathEdge[];
@@ -23,15 +31,9 @@ interface PathFlowMapProps {
 const NODE_W = { compact: 128, normal: 148 } as const;
 const CONN_W = { compact: 24, normal: 32 } as const;
 
-function groupIndices(rowStarts: Set<number>, count: number): number[][] {
-  const starts = [...rowStarts].sort((a, b) => a - b);
-  const groups: number[][] = [];
-  for (let s = 0; s < starts.length; s++) {
-    const from = starts[s];
-    const to = s + 1 < starts.length ? starts[s + 1] : count;
-    groups.push(Array.from({ length: to - from }, (_, i) => from + i));
-  }
-  return groups;
+function nodesPerRowForWidth(width: number, nodeW: number, connW: number): number {
+  if (width <= 0) return 1;
+  return Math.max(1, Math.floor((width + connW) / (nodeW + connW)));
 }
 
 export function PathFlowMap({
@@ -55,28 +57,13 @@ export function PathFlowMap({
   const connW = compact ? CONN_W.compact : CONN_W.normal;
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [rowStarts, setRowStarts] = useState<Set<number>>(() => new Set([0]));
+  const [containerWidth, setContainerWidth] = useState(0);
 
   useLayoutEffect(() => {
     const measure = () => {
-      const starts = new Set<number>([0]);
-      let prevTop: number | null = null;
-
-      for (let i = 0; i < visibleNodes.length; i++) {
-        const el = itemRefs.current[i];
-        if (!el) continue;
-        const top = el.offsetTop;
-        if (prevTop !== null && top > prevTop + 2) starts.add(i);
-        prevTop = top;
-      }
-
-      setRowStarts((prev) => {
-        if (prev.size === starts.size && [...prev].every((v) => starts.has(v))) {
-          return prev;
-        }
-        return starts;
-      });
+      if (!containerRef.current) return;
+      const width = containerRef.current.clientWidth;
+      setContainerWidth((prev) => (prev === width ? prev : width));
     };
 
     measure();
@@ -89,9 +76,14 @@ export function PathFlowMap({
     };
   }, [visibleNodes, compact, roleOnly, chainOverrides]);
 
+  const nodesPerRow = useMemo(
+    () => nodesPerRowForWidth(containerWidth, nodeW, connW),
+    [containerWidth, nodeW, connW],
+  );
+
   const rowGroups = useMemo(
-    () => groupIndices(rowStarts, visibleNodes.length),
-    [rowStarts, visibleNodes.length],
+    () => chunkIndices(visibleNodes.length, nodesPerRow),
+    [visibleNodes.length, nodesPerRow],
   );
 
   const renderNode = (node: PathNode, dimmed: boolean) => {
@@ -236,39 +228,26 @@ export function PathFlowMap({
 
   return (
     <div className={cn("px-1", compact ? "py-2" : "py-4")}>
-      <div
-        ref={containerRef}
-        className="flex flex-wrap items-center gap-y-3"
-      >
-        {visibleNodes.map((node, index) => {
-          const dimmed = typeFilter !== "all" && node.nodeType !== typeFilter;
-          const rowIdx = rowGroups.findIndex((g) => g.includes(index));
-          const isRowStart = rowStarts.has(index) && index > 0;
-          const prevRow = isRowStart && rowIdx > 0 ? rowGroups[rowIdx - 1] : null;
-          const currentRow = rowIdx >= 0 ? rowGroups[rowIdx] : null;
-          const nextStartsNewRow = rowStarts.has(index + 1);
-
-          return (
-            <Fragment key={node.id}>
-              {isRowStart && prevRow && currentRow && (
-                <div className="w-full basis-full">
-                  {renderRowBridge(prevRow, currentRow)}
-                </div>
-              )}
-              <div
-                ref={(el) => {
-                  itemRefs.current[index] = el;
-                }}
-                className="flex items-center"
-              >
-                {renderNode(node, dimmed)}
-                {index < visibleNodes.length - 1 &&
-                  !nextStartsNewRow &&
-                  renderHorizontalConnector(node.id)}
-              </div>
-            </Fragment>
-          );
-        })}
+      <div ref={containerRef} className="flex flex-col gap-y-3">
+        {rowGroups.map((rowIndices, rowIdx) => (
+          <Fragment key={rowIdx}>
+            {rowIdx > 0 && (
+              <div aria-hidden>{renderRowBridge(rowGroups[rowIdx - 1], rowIndices)}</div>
+            )}
+            <div className="flex items-center">
+              {rowIndices.map((index, i) => {
+                const node = visibleNodes[index];
+                const dimmed = typeFilter !== "all" && node.nodeType !== typeFilter;
+                return (
+                  <Fragment key={node.id}>
+                    {renderNode(node, dimmed)}
+                    {i < rowIndices.length - 1 && renderHorizontalConnector(node.id)}
+                  </Fragment>
+                );
+              })}
+            </div>
+          </Fragment>
+        ))}
       </div>
     </div>
   );
