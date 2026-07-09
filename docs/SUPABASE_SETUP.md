@@ -28,9 +28,11 @@
 ```
 supabase/migrations/001_initial.sql
 supabase/migrations/002_extended_modules.sql
+supabase/migrations/003_social_posts.sql
 ```
 
-`002` 会新增：产品监控、市场情报、财务、供需匹配、Dashboard 配置等表。
+`002` 会新增：产品监控、市场情报、财务、供需匹配、Dashboard 配置等表。  
+`003` 会新增：`social_posts`（Reddit 原始帖，供热度聚合与内部核对）。
 
 ## 3. Configure environment
 
@@ -45,6 +47,11 @@ NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbG...
 SUPABASE_SERVICE_ROLE_KEY=eyJhbG...
 MCP_API_KEY=your-long-random-secret
+
+# Reddit (舆论情报热度扫描)
+REDDIT_CLIENT_ID=
+REDDIT_CLIENT_SECRET=
+REDDIT_USER_AGENT=PeptideMonitor/0.1 by your_reddit_username
 ```
 
 ## 4. Start & auto-seed
@@ -77,6 +84,7 @@ curl -X POST http://localhost:3000/api/platform/seed \
 | `entities` | CRM 实体 |
 | `product_monitor_records` | SKU 监控（221 条） |
 | `intelligence_signals` / `sku_opportunities` | 市场情报 |
+| `social_posts` | Reddit 原始帖（内部页 `/social-posts`，不进主导航） |
 | `sales_records` | 财务销售 |
 | `supplier_profiles` / `customer_demands` | 供需匹配 |
 | `agent_submissions` | Agent 收件箱 |
@@ -98,6 +106,21 @@ curl -X POST http://localhost:3000/api/cron/regulatory-scan \
   -H "Authorization: Bearer YOUR_MCP_API_KEY"
 ```
 
+## 7b. Test Reddit heat scan (daily)
+
+1. 在 [Reddit Apps](https://www.reddit.com/prefs/apps) 创建 **script** 应用，填入 `REDDIT_*` 环境变量  
+2. 在 Supabase SQL Editor 运行 `003_social_posts.sql`  
+3. 触发扫描：
+
+```bash
+curl -X POST http://localhost:3000/api/cron/reddit-heat-scan \
+  -H "Authorization: Bearer YOUR_MCP_API_KEY"
+```
+
+- 原始帖写入 `social_posts`，内部查看：`/zh/social-posts` 或 `/en/social-posts`（**不在导航栏**）  
+- 过门槛的热度聚合写入 `intelligence_signals`（`source=social`），在 **舆论情报** `/intelligence` 展示  
+- 建议外部调度器 **每天 1 次** 调用上述 cron
+
 ## API Routes
 
 | Method | Path | Auth | Description |
@@ -108,6 +131,8 @@ curl -X POST http://localhost:3000/api/cron/regulatory-scan \
 | GET | `/api/alerts` | — | 提醒列表 |
 | GET | `/api/risk` | — | 风险信号 |
 | GET | `/api/intelligence` | — | 情报 + SKU 机会 |
+| GET | `/api/social-posts` | — | Reddit 原始帖（内部） |
+| GET/POST | `/api/cron/reddit-heat-scan` | MCP_API_KEY | 每日 Reddit 热度扫描 |
 | GET | `/api/finance` | — | 销售记录 |
 | GET | `/api/product-monitor` | — | 产品监控全量 |
 | GET | `/api/relations` | — | 供应商 + 客户需求 |

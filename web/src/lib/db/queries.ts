@@ -11,6 +11,7 @@ import {
   mapRiskSignal,
   mapSalesRecord,
   mapSkuOpportunity,
+  mapSocialPost,
   mapSupplier,
 } from "@/lib/db/platform-mappers";
 import { fetchSupplyChainState } from "@/lib/db/supply-chain";
@@ -22,6 +23,7 @@ import type {
   ProductBlend,
   ProductMonitorRecord,
 } from "@/lib/product-monitor/types";
+import type { SocialPostsResponse } from "@/lib/social/types";
 import type {
   CustomerDemand,
   SupplierProfile,
@@ -80,6 +82,36 @@ export async function fetchIntelligenceData(): Promise<{
     signals: (signalsRes.data ?? []).map(mapIntelSignal),
     skuOpportunities: (skuRes.data ?? []).map(mapSkuOpportunity),
   };
+}
+
+export async function fetchSocialPosts(options?: {
+  platform?: string;
+  product?: string;
+  limit?: number;
+}): Promise<SocialPostsResponse> {
+  const supabase = createServiceClient();
+  const limit = options?.limit ?? 100;
+
+  let query = supabase
+    .from("social_posts")
+    .select("*", { count: "exact" })
+    .order("posted_at", { ascending: false })
+    .limit(limit);
+
+  if (options?.platform) {
+    query = query.eq("platform", options.platform);
+  }
+
+  const { data, error, count } = await query;
+  if (error) throw error;
+
+  let posts = (data ?? []).map(mapSocialPost);
+  if (options?.product) {
+    const product = options.product;
+    posts = posts.filter((p) => p.products.includes(product));
+  }
+
+  return { posts, total: count ?? posts.length };
 }
 
 export async function fetchFinanceData(): Promise<{ records: SalesRecord[] }> {

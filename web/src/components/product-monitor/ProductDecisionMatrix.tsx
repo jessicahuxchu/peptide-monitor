@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Sparkline } from "@/components/ui/Sparkline";
@@ -42,6 +42,14 @@ const intelligenceFallback = {
   skuOpportunities: fallbackSku,
 };
 
+function introForLocale(
+  intro: ProductMonitorRecord["productIntro"],
+  locale: string,
+): string | undefined {
+  if (!intro) return undefined;
+  return locale.startsWith("zh") ? intro.zh : intro.en;
+}
+
 interface ProductDecisionMatrixProps {
   records: ProductMonitorRecord[];
   selectedId: string | null;
@@ -55,6 +63,7 @@ export function ProductDecisionMatrix({
 }: ProductDecisionMatrixProps) {
   const t = useTranslations("productMonitor");
   const tOpp = useTranslations("productMonitor.opportunity");
+  const locale = useLocale();
   const { data: intel } = useDbResource("/api/intelligence", intelligenceFallback);
   const { data: regulatoryEntries } = useDbResource(
     "/api/regulatory",
@@ -116,10 +125,11 @@ export function ProductDecisionMatrix({
       </div>
 
       <div className="w-full max-w-full overflow-x-auto">
-        <table className="w-full min-w-[720px] text-left text-sm">
+        <table className="w-full min-w-[880px] text-left text-sm">
           <thead>
             <tr className="border-b border-command-border text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
               <th className="pb-3 pr-3">{t("table.product")}</th>
+              <th className="pb-3 pr-3">{t("table.productIntro")}</th>
               <th className="pb-3 pr-3">{t("table.conclusion")}</th>
               <th className="pb-3 pr-3">{t("table.score")}</th>
               <th className="pb-3 pr-3">{tOpp("score")}</th>
@@ -136,6 +146,7 @@ export function ProductDecisionMatrix({
               const gap =
                 sku != null ? sku.localPrice - sku.competitivePrice : null;
               const TrendIcon = sku ? trendIcon[sku.trend] : null;
+              const intro = introForLocale(record.productIntro, locale);
 
               return (
                 <tr
@@ -149,6 +160,18 @@ export function ProductDecisionMatrix({
                   <td className="py-3 pr-3">
                     <p className="font-semibold text-command-teal-bright">{record.product}</p>
                     <p className="text-[10px] text-command-text-muted">{record.primarySpec}</p>
+                  </td>
+                  <td className="max-w-[220px] py-3 pr-3">
+                    {intro ? (
+                      <p
+                        className="line-clamp-2 text-[11px] leading-snug text-command-text-secondary"
+                        title={intro}
+                      >
+                        {intro}
+                      </p>
+                    ) : (
+                      <span className="text-[11px] text-command-text-muted">—</span>
+                    )}
                   </td>
                   <td className="py-3 pr-3">
                     <StrategyTierBadge tier={record.tier} />

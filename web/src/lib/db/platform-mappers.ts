@@ -10,6 +10,7 @@ import type {
   CustomerDemand,
   SupplierProfile,
 } from "@/lib/relations/matching";
+import type { SocialPost } from "@/lib/social/types";
 import type {
   AlertItem,
   EntityRecord,
@@ -32,6 +33,7 @@ type SupplierRow = Database["public"]["Tables"]["supplier_profiles"]["Row"];
 type DemandRow = Database["public"]["Tables"]["customer_demands"]["Row"];
 type MetaRow = Database["public"]["Tables"]["monitor_meta"]["Row"];
 type PlatformRow = Database["public"]["Tables"]["monitor_platforms"]["Row"];
+type SocialPostRow = Database["public"]["Tables"]["social_posts"]["Row"];
 
 export function mapRegulatory(row: RegRow): RegulatoryEntry {
   return {
@@ -115,6 +117,7 @@ export function mapProductMonitorRecord(row: ProductRow): ProductMonitorRecord {
     scores: row.scores as unknown as ProductMonitorRecord["scores"],
     compositeScore: Number(row.composite_score),
     stockingLogic: row.stocking_logic,
+    productIntro: (row.product_intro as ProductMonitorRecord["productIntro"]) ?? undefined,
     notes: row.notes ?? undefined,
     lastReviewed: row.last_reviewed ?? "",
   };
@@ -168,14 +171,43 @@ export function mapIntelSignal(row: SignalRow): IntelSignal {
     region: row.region ?? undefined,
     products: (row.products as string[]) ?? [],
     dimension,
-    directionLabel: dimension === "regulatory" ? "Regulatory signal" : "Market signal",
+    directionLabel:
+      source === "social"
+        ? dimension === "regulatory"
+          ? "Social · regulatory chatter"
+          : "Social · demand heat"
+        : dimension === "regulatory"
+          ? "Regulatory signal"
+          : "Market signal",
     pendingMatrixUpdate: dimension === "regulatory" && (regulatoryImpact ?? 0) > 0,
-    credibility: source === "news_legal" ? "high" : "medium",
-    horizon: "weeks",
+    credibility:
+      source === "news_legal" ? "high" : source === "social" ? "medium" : "medium",
+    horizon: source === "social" ? "immediate" : "weeks",
     heatImpact,
     regulatoryImpact,
     trend: (row.trend as IntelSignal["trend"]) ?? undefined,
     url: row.url ?? undefined,
+  };
+}
+
+export function mapSocialPost(row: SocialPostRow): SocialPost {
+  return {
+    id: row.id,
+    platform: row.platform,
+    externalId: row.external_id,
+    subreddit: row.subreddit,
+    title: row.title,
+    body: row.body,
+    score: row.score,
+    numComments: row.num_comments,
+    author: row.author,
+    permalink: row.permalink,
+    url: row.url,
+    postedAt: row.posted_at,
+    products: (row.products as string[]) ?? [],
+    hasRegulatory: row.has_regulatory,
+    engagement: row.engagement,
+    fetchedAt: row.fetched_at,
   };
 }
 
@@ -280,6 +312,7 @@ export function productRecordToRow(
     scores: record.scores as unknown as Json,
     composite_score: record.compositeScore,
     stocking_logic: record.stockingLogic,
+    product_intro: (record.productIntro as unknown as Json) ?? null,
     notes: record.notes ?? null,
     last_reviewed: record.lastReviewed || null,
   };

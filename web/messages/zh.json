@@ -401,6 +401,16 @@
       "title": "舆论情报",
       "description": ""
     },
+    "socialPosts": {
+      "title": "社媒原始帖（内部）",
+      "description": "Reddit 抓取的原始讨论，不在主导航展示；热度聚合后写入舆论情报。",
+      "hiddenNote": "此页未挂导航，仅供内部核对原始数据。聚合信号见",
+      "allProducts": "全部产品",
+      "regulatoryOnly": "仅监管相关",
+      "loading": "加载中…",
+      "empty": "暂无原始帖。配置 Reddit 凭证后触发每日扫描即可入库。",
+      "showing": "显示 {shown} / 库内 {total} 条"
+    },
     "productMonitor": {
       "title": "产品分析",
       "description": "决策层 — 聚合情报动量、合规约束与平台覆盖，输出 SKU 优先级。"
@@ -514,6 +524,7 @@
     },
     "table": {
       "product": "产品",
+      "productIntro": "产品介绍",
       "tier": "档位",
       "score": "综合分",
       "coverage": "平台覆盖",
@@ -558,6 +569,8 @@
     "detail": {
       "close": "关闭",
       "selectHint": "选择产品查看详情",
+      "productIntro": "产品介绍",
+      "productIntroEmpty": "暂无介绍",
       "scoreBreakdown": "评分拆解",
       "composite": "综合分",
       "coverage": "覆盖率",

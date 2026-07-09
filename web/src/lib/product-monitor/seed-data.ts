@@ -1,3 +1,4 @@
+import { productIntros } from "./product-intros";
 import { enrichRecordScores } from "./scoring";
 import type {
   PlatformDefinition,
@@ -1206,7 +1207,11 @@ export const productBlends: ProductBlend[] = [
 ];
 
 export const productMonitorRecords: ProductMonitorRecord[] = rawRecords.map(
-  (r) => enrichRecordScores(r),
+  (r) =>
+    enrichRecordScores({
+      ...r,
+      productIntro: productIntros[r.id],
+    }),
 );
 
 export function getRecordById(id: string) {

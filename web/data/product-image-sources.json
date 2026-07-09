@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "defaultUserAgent": "PeptideMonitor/1.0 (+product image update checker)",
+  "sources": [
+    {
+      "id": "example-elite-peps-bpc-157",
+      "platform": "Elite Peps Australia",
+      "product": "BPC-157",
+      "pageUrl": "",
+      "enabled": false,
+      "notes": "Fill pageUrl with the canonical product page. Disabled examples are ignored by the scanner."
+    }
+  ]
+}

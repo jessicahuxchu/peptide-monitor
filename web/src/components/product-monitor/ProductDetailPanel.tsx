@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ChevronDown, ChevronRight, X } from "lucide-react";
 import { PlatformCoverageMap } from "@/components/product-monitor/PlatformCoverageMap";
@@ -30,6 +30,7 @@ interface ProductDetailPanelProps {
 
 export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps) {
   const t = useTranslations("productMonitor");
+  const locale = useLocale();
   const { data } = useProductMonitor();
   const { data: regulatoryEntries } = useDbResource(
     "/api/regulatory",
@@ -38,6 +39,11 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
   const matrixRisk = getProductRegulatoryRisk(record.product, regulatoryEntries);
   const blends = getBlendsForProductFromData(data, record.id);
   const [showPlatforms, setShowPlatforms] = useState(false);
+  const intro = record.productIntro
+    ? locale.startsWith("zh")
+      ? record.productIntro.zh
+      : record.productIntro.en
+    : undefined;
 
   return (
     <aside className="flex max-h-[70vh] flex-col rounded-xl border border-command-border bg-command-card lg:max-h-none lg:h-full">
@@ -68,6 +74,15 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
       </header>
 
       <div className="flex-1 space-y-4 overflow-y-auto p-3">
+        <section>
+          <h4 className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
+            {t("detail.productIntro")}
+          </h4>
+          <p className="text-xs leading-relaxed text-command-text-secondary">
+            {intro ?? t("detail.productIntroEmpty")}
+          </p>
+        </section>
+
         <p className="text-xs leading-relaxed text-command-text-secondary">
           {record.stockingLogic}
         </p>

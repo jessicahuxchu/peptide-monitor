@@ -398,6 +398,16 @@
       "title": "Market Monitor",
       "description": "Signal layer — leading indicators and sentiment. Regulatory deltas write to matrix after confirmation."
     },
+    "socialPosts": {
+      "title": "Social Raw Posts (internal)",
+      "description": "Raw Reddit threads used to build heat signals. Not linked in main nav.",
+      "hiddenNote": "This page is intentionally unlisted. Aggregated signals live under",
+      "allProducts": "All products",
+      "regulatoryOnly": "Regulatory only",
+      "loading": "Loading…",
+      "empty": "No posts yet. Configure Reddit credentials and run the daily heat scan.",
+      "showing": "Showing {shown} of {total} stored"
+    },
     "productMonitor": {
       "title": "Product Analysis",
       "description": "Decision layer — aggregates intel momentum, compliance constraints, and platform coverage into SKU priority."
@@ -506,6 +516,7 @@
     },
     "table": {
       "product": "Product",
+      "productIntro": "Product Intro",
       "tier": "Tier",
       "score": "Score",
       "coverage": "Coverage",
@@ -550,6 +561,8 @@
     "detail": {
       "close": "Close",
       "selectHint": "Select a product to view details",
+      "productIntro": "Product Intro",
+      "productIntroEmpty": "No introduction available",
       "scoreBreakdown": "Score Breakdown",
       "composite": "Composite",
       "coverage": "Coverage",

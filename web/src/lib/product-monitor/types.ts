@@ -60,6 +60,12 @@ export interface ProductScores {
   turnover: number;
 }
 
+/** Locale-aware product intro (chemical composition + primary function). */
+export interface LocalizedText {
+  en: string;
+  zh: string;
+}
+
 export interface ProductMonitorRecord {
   id: string;
   product: string;
@@ -80,6 +86,8 @@ export interface ProductMonitorRecord {
   scores: ProductScores;
   compositeScore: number;
   stockingLogic: string;
+  /** Chemical composition and primary function; UI picks en/zh by locale. */
+  productIntro?: LocalizedText;
   notes?: string;
   lastReviewed: string;
 }

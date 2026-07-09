@@ -249,6 +249,7 @@ export interface Database {
           scores: Json;
           composite_score: number;
           stocking_logic: string;
+          product_intro: Json | null;
           notes: string | null;
           last_reviewed: string | null;
           created_at: string;
@@ -297,6 +298,35 @@ export interface Database {
         Update: Partial<
           Database["public"]["Tables"]["intelligence_signals"]["Insert"]
         >;
+      };
+      social_posts: {
+        Row: {
+          id: string;
+          platform: string;
+          external_id: string;
+          subreddit: string | null;
+          title: string;
+          body: string;
+          score: number;
+          num_comments: number;
+          author: string | null;
+          permalink: string;
+          url: string;
+          posted_at: string;
+          products: Json;
+          has_regulatory: boolean;
+          engagement: number;
+          fetched_at: string;
+          created_at: string;
+        };
+        Insert: Omit<
+          Database["public"]["Tables"]["social_posts"]["Row"],
+          "created_at" | "fetched_at"
+        > & {
+          fetched_at?: string;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["social_posts"]["Insert"]>;
       };
       sku_opportunities: {
         Row: {
