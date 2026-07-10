@@ -94,10 +94,22 @@ export function ProductDecisionMatrix({
       </div>
 
       <div className="w-full max-w-full overflow-x-auto">
-        <table className="w-full min-w-[880px] text-left text-sm">
+        <table className="w-full min-w-[960px] table-fixed text-left text-sm">
+          <colgroup>
+            <col className="w-[6.5rem]" />
+            <col className="w-[14rem]" />
+            <col className="w-[8.5rem]" />
+            <col className="w-[3.5rem]" />
+            <col className="w-[3.5rem]" />
+            <col className="w-[3.5rem]" />
+            <col className="w-[4rem]" />
+            <col className="w-[6.5rem]" />
+            <col className="w-[5.5rem]" />
+            <col className="w-[3.5rem]" />
+          </colgroup>
           <thead>
             <tr className="border-b border-command-border text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
-              <th className="pb-3 pr-3">{t("table.product")}</th>
+              <th className="pb-3 pr-2">{t("table.product")}</th>
               <th className="pb-3 pr-3">{t("table.productIntro")}</th>
               <th className="pb-3 pr-3">{t("table.conclusion")}</th>
               <th className="pb-3 pr-3">{tVia("score")}</th>
@@ -134,14 +146,18 @@ export function ProductDecisionMatrix({
                     selectedId === record.id && "bg-command-teal/5",
                   )}
                 >
-                  <td className="py-3 pr-3">
-                    <p className="font-semibold text-command-teal-bright">{record.product}</p>
-                    <p className="text-[10px] text-command-text-muted">{record.primarySpec}</p>
+                  <td className="py-3 pr-2">
+                    <p className="truncate text-xs font-semibold text-command-teal-bright">
+                      {record.product}
+                    </p>
+                    <p className="truncate text-[10px] text-command-text-muted">
+                      {record.primarySpec}
+                    </p>
                   </td>
-                  <td className="max-w-[220px] py-3 pr-3">
+                  <td className="py-3 pr-3">
                     {intro ? (
                       <p
-                        className="line-clamp-2 text-[11px] leading-snug text-command-text-secondary"
+                        className="line-clamp-3 text-[11px] leading-snug text-command-text-secondary"
                         title={intro}
                       >
                         {intro}

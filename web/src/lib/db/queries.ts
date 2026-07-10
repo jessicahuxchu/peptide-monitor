@@ -23,6 +23,7 @@ import type {
   ProductBlend,
   ProductMonitorRecord,
 } from "@/lib/product-monitor/types";
+import { productIntros } from "@/lib/product-monitor/product-intros";
 import type { SocialPostsResponse } from "@/lib/social/types";
 import type {
   CustomerDemand,
@@ -163,7 +164,13 @@ export async function fetchProductMonitorData(): Promise<{
   return {
     meta: mapMonitorMeta(metaRes.data),
     platforms: (platRes.data ?? []).map(mapPlatform),
-    records: (recRes.data ?? []).map(mapProductMonitorRecord),
+    records: (recRes.data ?? []).map((row) => {
+      const record = mapProductMonitorRecord(row);
+      return {
+        ...record,
+        productIntro: record.productIntro ?? productIntros[record.id],
+      };
+    }),
     blends: (blendRes.data ?? []).map(mapProductBlend),
   };
 }
