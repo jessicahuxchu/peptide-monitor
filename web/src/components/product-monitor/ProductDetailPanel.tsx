@@ -14,6 +14,7 @@ import {
   useProductMonitor,
 } from "@/components/providers/ProductMonitorProvider";
 import { getProductRegulatoryRisk } from "@/lib/regulatory/matrix";
+import { introFullForLocale } from "@/lib/product-monitor/product-intro-utils";
 import type { ProductMonitorRecord } from "@/lib/product-monitor/types";
 import { cn } from "@/lib/utils";
 
@@ -39,11 +40,7 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
   const matrixRisk = getProductRegulatoryRisk(record.product, regulatoryEntries);
   const blends = getBlendsForProductFromData(data, record.id);
   const [showPlatforms, setShowPlatforms] = useState(false);
-  const intro = record.productIntro
-    ? locale.startsWith("zh")
-      ? record.productIntro.zh
-      : record.productIntro.en
-    : undefined;
+  const intro = introFullForLocale(record.productIntro, locale);
 
   const actionTier = assessment?.actionTier ?? record.tier;
   const viabilityScore = assessment?.viabilityScore ?? record.compositeScore;
@@ -134,10 +131,8 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
         </dl>
 
         <SpecConsensusPanel
-          primarySpec={record.primarySpec}
           consensusSpec={record.specProfile.consensusSpec}
           primarySpecs={record.specProfile.primarySpecs}
-          forms={record.specProfile.forms}
           notes={record.specProfile.notes}
         />
 

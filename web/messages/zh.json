@@ -560,9 +560,7 @@
     "specs": {
       "title": "规格共性",
       "consensus": "共识规格",
-      "primarySpec": "建议常备",
-      "variants": "市场规格变体",
-      "forms": "常见形态"
+      "variants": "市场规格变体"
     },
     "blends": {
       "title": "组合配方",

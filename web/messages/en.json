@@ -552,9 +552,7 @@
     "specs": {
       "title": "Spec Consensus",
       "consensus": "Consensus",
-      "primarySpec": "Recommended Stock",
-      "variants": "Market Variants",
-      "forms": "Common Forms"
+      "variants": "Market Variants"
     },
     "blends": {
       "title": "Blend Formulas",

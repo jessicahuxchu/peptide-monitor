@@ -50,17 +50,19 @@ export function BlendCompositionView() {
   );
 }
 
+function isConsensusVariant(variant: string, consensusSpec: string): boolean {
+  if (consensusSpec.includes(variant)) return true;
+  const firstSegment = consensusSpec.split("、")[0]?.trim() ?? "";
+  return variant === firstSegment || firstSegment.startsWith(`${variant} `);
+}
+
 export function SpecConsensusPanel({
-  primarySpec,
   consensusSpec,
   primarySpecs,
-  forms,
   notes,
 }: {
-  primarySpec: string;
   consensusSpec: string;
   primarySpecs: string[];
-  forms: string[];
   notes?: string;
 }) {
   const t = useTranslations("productMonitor.specs");
@@ -68,7 +70,6 @@ export function SpecConsensusPanel({
   return (
     <div className="space-y-3 text-sm">
       <Row label={t("consensus")} value={consensusSpec} highlight />
-      <Row label={t("primarySpec")} value={primarySpec} />
       <div>
         <p className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
           {t("variants")}
@@ -79,27 +80,12 @@ export function SpecConsensusPanel({
               key={s}
               className={cn(
                 "rounded-md border px-2 py-0.5 text-xs",
-                s === consensusSpec.split("、")[0] || s === consensusSpec
+                isConsensusVariant(s, consensusSpec)
                   ? "border-command-teal/40 bg-command-teal/10 text-command-teal-bright"
                   : "border-command-border text-command-text-secondary",
               )}
             >
               {s}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div>
-        <p className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
-          {t("forms")}
-        </p>
-        <div className="flex flex-wrap gap-1.5">
-          {forms.map((f) => (
-            <span
-              key={f}
-              className="rounded-md border border-command-border px-2 py-0.5 text-xs text-command-text-secondary"
-            >
-              {f}
             </span>
           ))}
         </div>

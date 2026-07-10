@@ -129,7 +129,7 @@ const rawRecords: Omit<
     id: "pm-mots-c",
     product: "MOTS-C",
     displayNameZh: "MOTS-C",
-    primarySpec: "10mg / 40mg",
+    primarySpec: "10mg 冻干粉 / 40mg 冻干粉",
     category: "metabolic",
     tier: "core",
     tierSource: "manual",
@@ -168,7 +168,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["10mg", "40mg", "20mg"],
-      consensusSpec: "10mg、40mg",
+      consensusSpec: "10mg 冻干粉、40mg 冻干粉",
       forms: ["冻干粉", "胶囊"],
       notes: "澳洲与美国平台均高度覆盖，兼具单品与线粒体/抗衰组合需求",
     },
@@ -186,7 +186,7 @@ const rawRecords: Omit<
     id: "pm-ghk-cu",
     product: "GHK-Cu",
     displayNameZh: "GHK-Cu 蓝铜肽",
-    primarySpec: "50mg / 100mg",
+    primarySpec: "50mg 冻干粉 / 100mg 冻干粉",
     category: "cosmetic",
     tier: "core",
     tierSource: "manual",
@@ -225,7 +225,7 @@ const rawRecords: Omit<
     commonBlends: ["blend-glow", "blend-klow"],
     specProfile: {
       primarySpecs: ["50mg", "100mg"],
-      consensusSpec: "50mg、100mg",
+      consensusSpec: "50mg 冻干粉、100mg 冻干粉",
       forms: ["冻干粉", "精华", "面霜", "胶囊", "喷雾"],
       notes: "剂型和客户类型最丰富，可延展为冻干粉、精华、面霜及 GLOW/KLOW",
     },
@@ -246,7 +246,7 @@ const rawRecords: Omit<
     id: "pm-tb500",
     product: "TB-500",
     displayNameZh: "TB-500",
-    primarySpec: "10mg",
+    primarySpec: "10mg 冻干粉",
     category: "recovery",
     tier: "core",
     tierSource: "manual",
@@ -281,7 +281,7 @@ const rawRecords: Omit<
     commonBlends: ["blend-bpc-tb", "blend-glow", "blend-klow"],
     specProfile: {
       primarySpecs: ["10mg", "5mg"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉", "Fragment 变体"],
     },
     supplyMetrics: {
@@ -298,7 +298,7 @@ const rawRecords: Omit<
     id: "pm-cjc-ipa",
     product: "CJC-1295 + Ipamorelin",
     displayNameZh: "CJC-1295 + Ipamorelin",
-    primarySpec: "5mg+5mg（总量 10mg）",
+    primarySpec: "5mg+5mg 预混冻干粉（总量 10mg）",
     category: "metabolic",
     tier: "core",
     tierSource: "manual",
@@ -334,7 +334,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["5mg+5mg", "10mg blend"],
-      consensusSpec: "5mg+5mg，总量 10mg",
+      consensusSpec: "5mg+5mg 预混冻干粉（总量 10mg）",
       forms: ["预混冻干粉"],
       notes: "各平台规格高度统一，适合标准化白牌交付",
     },
@@ -352,7 +352,7 @@ const rawRecords: Omit<
     id: "pm-tesamorelin",
     product: "Tesamorelin",
     displayNameZh: "Tesamorelin",
-    primarySpec: "10mg",
+    primarySpec: "10mg 冻干粉",
     category: "metabolic",
     tier: "core",
     tierSource: "manual",
@@ -388,7 +388,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["10mg", "5mg", "20mg"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉"],
     },
     supplyMetrics: {
@@ -405,7 +405,7 @@ const rawRecords: Omit<
     id: "pm-bpc-tb-blend",
     product: "BPC-157 + TB-500",
     displayNameZh: "BPC-157 + TB-500 组合",
-    primarySpec: "10mg+10mg",
+    primarySpec: "10mg+10mg 预混冻干粉",
     category: "blend",
     tier: "trial",
     tierSource: "manual",
@@ -440,7 +440,7 @@ const rawRecords: Omit<
     commonBlends: ["blend-bpc-tb"],
     specProfile: {
       primarySpecs: ["10mg+10mg", "10mg blend"],
-      consensusSpec: "10mg+10mg",
+      consensusSpec: "10mg+10mg 预混冻干粉",
       forms: ["预混冻干粉", "喷雾"],
     },
     supplyMetrics: {
@@ -458,7 +458,7 @@ const rawRecords: Omit<
     id: "pm-glow",
     product: "GLOW",
     displayNameZh: "GLOW 组合",
-    primarySpec: "GHK-Cu 50mg + BPC-157 10mg + TB-500 10mg（70mg）",
+    primarySpec: "70mg 预混冻干粉（GHK-Cu 50 + BPC-157 10 + TB-500 10）",
     category: "blend",
     tier: "trial",
     tierSource: "manual",
@@ -488,7 +488,7 @@ const rawRecords: Omit<
     commonBlends: ["blend-glow"],
     specProfile: {
       primarySpecs: ["70mg total", "50mg blend"],
-      consensusSpec: "70mg（GHK-Cu 50 + BPC-157 10 + TB-500 10）",
+      consensusSpec: "70mg 预混冻干粉（GHK-Cu 50 + BPC-157 10 + TB-500 10）",
       forms: ["预混冻干粉", "喷雾"],
     },
     supplyMetrics: {
@@ -506,7 +506,7 @@ const rawRecords: Omit<
     id: "pm-klow",
     product: "KLOW",
     displayNameZh: "KLOW 组合",
-    primarySpec: "GLOW + KPV 10mg（80mg total）",
+    primarySpec: "80mg 预混冻干粉（GLOW 配方 + KPV 10mg）",
     category: "blend",
     tier: "trial",
     tierSource: "manual",
@@ -535,7 +535,7 @@ const rawRecords: Omit<
     commonBlends: ["blend-klow"],
     specProfile: {
       primarySpecs: ["80mg total"],
-      consensusSpec: "80mg（GLOW 配方 + KPV 10mg）",
+      consensusSpec: "80mg 预混冻干粉（GLOW 配方 + KPV 10mg）",
       forms: ["预混冻干粉"],
     },
     supplyMetrics: {
@@ -551,7 +551,7 @@ const rawRecords: Omit<
   {
     id: "pm-pt141",
     product: "PT-141",
-    primarySpec: "10mg",
+    primarySpec: "10mg 冻干粉",
     category: "other",
     tier: "trial",
     tierSource: "manual",
@@ -585,7 +585,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["10mg", "5mg"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉", "BioStrips"],
     },
     supplyMetrics: {
@@ -601,7 +601,7 @@ const rawRecords: Omit<
   {
     id: "pm-dsip",
     product: "DSIP",
-    primarySpec: "10mg",
+    primarySpec: "10mg 冻干粉",
     category: "neuro",
     tier: "trial",
     tierSource: "manual",
@@ -635,7 +635,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["10mg", "5mg", "15mg"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉", "胶囊", "喷雾"],
     },
     supplyMetrics: {
@@ -651,7 +651,7 @@ const rawRecords: Omit<
   {
     id: "pm-kpv",
     product: "KPV",
-    primarySpec: "10mg",
+    primarySpec: "10mg 冻干粉",
     category: "immune",
     tier: "trial",
     tierSource: "manual",
@@ -683,7 +683,7 @@ const rawRecords: Omit<
     commonBlends: ["blend-klow"],
     specProfile: {
       primarySpecs: ["10mg", "5mg", "4mg capsules"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉", "胶囊"],
     },
     supplyMetrics: {
@@ -700,7 +700,7 @@ const rawRecords: Omit<
   {
     id: "pm-epitalon",
     product: "Epitalon",
-    primarySpec: "10mg",
+    primarySpec: "10mg 冻干粉",
     category: "metabolic",
     tier: "trial",
     tierSource: "manual",
@@ -732,7 +732,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["10mg", "50mg", "20mg"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉", "胶囊"],
     },
     supplyMetrics: {
@@ -748,7 +748,7 @@ const rawRecords: Omit<
   {
     id: "pm-semax",
     product: "Semax",
-    primarySpec: "10mg",
+    primarySpec: "10mg 冻干粉",
     category: "neuro",
     tier: "trial",
     tierSource: "manual",
@@ -780,7 +780,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["10mg", "30mg"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉", "胶囊", "喷雾"],
     },
     supplyMetrics: {
@@ -797,7 +797,7 @@ const rawRecords: Omit<
   {
     id: "pm-selank",
     product: "Selank",
-    primarySpec: "10mg",
+    primarySpec: "10mg 冻干粉",
     category: "neuro",
     tier: "trial",
     tierSource: "manual",
@@ -825,7 +825,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["10mg", "5mg"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉", "胶囊"],
     },
     supplyMetrics: {
@@ -843,7 +843,7 @@ const rawRecords: Omit<
     id: "pm-ta1",
     product: "Thymosin Alpha-1",
     displayNameZh: "胸腺肽 α1",
-    primarySpec: "10mg",
+    primarySpec: "10mg 冻干粉",
     category: "immune",
     tier: "trial",
     tierSource: "manual",
@@ -873,7 +873,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["10mg", "5mg"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉", "BioStrips", "胶囊"],
     },
     supplyMetrics: {
@@ -889,7 +889,7 @@ const rawRecords: Omit<
   {
     id: "pm-aod9604",
     product: "AOD-9604",
-    primarySpec: "5mg / 10mg",
+    primarySpec: "5mg 冻干粉 / 10mg 冻干粉",
     category: "metabolic",
     tier: "trial",
     tierSource: "manual",
@@ -919,7 +919,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["5mg", "10mg"],
-      consensusSpec: "5mg、10mg",
+      consensusSpec: "5mg 冻干粉、10mg 冻干粉",
       forms: ["冻干粉"],
     },
     supplyMetrics: {
@@ -936,7 +936,7 @@ const rawRecords: Omit<
     id: "pm-ss31",
     product: "SS-31",
     displayNameZh: "Elamipretide",
-    primarySpec: "10mg",
+    primarySpec: "10mg 冻干粉",
     category: "metabolic",
     tier: "trial",
     tierSource: "manual",
@@ -962,7 +962,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["10mg", "50mg", "20mg capsules"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉", "胶囊"],
     },
     supplyMetrics: {
@@ -978,7 +978,7 @@ const rawRecords: Omit<
   {
     id: "pm-retatrutide",
     product: "Retatrutide",
-    primarySpec: "10mg / 20mg",
+    primarySpec: "10mg 冻干粉 / 20mg 冻干粉",
     category: "metabolic",
     tier: "avoid",
     tierSource: "manual",
@@ -1005,7 +1005,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["10mg", "20mg", "30mg"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉", "胶囊", "Bundle"],
     },
     supplyMetrics: {
@@ -1025,7 +1025,7 @@ const rawRecords: Omit<
   {
     id: "pm-tirzepatide",
     product: "Tirzepatide",
-    primarySpec: "10mg / 20mg",
+    primarySpec: "10mg 冻干粉 / 20mg 冻干粉",
     category: "metabolic",
     tier: "avoid",
     tierSource: "manual",
@@ -1051,7 +1051,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["10mg", "20mg", "40mg"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉", "胶囊"],
     },
     supplyMetrics: {
@@ -1067,7 +1067,7 @@ const rawRecords: Omit<
   {
     id: "pm-semaglutide",
     product: "Semaglutide",
-    primarySpec: "10mg",
+    primarySpec: "10mg 冻干粉",
     category: "metabolic",
     tier: "avoid",
     tierSource: "manual",
@@ -1079,7 +1079,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["10mg"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉"],
     },
     supplyMetrics: {
@@ -1095,7 +1095,7 @@ const rawRecords: Omit<
   {
     id: "pm-cagrilintide",
     product: "Cagrilintide",
-    primarySpec: "5mg / 10mg",
+    primarySpec: "5mg 冻干粉 / 10mg 冻干粉",
     category: "metabolic",
     tier: "avoid",
     tierSource: "manual",
@@ -1117,7 +1117,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["5mg", "10mg"],
-      consensusSpec: "5mg",
+      consensusSpec: "5mg 冻干粉",
       forms: ["冻干粉"],
     },
     supplyMetrics: {
@@ -1133,7 +1133,7 @@ const rawRecords: Omit<
   {
     id: "pm-melanotan",
     product: "Melanotan I / II",
-    primarySpec: "10mg",
+    primarySpec: "10mg 冻干粉",
     category: "other",
     tier: "avoid",
     tierSource: "manual",
@@ -1149,7 +1149,7 @@ const rawRecords: Omit<
     commonBlends: [],
     specProfile: {
       primarySpecs: ["10mg"],
-      consensusSpec: "10mg",
+      consensusSpec: "10mg 冻干粉",
       forms: ["冻干粉"],
     },
     supplyMetrics: {

@@ -64,6 +64,11 @@ export interface ProductScores {
 export interface LocalizedText {
   en: string;
   zh: string;
+  /** One-line summary for compact table cells; full text stays in detail panel. */
+  brief?: {
+    en: string;
+    zh: string;
+  };
 }
 
 export interface ProductMonitorRecord {

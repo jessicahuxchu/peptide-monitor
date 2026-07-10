@@ -9,6 +9,7 @@ import { CoverageLegendHelp } from "@/components/product-monitor/CoverageLegendH
 import { useProductMonitor } from "@/components/providers/ProductMonitorProvider";
 import { useProductViability } from "@/hooks/useProductViability";
 import { getProductRegulatoryRisk } from "@/lib/regulatory/matrix";
+import { introBriefForLocale } from "@/lib/product-monitor/product-intro-utils";
 import type { InventoryTier, ProductMonitorRecord } from "@/lib/product-monitor/types";
 import { TrendingDown, TrendingUp, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -32,14 +33,6 @@ const strategyTitleKey: Record<InventoryTier, "coreTitle" | "trialTitle" | "avoi
 };
 
 const trendIcon = { up: TrendingUp, down: TrendingDown, stable: Minus };
-
-function introForLocale(
-  intro: ProductMonitorRecord["productIntro"],
-  locale: string,
-): string | undefined {
-  if (!intro) return undefined;
-  return locale.startsWith("zh") ? intro.zh : intro.en;
-}
 
 interface ProductDecisionMatrixProps {
   records: ProductMonitorRecord[];
@@ -97,7 +90,7 @@ export function ProductDecisionMatrix({
         <table className="w-full min-w-[960px] table-fixed text-left text-sm">
           <colgroup>
             <col className="w-[6.5rem]" />
-            <col className="w-[14rem]" />
+            <col className="w-[9rem]" />
             <col className="w-[8.5rem]" />
             <col className="w-[3.5rem]" />
             <col className="w-[3.5rem]" />
@@ -133,7 +126,12 @@ export function ProductDecisionMatrix({
               const gap =
                 sku != null ? sku.localPrice - sku.competitivePrice : null;
               const TrendIcon = sku ? trendIcon[sku.trend] : null;
-              const intro = introForLocale(record.productIntro, locale);
+              const intro = introBriefForLocale(record.productIntro, locale);
+              const introFull = record.productIntro
+                ? locale.startsWith("zh")
+                  ? record.productIntro.zh
+                  : record.productIntro.en
+                : undefined;
               const viabilityScore = assessment?.viabilityScore ?? 0;
               const actionTier = assessment?.actionTier ?? record.tier;
 
@@ -157,8 +155,8 @@ export function ProductDecisionMatrix({
                   <td className="py-3 pr-3">
                     {intro ? (
                       <p
-                        className="line-clamp-3 text-[11px] leading-snug text-command-text-secondary"
-                        title={intro}
+                        className="line-clamp-1 text-[11px] leading-snug text-command-text-secondary"
+                        title={introFull}
                       >
                         {intro}
                       </p>
