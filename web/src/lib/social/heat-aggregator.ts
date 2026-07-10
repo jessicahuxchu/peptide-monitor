@@ -1,10 +1,8 @@
 import { createServiceClient } from "@/lib/supabase/client";
 import type { Database } from "@/lib/supabase/database.types";
 import { HEAT_THRESHOLDS, PRODUCT_ALIASES } from "./config";
-import {
-  fetchRedditPeptidePosts,
-  type NormalizedSocialPost,
-} from "./reddit-client";
+import { fetchSocialPeptidePosts } from "./social-fetcher";
+import type { NormalizedSocialPost } from "./types";
 
 type SocialPostInsert = Database["public"]["Tables"]["social_posts"]["Insert"];
 type SignalInsert = Database["public"]["Tables"]["intelligence_signals"]["Insert"];
@@ -209,6 +207,7 @@ function toRow(post: NormalizedSocialPost): SocialPostInsert {
 export interface RedditHeatScanResult {
   ok: boolean;
   configured: boolean;
+  provider?: "apify" | "reddit" | "none";
   fetched: number;
   upsertedPosts: number;
   signalsUpserted: number;
@@ -222,6 +221,7 @@ export interface RedditHeatScanResult {
     reasons: string[];
   }>;
   sources: { subredditPulls: number; searchPulls: number };
+  errors?: string[];
   error?: string;
 }
 
@@ -229,19 +229,40 @@ export interface RedditHeatScanResult {
  * Daily Reddit heat scan: fetch → upsert social_posts → promote heat signals.
  */
 export async function runRedditHeatScan(): Promise<RedditHeatScanResult> {
-  const { posts, configured, sources } = await fetchRedditPeptidePosts();
+  const { posts, configured, provider, sources, errors } =
+    await fetchSocialPeptidePosts();
 
   if (!configured) {
     return {
       ok: false,
       configured: false,
+      provider,
       fetched: 0,
       upsertedPosts: 0,
       signalsUpserted: 0,
       productStats: [],
       sources,
+      errors,
       error:
-        "Reddit credentials missing. Set REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT.",
+        "Social fetch not configured. Set APIFY_API_TOKEN (recommended) or Reddit OAuth credentials.",
+    };
+  }
+
+  if (posts.length === 0) {
+    return {
+      ok: false,
+      configured: true,
+      provider,
+      fetched: 0,
+      upsertedPosts: 0,
+      signalsUpserted: 0,
+      productStats: [],
+      sources,
+      errors,
+      error:
+        provider === "apify"
+          ? `Apify run returned no peptide posts. ${errors[0] ?? "Check actor quota and Apify console."}`
+          : "Reddit OAuth returned no peptide posts.",
     };
   }
 
@@ -305,6 +326,7 @@ export async function runRedditHeatScan(): Promise<RedditHeatScanResult> {
   return {
     ok: true,
     configured: true,
+    provider,
     fetched: posts.length,
     upsertedPosts,
     signalsUpserted,

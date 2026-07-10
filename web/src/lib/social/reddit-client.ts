@@ -1,5 +1,6 @@
 import {
   BODY_MAX_CHARS,
+  REDDIT_SEARCH_TERMS,
   REDDIT_SUBREDDITS,
   SCAN_LOOKBACK_DAYS,
 } from "./config";
@@ -9,8 +10,9 @@ import {
   hasRegulatoryKeyword,
   matchProducts,
 } from "./matcher";
+import type { NormalizedSocialPost, SocialFetchResult } from "./types";
 
-export interface RedditListingChild {
+interface RedditListingChild {
   kind: string;
   data: {
     id: string;
@@ -23,27 +25,7 @@ export interface RedditListingChild {
     author: string;
     permalink: string;
     created_utc: number;
-    over_18?: boolean;
   };
-}
-
-export interface NormalizedSocialPost {
-  id: string;
-  platform: "reddit";
-  externalId: string;
-  subreddit: string;
-  title: string;
-  body: string;
-  score: number;
-  numComments: number;
-  author: string | null;
-  permalink: string;
-  url: string;
-  postedAt: string;
-  products: string[];
-  hasRegulatory: boolean;
-  engagement: number;
-  auContext: boolean;
 }
 
 function truncate(s: string, max: number): string {
@@ -51,7 +33,11 @@ function truncate(s: string, max: number): string {
   return `${s.slice(0, max)}…`;
 }
 
-function isRedditConfigured(): boolean {
+function userAgent(): string {
+  return process.env.REDDIT_USER_AGENT || "PeptideMonitor/0.1 (read-only)";
+}
+
+function isRedditOAuthConfigured(): boolean {
   return Boolean(
     process.env.REDDIT_CLIENT_ID &&
       process.env.REDDIT_CLIENT_SECRET &&
@@ -64,11 +50,11 @@ let cachedToken: { value: string; expiresAt: number } | null = null;
 async function getAccessToken(): Promise<string> {
   const clientId = process.env.REDDIT_CLIENT_ID;
   const clientSecret = process.env.REDDIT_CLIENT_SECRET;
-  const userAgent = process.env.REDDIT_USER_AGENT;
+  const ua = process.env.REDDIT_USER_AGENT;
 
-  if (!clientId || !clientSecret || !userAgent) {
+  if (!clientId || !clientSecret || !ua) {
     throw new Error(
-      "Reddit not configured. Set REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT.",
+      "Reddit OAuth not configured. Set REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT.",
     );
   }
 
@@ -82,7 +68,7 @@ async function getAccessToken(): Promise<string> {
     headers: {
       Authorization: `Basic ${basic}`,
       "Content-Type": "application/x-www-form-urlencoded",
-      "User-Agent": userAgent,
+      "User-Agent": ua,
     },
     body: "grant_type=client_credentials",
   });
@@ -105,7 +91,6 @@ async function getAccessToken(): Promise<string> {
 }
 
 async function redditGet(path: string, params: Record<string, string>): Promise<unknown> {
-  const userAgent = process.env.REDDIT_USER_AGENT!;
   const token = await getAccessToken();
   const qs = new URLSearchParams(params).toString();
   const url = `https://oauth.reddit.com${path}?${qs}`;
@@ -113,7 +98,7 @@ async function redditGet(path: string, params: Record<string, string>): Promise<
   const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "User-Agent": userAgent,
+      "User-Agent": userAgent(),
     },
   });
 
@@ -199,24 +184,20 @@ function withinLookback(postedAt: string, days: number): boolean {
   return new Date(postedAt).getTime() >= cutoff;
 }
 
-/**
- * Pull recent peptide-related Reddit posts from whitelist subs + product search.
- * Dedupes by external_id in memory before return.
- */
-export async function fetchRedditPeptidePosts(): Promise<{
-  posts: NormalizedSocialPost[];
-  configured: boolean;
-  sources: { subredditPulls: number; searchPulls: number };
-}> {
-  if (!isRedditConfigured()) {
+/** Legacy Reddit OAuth fetch (fallback when Apify is not configured). */
+export async function fetchRedditPeptidePostsViaOAuth(): Promise<SocialFetchResult> {
+  if (!isRedditOAuthConfigured()) {
     return {
       posts: [],
       configured: false,
+      provider: "none",
       sources: { subredditPulls: 0, searchPulls: 0 },
+      errors: ["Set APIFY_API_TOKEN or Reddit OAuth credentials"],
     };
   }
 
   const byId = new Map<string, NormalizedSocialPost>();
+  const errors: string[] = [];
   let subredditPulls = 0;
   let searchPulls = 0;
 
@@ -230,21 +211,13 @@ export async function fetchRedditPeptidePosts(): Promise<{
         }
       }
     } catch (err) {
-      console.error(`[reddit] subreddit ${sub} failed:`, err);
+      const msg = err instanceof Error ? err.message : String(err);
+      errors.push(`subreddit ${sub}: ${msg.slice(0, 120)}`);
     }
-    // Gentle pacing for Reddit rate limits
     await new Promise((r) => setTimeout(r, 600));
   }
 
-  const searchTerms = [
-    "BPC-157",
-    "TB-500",
-    "GHK-Cu",
-    "Semaglutide peptide",
-    "Tirzepatide",
-  ];
-
-  for (const term of searchTerms) {
+  for (const term of REDDIT_SEARCH_TERMS) {
     try {
       const posts = await searchProductPosts(term, 50);
       searchPulls += 1;
@@ -254,7 +227,8 @@ export async function fetchRedditPeptidePosts(): Promise<{
         }
       }
     } catch (err) {
-      console.error(`[reddit] search "${term}" failed:`, err);
+      const msg = err instanceof Error ? err.message : String(err);
+      errors.push(`search "${term}": ${msg.slice(0, 120)}`);
     }
     await new Promise((r) => setTimeout(r, 600));
   }
@@ -262,8 +236,10 @@ export async function fetchRedditPeptidePosts(): Promise<{
   return {
     posts: [...byId.values()],
     configured: true,
+    provider: "reddit",
     sources: { subredditPulls, searchPulls },
+    errors,
   };
 }
 
-export { isRedditConfigured };
+export { isRedditOAuthConfigured };

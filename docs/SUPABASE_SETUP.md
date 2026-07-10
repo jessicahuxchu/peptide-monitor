@@ -48,10 +48,14 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbG...
 SUPABASE_SERVICE_ROLE_KEY=eyJhbG...
 MCP_API_KEY=your-long-random-secret
 
-# Reddit (舆论情报热度扫描)
+# Reddit (optional OAuth fallback)
 REDDIT_CLIENT_ID=
 REDDIT_CLIENT_SECRET=
 REDDIT_USER_AGENT=PeptideMonitor/0.1 by your_reddit_username
+
+# Apify (recommended — Reddit via trudax/reddit-scraper-lite)
+APIFY_API_TOKEN=
+APIFY_REDDIT_ACTOR=trudax/reddit-scraper-lite
 ```
 
 ## 4. Start & auto-seed
@@ -106,20 +110,31 @@ curl -X POST http://localhost:3000/api/cron/regulatory-scan \
   -H "Authorization: Bearer YOUR_MCP_API_KEY"
 ```
 
-## 7b. Test Reddit heat scan (daily)
+## 7b. Test Reddit heat scan (daily, via Apify)
 
-1. 在 [Reddit Apps](https://www.reddit.com/prefs/apps) 创建 **script** 应用，填入 `REDDIT_*` 环境变量  
-2. 在 Supabase SQL Editor 运行 `003_social_posts.sql`  
-3. 触发扫描：
+1. 注册 [Apify](https://apify.com/)，在 [Integrations](https://console.apify.com/account/integrations) 复制 **API Token**  
+2. 填入 `web/.env.local` 的 `APIFY_API_TOKEN`（使用 Actor：`trudax/reddit-scraper-lite`）  
+3. 在 Supabase SQL Editor 运行 `003_social_posts.sql`（若尚未运行）  
+4. 触发扫描：
+
+```bash
+cd web
+npm run reddit-heat-scan
+```
+
+或通过 API：
 
 ```bash
 curl -X POST http://localhost:3000/api/cron/reddit-heat-scan \
   -H "Authorization: Bearer YOUR_MCP_API_KEY"
 ```
 
-- 原始帖写入 `social_posts`，内部查看：`/zh/social-posts` 或 `/en/social-posts`（**不在导航栏**）  
-- 过门槛的热度聚合写入 `intelligence_signals`（`source=social`），在 **舆论情报** `/intelligence` 展示  
-- 建议外部调度器 **每天 1 次** 调用上述 cron
+- Apify 抓取原始帖 → 写入 `social_posts`  
+- 内部核对：`/zh/social-posts`（不进导航）  
+- 过门槛热度 → `intelligence_signals`（`source=social`）→ `/intelligence`  
+- 建议 **每天 1 次** 调度 `reddit-heat-scan`
+
+> Apify 按量计费（lite 版约 $0.004/结果）。每日扫描约 9 个 URL，通常每次几十到几百条结果。
 
 ## API Routes
 

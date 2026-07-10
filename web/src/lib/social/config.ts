@@ -98,3 +98,20 @@ export const HEAT_THRESHOLDS = {
 export const SCAN_LOOKBACK_DAYS = 7;
 
 export const BODY_MAX_CHARS = 4000;
+
+/** Apify Reddit scraper — https://apify.com/trudax/reddit-scraper-lite */
+export const APIFY_REDDIT_ACTOR_DEFAULT = "trudax/reddit-scraper-lite";
+
+/** Keep MVP runs small/fast; raise later once daily cron is stable. */
+export const APIFY_MAX_ITEMS = 120;
+export const APIFY_MAX_POSTS_PER_URL = 25;
+export const APIFY_RUN_TIMEOUT_MS = 20 * 60 * 1000;
+
+/** Product keyword searches (encoded into Reddit search URLs). */
+export const REDDIT_SEARCH_TERMS = [
+  "BPC-157",
+  "TB-500",
+  "GHK-Cu",
+  "Semaglutide peptide",
+  "Tirzepatide",
+] as const;

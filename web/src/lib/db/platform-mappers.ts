@@ -117,7 +117,8 @@ export function mapProductMonitorRecord(row: ProductRow): ProductMonitorRecord {
     scores: row.scores as unknown as ProductMonitorRecord["scores"],
     compositeScore: Number(row.composite_score),
     stockingLogic: row.stocking_logic,
-    productIntro: (row.product_intro as ProductMonitorRecord["productIntro"]) ?? undefined,
+    productIntro:
+      (row.product_intro as unknown as ProductMonitorRecord["productIntro"]) ?? undefined,
     notes: row.notes ?? undefined,
     lastReviewed: row.last_reviewed ?? "",
   };

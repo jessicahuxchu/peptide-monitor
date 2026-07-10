@@ -3,12 +3,3138 @@
   "defaultUserAgent": "PeptideMonitor/1.0 (+product image update checker)",
   "sources": [
     {
-      "id": "example-elite-peps-bpc-157",
+      "id": "ozpeps-tirzepatide",
+      "platform": "OzPeps",
+      "product": "Tirzepatide",
+      "pageUrl": "https://www.ozpeps.com.au/products/tirzepatide",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780295476827-r2na.png",
+      "selectorHints": [
+        "Tirzepatide",
+        "Tirzepatide 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-glow",
+      "platform": "OzPeps",
+      "product": "Glow",
+      "pageUrl": "https://www.ozpeps.com.au/products/glow",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780303048005-uwvdav.jpeg",
+      "selectorHints": [
+        "Glow",
+        "Glow 70mg"
+      ]
+    },
+    {
+      "id": "ozpeps-retatrutide",
+      "platform": "OzPeps",
+      "product": "Retatrutide",
+      "pageUrl": "https://www.ozpeps.com.au/products/retatrutide",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780295613083-f0xceh.png",
+      "selectorHints": [
+        "Retatrutide",
+        "Retatrutide 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-tb-500",
+      "platform": "OzPeps",
+      "product": "TB-500",
+      "pageUrl": "https://www.ozpeps.com.au/products/tb-500",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780295826551-2fc81w.png",
+      "selectorHints": [
+        "TB-500",
+        "TB-500 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-bpc-157",
+      "platform": "OzPeps",
+      "product": "BPC-157",
+      "pageUrl": "https://www.ozpeps.com.au/products/bpc-157",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780295867131-n66yls.png",
+      "selectorHints": [
+        "BPC-157",
+        "BPC-157 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-semaglutide",
+      "platform": "OzPeps",
+      "product": "Semaglutide",
+      "pageUrl": "https://www.ozpeps.com.au/products/semaglutide",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780300606384-auiy7o.png",
+      "selectorHints": [
+        "Semaglutide",
+        "Semaglutide 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-selank",
+      "platform": "OzPeps",
+      "product": "Selank",
+      "pageUrl": "https://www.ozpeps.com.au/products/selank",
+      "enabled": true,
+      "imageUrl": "https://www.ozpeps.com.au/products/selank.jpg",
+      "selectorHints": [
+        "Selank",
+        "Selank 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-semax",
+      "platform": "OzPeps",
+      "product": "Semax",
+      "pageUrl": "https://www.ozpeps.com.au/products/semax",
+      "enabled": true,
+      "imageUrl": "https://www.ozpeps.com.au/products/semax.jpg",
+      "selectorHints": [
+        "Semax",
+        "Semax 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-ss-31",
+      "platform": "OzPeps",
+      "product": "SS-31",
+      "pageUrl": "https://www.ozpeps.com.au/products/ss-31",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780299252261-wfgq2.png",
+      "selectorHints": [
+        "SS-31",
+        "SS-31 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-mots-c",
+      "platform": "OzPeps",
+      "product": "MOTS-C",
+      "pageUrl": "https://www.ozpeps.com.au/products/mots-c",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780298119526-ney8t.png",
+      "selectorHints": [
+        "MOTS-C",
+        "MOTS-C 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-tesamorelin",
+      "platform": "OzPeps",
+      "product": "Tesamorelin",
+      "pageUrl": "https://www.ozpeps.com.au/products/tesamorelin",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780298172218-nkqc1a.png",
+      "selectorHints": [
+        "Tesamorelin",
+        "Tesamorelin 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-cjc-1295-dac",
+      "platform": "OzPeps",
+      "product": "CJC-1295 + Ipamorelin",
+      "pageUrl": "https://www.ozpeps.com.au/products/cjc-1295-dac",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780301256159-02wnk.jpeg",
+      "selectorHints": [
+        "CJC-1295 + Ipamorelin",
+        "CJC-1295 + Ipamorelin 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-pt-141",
+      "platform": "OzPeps",
+      "product": "PT-141",
+      "pageUrl": "https://www.ozpeps.com.au/products/pt-141",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780299468996-u7y1fl.png",
+      "selectorHints": [
+        "PT-141",
+        "PT-141 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-kpv",
+      "platform": "OzPeps",
+      "product": "KPV",
+      "pageUrl": "https://www.ozpeps.com.au/products/kpv",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780295637371-84as4n.png",
+      "selectorHints": [
+        "KPV",
+        "KPV 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-dsip",
+      "platform": "OzPeps",
+      "product": "DSIP",
+      "pageUrl": "https://www.ozpeps.com.au/products/dsip",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780295525447-yguw4b.png",
+      "selectorHints": [
+        "DSIP",
+        "DSIP 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-klow",
+      "platform": "OzPeps",
+      "product": "KLOW",
+      "pageUrl": "https://www.ozpeps.com.au/products/klow",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780303071826-ai3gp.jpeg",
+      "selectorHints": [
+        "KLOW",
+        "KLOW 80mg"
+      ]
+    },
+    {
+      "id": "ozpeps-ghk-cu",
+      "platform": "OzPeps",
+      "product": "GHK-Cu",
+      "pageUrl": "https://www.ozpeps.com.au/products/ghk-cu",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780302855899-wqdnoe.jpeg",
+      "selectorHints": [
+        "GHK-Cu",
+        "GHK-Cu 100mg"
+      ]
+    },
+    {
+      "id": "ozpeps-ipamorelin",
+      "platform": "OzPeps",
+      "product": "Ipamorelin",
+      "pageUrl": "https://www.ozpeps.com.au/products/ipamorelin",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780299348342-icapm.png",
+      "selectorHints": [
+        "Ipamorelin",
+        "Ipamorelin 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-mt-1",
+      "platform": "OzPeps",
+      "product": "MT-1 (Melanotan 1)",
+      "pageUrl": "https://www.ozpeps.com.au/products/mt-1",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780444926997-o29hpi.jpeg",
+      "selectorHints": [
+        "MT-1 (Melanotan 1)",
+        "MT-1 (Melanotan 1) 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-bac-water-3ml",
+      "platform": "OzPeps",
+      "product": "Bacteriostatic Water",
+      "pageUrl": "https://www.ozpeps.com.au/products/bac-water-3ml",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780445146010-kywiaj.jpeg",
+      "selectorHints": [
+        "Bacteriostatic Water",
+        "Bacteriostatic Water 3ml"
+      ]
+    },
+    {
+      "id": "ozpeps-mt-2",
+      "platform": "OzPeps",
+      "product": "MT-2 (Melanotan 2)",
+      "pageUrl": "https://www.ozpeps.com.au/products/mt-2",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780444947845-cissuq.jpeg",
+      "selectorHints": [
+        "MT-2 (Melanotan 2)",
+        "MT-2 (Melanotan 2) 10mg"
+      ]
+    },
+    {
+      "id": "ozpeps-epithalon",
+      "platform": "OzPeps",
+      "product": "Epithalon",
+      "pageUrl": "https://www.ozpeps.com.au/products/epithalon",
+      "enabled": true,
+      "imageUrl": "https://mdok1c54laoq68eu.public.blob.vercel-storage.com/products/1780300681138-ydqieb.png",
+      "selectorHints": [
+        "Epithalon",
+        "Epithalon 10mg"
+      ]
+    },
+    {
+      "id": "elitepeps-retatrutide-10mg",
+      "platform": "Elite Peps Australia",
+      "product": "Retatrutide",
+      "pageUrl": "https://elitepeps.com.au/product/retatrutide-10mg",
+      "enabled": true,
+      "imageUrl": "https://elitepeps.com.au/assets/retatrutide-10mg-Diu_-uVz.png",
+      "selectorHints": [
+        "Retatrutide",
+        "Retatrutide 10mg"
+      ]
+    },
+    {
+      "id": "elitepeps-retatrutide-20mg",
+      "platform": "Elite Peps Australia",
+      "product": "Retatrutide",
+      "pageUrl": "https://elitepeps.com.au/product/retatrutide-20mg",
+      "enabled": true,
+      "imageUrl": "https://elitepeps.com.au/assets/retatrutide-20mg-F-aOQKE5.png",
+      "selectorHints": [
+        "Retatrutide",
+        "Retatrutide 20mg"
+      ]
+    },
+    {
+      "id": "elitepeps-bpc-157",
       "platform": "Elite Peps Australia",
       "product": "BPC-157",
-      "pageUrl": "",
-      "enabled": false,
-      "notes": "Fill pageUrl with the canonical product page. Disabled examples are ignored by the scanner."
+      "pageUrl": "https://elitepeps.com.au/product/bpc-157",
+      "enabled": true,
+      "imageUrl": "https://elitepeps.com.au/assets/bpc-157-t9_kAcZ1.png",
+      "selectorHints": [
+        "BPC-157",
+        "BPC-157 10mg"
+      ]
+    },
+    {
+      "id": "elitepeps-ghk-cu-50mg",
+      "platform": "Elite Peps Australia",
+      "product": "GHK-Cu",
+      "pageUrl": "https://elitepeps.com.au/product/ghk-cu-50mg",
+      "enabled": true,
+      "imageUrl": "https://elitepeps.com.au/assets/ghk-cu-50mg-Bre7kyRK.png",
+      "selectorHints": [
+        "GHK-Cu",
+        "GHK-Cu 50mg"
+      ]
+    },
+    {
+      "id": "elitepeps-ghk-cu-100mg",
+      "platform": "Elite Peps Australia",
+      "product": "GHK-Cu",
+      "pageUrl": "https://elitepeps.com.au/product/ghk-cu-100mg",
+      "enabled": true,
+      "imageUrl": "https://elitepeps.com.au/assets/ghk-cu-100mg-C7EV8lAk.png",
+      "selectorHints": [
+        "GHK-Cu",
+        "GHK-Cu 100mg"
+      ]
+    },
+    {
+      "id": "elitepeps-tb-500",
+      "platform": "Elite Peps Australia",
+      "product": "TB-500",
+      "pageUrl": "https://elitepeps.com.au/product/tb-500",
+      "enabled": true,
+      "imageUrl": "https://elitepeps.com.au/assets/tb-500-DExT6ifR.png",
+      "selectorHints": [
+        "TB-500",
+        "TB-500 10mg"
+      ]
+    },
+    {
+      "id": "elitepeps-cjc-ipamorelin",
+      "platform": "Elite Peps Australia",
+      "product": "CJC-1295 + Ipamorelin",
+      "pageUrl": "https://elitepeps.com.au/product/cjc-ipamorelin",
+      "enabled": true,
+      "imageUrl": "https://elitepeps.com.au/assets/cjc-ipamorelin-CDSS8jYl.png",
+      "selectorHints": [
+        "CJC-1295",
+        "Ipamorelin",
+        "CJC-1295 + Ipamorelin 10mg"
+      ]
+    },
+    {
+      "id": "elitepeps-tesamorelin",
+      "platform": "Elite Peps Australia",
+      "product": "Tesamorelin",
+      "pageUrl": "https://elitepeps.com.au/product/tesamorelin",
+      "enabled": true,
+      "imageUrl": "https://elitepeps.com.au/assets/tesamorelin-CxXwXlU9.png",
+      "selectorHints": [
+        "Tesamorelin",
+        "Tesamorelin 10mg"
+      ]
+    },
+    {
+      "id": "elitepeps-hgh-191aa",
+      "platform": "Elite Peps Australia",
+      "product": "HGH",
+      "pageUrl": "https://elitepeps.com.au/product/hgh-191aa",
+      "enabled": true,
+      "imageUrl": "https://elitepeps.com.au/assets/hgh-191aa-B00K2HYb.png",
+      "selectorHints": [
+        "HGH",
+        "HGH 191AA",
+        "Somatropin 15iu"
+      ]
+    },
+    {
+      "id": "elitepeps-mots-c",
+      "platform": "Elite Peps Australia",
+      "product": "MOTS-c",
+      "pageUrl": "https://elitepeps.com.au/product/mots-c",
+      "enabled": true,
+      "imageUrl": "https://elitepeps.com.au/assets/mots-c-BeN2ALUh.png",
+      "selectorHints": [
+        "MOTS-c",
+        "MOTS-c 10mg"
+      ]
+    },
+    {
+      "id": "elitepeps-melanotan-i",
+      "platform": "Elite Peps Australia",
+      "product": "Melanotan I",
+      "pageUrl": "https://elitepeps.com.au/product/melanotan-i",
+      "enabled": true,
+      "imageUrl": "https://elitepeps.com.au/assets/melanotan-i-DLsiuIFy.png",
+      "selectorHints": [
+        "Melanotan I",
+        "Melanotan I 10mg"
+      ]
+    },
+    {
+      "id": "elitepeps-bac-water",
+      "platform": "Elite Peps Australia",
+      "product": "BAC Water",
+      "pageUrl": "https://elitepeps.com.au/product/bac-water",
+      "enabled": true,
+      "imageUrl": "https://elitepeps.com.au/assets/bac-water-CshRTc3a.png",
+      "selectorHints": [
+        "BAC Water",
+        "BAC Water 3mL"
+      ]
+    },
+    {
+      "id": "bt7-5-amino-1mq-50mg",
+      "platform": "BT7",
+      "product": "5-AMINO-1mq",
+      "pageUrl": "https://bt7.com.au/product/5-amino-1mq-50mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/5-amino-800x800.png",
+      "selectorHints": [
+        "5-AMINO-1mq",
+        "5-AMINO-1mq 50mg"
+      ]
+    },
+    {
+      "id": "bt7-ahk-cu-100mg",
+      "platform": "BT7",
+      "product": "AHK-CU",
+      "pageUrl": "https://bt7.com.au/product/ahk-cu-100mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/87f35303-41d8-4f09-89b6-07405989949f-1-800x800.png",
+      "selectorHints": [
+        "AHK-CU",
+        "AHK-CU 100mg"
+      ]
+    },
+    {
+      "id": "bt7-aod-9604-10mg",
+      "platform": "BT7",
+      "product": "AOD 9604 -",
+      "pageUrl": "https://bt7.com.au/product/aod-9604-10mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/ChatGPT-Image-Jun-24-2026-04_40_21-PM-800x800.png",
+      "selectorHints": [
+        "AOD 9604 -",
+        "AOD 9604 - 10mg"
+      ]
+    },
+    {
+      "id": "bt7-bacteriostatic-water-10-ml",
+      "platform": "BT7",
+      "product": "Bacteriostatic Water - 10 ML",
+      "pageUrl": "https://bt7.com.au/product/bacteriostatic-water-10-ml/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/10-2.jpg",
+      "selectorHints": [
+        "Bacteriostatic Water - 10 ML",
+        "Bacteriostatic Water - 10 ML"
+      ]
+    },
+    {
+      "id": "bt7-bpc-157-tb-500-research-blend-10mg-10mg",
+      "platform": "BT7",
+      "product": "BPC-157 + TB-500 Research Blend - 10 mg / 10 mg",
+      "pageUrl": "https://bt7.com.au/product/bpc-157-tb-500-research-blend-10mg-10mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/8.jpg",
+      "selectorHints": [
+        "BPC-157 + TB-500 Research Blend - 10 mg / 10 mg",
+        "BPC-157 + TB-500 Research Blend - 10 mg / 10 mg"
+      ]
+    },
+    {
+      "id": "bt7-bpc-157",
+      "platform": "BT7",
+      "product": "BPC‑157",
+      "pageUrl": "https://bt7.com.au/product/bpc-157/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2025/10/5.jpg",
+      "selectorHints": [
+        "BPC‑157",
+        "BPC‑157 10mg"
+      ]
+    },
+    {
+      "id": "bt7-cjc-1295-ipamorelin-blend",
+      "platform": "BT7",
+      "product": "CJC-1295 + Ipamorelin Blend",
+      "pageUrl": "https://bt7.com.au/product/cjc-1295-ipamorelin-blend/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/19.jpg",
+      "selectorHints": [
+        "CJC-1295 + Ipamorelin Blend",
+        "CJC-1295 + Ipamorelin Blend"
+      ]
+    },
+    {
+      "id": "bt7-dsip-5mg",
+      "platform": "BT7",
+      "product": "DSIP -",
+      "pageUrl": "https://bt7.com.au/product/dsip-5mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/26-1.jpg",
+      "selectorHints": [
+        "DSIP -",
+        "DSIP - 5mg"
+      ]
+    },
+    {
+      "id": "bt7-epitalon-50mg",
+      "platform": "BT7",
+      "product": "Epitalon",
+      "pageUrl": "https://bt7.com.au/product/epitalon-50mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/epitalon-50-800x800.png",
+      "selectorHints": [
+        "Epitalon",
+        "Epitalon 50mg"
+      ]
+    },
+    {
+      "id": "bt7-epithalon-10-mg",
+      "platform": "BT7",
+      "product": "Epithalon - 10 mg",
+      "pageUrl": "https://bt7.com.au/product/epithalon-10-mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2025/10/Epitalon-800x800.jpg",
+      "selectorHints": [
+        "Epithalon - 10 mg",
+        "Epithalon - 10 mg"
+      ]
+    },
+    {
+      "id": "bt7-epithalon-50mg",
+      "platform": "BT7",
+      "product": "Epithalon -",
+      "pageUrl": "https://bt7.com.au/product/epithalon-50mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/04/ChatGPT-Image-Apr-30-2026-03_32_05-PM-2-800x800.png",
+      "selectorHints": [
+        "Epithalon -",
+        "Epithalon - 50mg"
+      ]
+    },
+    {
+      "id": "bt7-ghk-cream",
+      "platform": "BT7",
+      "product": "GHK Cream",
+      "pageUrl": "https://bt7.com.au/product/ghk-cream/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/05/ChatGPT-Image-May-6-2026-09_39_31-AM-800x800.png",
+      "selectorHints": [
+        "GHK Cream",
+        "GHK Cream"
+      ]
+    },
+    {
+      "id": "bt7-ghk-cu-100-mg",
+      "platform": "BT7",
+      "product": "GHK-Cu -",
+      "pageUrl": "https://bt7.com.au/product/ghk-cu-100-mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/ChatGPT-Image-May-6-2026-09_46_53-AM-800x800.png",
+      "selectorHints": [
+        "GHK-Cu -",
+        "GHK-Cu - 100mg"
+      ]
+    },
+    {
+      "id": "bt7-ghk-cu-copper-peptide-face-cream",
+      "platform": "BT7",
+      "product": "GHK-CU Copper Peptide Face Cream",
+      "pageUrl": "https://bt7.com.au/product/ghk-cu-copper-peptide-face-cream/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/05/ChatGPT-Image-May-6-2026-09_39_31-AM-800x800.png",
+      "selectorHints": [
+        "GHK-CU Copper Peptide Face Cream",
+        "GHK-CU Copper Peptide Face Cream"
+      ]
+    },
+    {
+      "id": "bt7-ghk-cu-peptide-face-cream-bundle",
+      "platform": "BT7",
+      "product": "GHK-CU Peptide Face Cream Bundle",
+      "pageUrl": "https://bt7.com.au/product/ghk-cu-peptide-face-cream-bundle/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/05/May-6-2026-08_59_37-AM-800x800.png",
+      "selectorHints": [
+        "GHK-CU Peptide Face Cream Bundle",
+        "GHK-CU Peptide Face Cream Bundle"
+      ]
+    },
+    {
+      "id": "bt7-glow-70mg",
+      "platform": "BT7",
+      "product": "Glow",
+      "pageUrl": "https://bt7.com.au/product/glow-70mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/glow-70-800x800.png",
+      "selectorHints": [
+        "Glow",
+        "Glow 70mg"
+      ]
+    },
+    {
+      "id": "bt7-glow-blend-70-mg-ghk-cu-50-mg-tb-500-10-mg-bpc-157-10-mg",
+      "platform": "BT7",
+      "product": "GLOW blend - 70 mg (GHK-Cu 50 mg / TB-500 10 mg / BPC-157 10 mg)",
+      "pageUrl": "https://bt7.com.au/product/glow-blend-70-mg-ghk-cu-50-mg-tb-500-10-mg-bpc-157-10-mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/ChatGPT-Image-May-6-2026-09_50_18-AM-800x800.png",
+      "selectorHints": [
+        "GLOW blend - 70 mg (GHK-Cu 50 mg / TB-500 10 mg / BPC-157 10 mg)",
+        "GLOW blend - 70 mg (GHK-Cu 50 mg / TB-500 10 mg / BPC-157 10 mg)"
+      ]
+    },
+    {
+      "id": "bt7-glutathione-1500mg",
+      "platform": "BT7",
+      "product": "Glutathione",
+      "pageUrl": "https://bt7.com.au/product/glutathione-1500mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/05113098-f286-4538-8266-eb3fa890a25c-800x800.png",
+      "selectorHints": [
+        "Glutathione",
+        "Glutathione 1500mg"
+      ]
+    },
+    {
+      "id": "bt7-hcg-5000-iu",
+      "platform": "BT7",
+      "product": "HCG 5000 IU",
+      "pageUrl": "https://bt7.com.au/product/hcg-5000-iu/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2025/11/1.jpg",
+      "selectorHints": [
+        "HCG 5000 IU",
+        "HCG 5000 IU"
+      ]
+    },
+    {
+      "id": "bt7-igf-1-1mg",
+      "platform": "BT7",
+      "product": "IGF-1 -",
+      "pageUrl": "https://bt7.com.au/product/igf-1-1mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/themes/bt7/image/shield.png",
+      "selectorHints": [
+        "IGF-1 -",
+        "IGF-1 - 1mg"
+      ]
+    },
+    {
+      "id": "bt7-insulin-syringe-with-needle-0-5ml-31g-x-8mm-st-su",
+      "platform": "BT7",
+      "product": "INSULIN SYRINGE WITH NEEDLE 0.5ML 31G X 8MM ST SU ( 100 Pack )",
+      "pageUrl": "https://bt7.com.au/product/insulin-syringe-with-needle-0-5ml-31g-x-8mm-st-su/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/04/2550188baremedicalInsulinSyringew-needle0.5ml31gx8mm-800x800.webp",
+      "selectorHints": [
+        "INSULIN SYRINGE WITH NEEDLE 0.5ML 31G X 8MM ST SU ( 100 Pack )",
+        "INSULIN SYRINGE WITH NEEDLE 0.5ML 31G X 8MM ST SU ( 100 Pack )"
+      ]
+    },
+    {
+      "id": "bt7-kpv-10mg",
+      "platform": "BT7",
+      "product": "KPV -",
+      "pageUrl": "https://bt7.com.au/product/kpv-10mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/04/ChatGPT-Image-Apr-30-2026-03_32_05-PM-3-800x800.png",
+      "selectorHints": [
+        "KPV -",
+        "KPV - 10mg"
+      ]
+    },
+    {
+      "id": "bt7-l-carnitine-600mg",
+      "platform": "BT7",
+      "product": "L-Carnitine",
+      "pageUrl": "https://bt7.com.au/product/l-carnitine-600mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/ccd85682-a2f3-4b03-9559-7a085f916515-800x800.png",
+      "selectorHints": [
+        "L-Carnitine",
+        "L-Carnitine 600mg"
+      ]
+    },
+    {
+      "id": "bt7-melano-2-10mg",
+      "platform": "BT7",
+      "product": "Melano 2",
+      "pageUrl": "https://bt7.com.au/product/melano-2-10mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/86e05e45-b238-42ce-89dc-4d6707e8f6f5-800x800.png",
+      "selectorHints": [
+        "Melano 2",
+        "Melano 2 10mg"
+      ]
+    },
+    {
+      "id": "bt7-melanotan-i-10mg",
+      "platform": "BT7",
+      "product": "Melanotan I -",
+      "pageUrl": "https://bt7.com.au/product/melanotan-i-10mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/07/Melanotan-1-800x800.png",
+      "selectorHints": [
+        "Melanotan I -",
+        "Melanotan I - 10mg"
+      ]
+    },
+    {
+      "id": "bt7-melanotan-ii",
+      "platform": "BT7",
+      "product": "Melanotan II",
+      "pageUrl": "https://bt7.com.au/product/melanotan-ii/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2025/11/17-1.jpg",
+      "selectorHints": [
+        "Melanotan II",
+        "Melanotan II"
+      ]
+    },
+    {
+      "id": "bt7-melatonin-10mg",
+      "platform": "BT7",
+      "product": "Melatonin -",
+      "pageUrl": "https://bt7.com.au/product/melatonin-10mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/25-2.jpg",
+      "selectorHints": [
+        "Melatonin -",
+        "Melatonin - 10mg"
+      ]
+    },
+    {
+      "id": "bt7-mots-10mg",
+      "platform": "BT7",
+      "product": "Mots",
+      "pageUrl": "https://bt7.com.au/product/mots-10mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/mots-10-800x800.png",
+      "selectorHints": [
+        "Mots",
+        "Mots 10mg"
+      ]
+    },
+    {
+      "id": "bt7-mots-20mg",
+      "platform": "BT7",
+      "product": "Mots",
+      "pageUrl": "https://bt7.com.au/product/mots-20mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/mots-20-800x800.png",
+      "selectorHints": [
+        "Mots",
+        "Mots 20mg"
+      ]
+    },
+    {
+      "id": "bt7-mots-40",
+      "platform": "BT7",
+      "product": "Mots 40",
+      "pageUrl": "https://bt7.com.au/product/mots-40/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/ChatGPT-Image-Jun-24-2026-05_03_22-PM-800x800.png",
+      "selectorHints": [
+        "Mots 40",
+        "Mots 40"
+      ]
+    },
+    {
+      "id": "bt7-mots-c-10-mg",
+      "platform": "BT7",
+      "product": "Mots-C -",
+      "pageUrl": "https://bt7.com.au/product/mots-c-10-mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/motsc.png",
+      "selectorHints": [
+        "Mots-C -",
+        "Mots-C - 10mg"
+      ]
+    },
+    {
+      "id": "bt7-mots-c-20mg",
+      "platform": "BT7",
+      "product": "Mots-C -",
+      "pageUrl": "https://bt7.com.au/product/mots-c-20mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/motsc.png",
+      "selectorHints": [
+        "Mots-C -",
+        "Mots-C - 20mg"
+      ]
+    },
+    {
+      "id": "bt7-mots-c-40mg",
+      "platform": "BT7",
+      "product": "Mots-C -",
+      "pageUrl": "https://bt7.com.au/product/mots-c-40mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/ChatGPT-Image-Jun-24-2026-05_03_22-PM-800x800.png",
+      "selectorHints": [
+        "Mots-C -",
+        "Mots-C - 40mg"
+      ]
+    },
+    {
+      "id": "bt7-nad-1000-mg",
+      "platform": "BT7",
+      "product": "NAD+",
+      "pageUrl": "https://bt7.com.au/product/nad-1000-mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/6.jpg",
+      "selectorHints": [
+        "NAD+",
+        "NAD+ 1000mg"
+      ]
+    },
+    {
+      "id": "bt7-pt-141-research-material-10mg",
+      "platform": "BT7",
+      "product": "PT-141 Research Material - 10 mg",
+      "pageUrl": "https://bt7.com.au/product/pt-141-research-material-10mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/24-2.jpg",
+      "selectorHints": [
+        "PT-141 Research Material - 10 mg",
+        "PT-141 Research Material - 10 mg"
+      ]
+    },
+    {
+      "id": "bt7-pt-141-10mg-research",
+      "platform": "BT7",
+      "product": "PT-141-10mg-Research",
+      "pageUrl": "https://bt7.com.au/product/pt-141-10mg-research/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/PT-141-10mg-Research-800x800.png",
+      "selectorHints": [
+        "PT-141-10mg-Research",
+        "PT-141-10mg-Research"
+      ]
+    },
+    {
+      "id": "bt7-retatru-10mg",
+      "platform": "BT7",
+      "product": "Retatru",
+      "pageUrl": "https://bt7.com.au/product/retatru-10mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/06/retatru-10-800x800.png",
+      "selectorHints": [
+        "Retatru",
+        "Retatru 10mg"
+      ]
+    },
+    {
+      "id": "bt7-reta-10-mg",
+      "platform": "BT7",
+      "product": "Retatrutide -",
+      "pageUrl": "https://bt7.com.au/product/reta-10-mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/28.jpg",
+      "selectorHints": [
+        "Retatrutide -",
+        "Retatrutide - 10mg"
+      ]
+    },
+    {
+      "id": "bt7-reta-20mg",
+      "platform": "BT7",
+      "product": "Retatrutide - 20 mg",
+      "pageUrl": "https://bt7.com.au/product/reta-20mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2025/11/11.jpg",
+      "selectorHints": [
+        "Retatrutide - 20 mg",
+        "Retatrutide - 20 mg"
+      ]
+    },
+    {
+      "id": "bt7-semaglutide-10-mg",
+      "platform": "BT7",
+      "product": "Semaglutide -",
+      "pageUrl": "https://bt7.com.au/product/semaglutide-10-mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/23-1.jpg",
+      "selectorHints": [
+        "Semaglutide -",
+        "Semaglutide - 10mg"
+      ]
+    },
+    {
+      "id": "bt7-semax-various",
+      "platform": "BT7",
+      "product": "Semax - (various)",
+      "pageUrl": "https://bt7.com.au/product/semax-various/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/4.jpg",
+      "selectorHints": [
+        "Semax - (various)",
+        "Semax - (various)"
+      ]
+    },
+    {
+      "id": "bt7-slu-pp-322-5mg",
+      "platform": "BT7",
+      "product": "SLU-PP 322 -",
+      "pageUrl": "https://bt7.com.au/product/slu-pp-322-5mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/04/ChatGPT-Image-Apr-30-2026-04_11_37-PM-800x800.png",
+      "selectorHints": [
+        "SLU-PP 322 -",
+        "SLU-PP 322 - 5mg"
+      ]
+    },
+    {
+      "id": "bt7-ss-31-10-mg",
+      "platform": "BT7",
+      "product": "SS-31 -",
+      "pageUrl": "https://bt7.com.au/product/ss-31-10-mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/22-1.jpg",
+      "selectorHints": [
+        "SS-31 -",
+        "SS-31 - 10mg"
+      ]
+    },
+    {
+      "id": "bt7-tb-500-10-mg",
+      "platform": "BT7",
+      "product": "TB-500 -",
+      "pageUrl": "https://bt7.com.au/product/tb-500-10-mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/14.jpg",
+      "selectorHints": [
+        "TB-500 -",
+        "TB-500 - 10mg"
+      ]
+    },
+    {
+      "id": "bt7-tesamorelin-20-mg",
+      "platform": "BT7",
+      "product": "Tesamorelin -",
+      "pageUrl": "https://bt7.com.au/product/tesamorelin-20-mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/21-1.jpg",
+      "selectorHints": [
+        "Tesamorelin -",
+        "Tesamorelin - 20mg"
+      ]
+    },
+    {
+      "id": "bt7-thymosin-alpha-1-10mg",
+      "platform": "BT7",
+      "product": "Thymosin Alpha-1 -",
+      "pageUrl": "https://bt7.com.au/product/thymosin-alpha-1-10mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/20-3.jpg",
+      "selectorHints": [
+        "Thymosin Alpha-1 -",
+        "Thymosin Alpha-1 - 10mg"
+      ]
+    },
+    {
+      "id": "bt7-tirzepatide-10-mg",
+      "platform": "BT7",
+      "product": "Tirzepatide -",
+      "pageUrl": "https://bt7.com.au/product/tirzepatide-10-mg/",
+      "enabled": true,
+      "imageUrl": "https://bt7.com.au/wp-content/uploads/2026/01/13.jpg",
+      "selectorHints": [
+        "Tirzepatide -",
+        "Tirzepatide - 10mg"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-cell-factors",
+      "platform": "BioLongevity Labs",
+      "product": "Cell Factors™",
+      "pageUrl": "https://biolongevitylabs.com/product/cell-factors/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2026/02/IMG_0641-300x300.jpg",
+      "selectorHints": [
+        "Cell Factors™",
+        "Cell Factors™"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-follistatin",
+      "platform": "BioLongevity Labs",
+      "product": "Follistatin (FLGR242)",
+      "pageUrl": "https://biolongevitylabs.com/product/follistatin/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/11/Folli-Pair-300x300.jpg",
+      "selectorHints": [
+        "Follistatin (FLGR242)",
+        "Follistatin (FLGR242) (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-klotho",
+      "platform": "BioLongevity Labs",
+      "product": "Klotho (alphaKlothoLR)",
+      "pageUrl": "https://biolongevitylabs.com/product/klotho/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2026/02/alphaKlothoLR-pair-300x300.jpg",
+      "selectorHints": [
+        "Klotho (alphaKlothoLR)",
+        "Klotho (alphaKlothoLR) (20mcg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-bpc-157-tb-500-cartalax-blend-30mg-10mg-10mg-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "Regeno Blend (BPC-157, TB-500, Cartalax)",
+      "pageUrl": "https://biolongevitylabs.com/product/bpc-157-tb-500-cartalax-blend-30mg-10mg-10mg-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/10/BPC-157-TB-500-Cartalax-300x300.jpg",
+      "selectorHints": [
+        "Regeno Blend (BPC-157, TB-500, Cartalax)",
+        "Regeno Blend (BPC-157, TB-500, Cartalax) 30mg"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-slimassist",
+      "platform": "BioLongevity Labs",
+      "product": "SlimAssist (FLGR242",
+      "pageUrl": "https://biolongevitylabs.com/product/slimassist/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/12/SlimAssit-Product-Shot-300x300.jpg",
+      "selectorHints": [
+        "SlimAssist (FLGR242",
+        "SlimAssist (FLGR242 2MG / 500mcg B Complex)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-5-amino-1mq-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "5-Amino-1MQ",
+      "pageUrl": "https://biolongevitylabs.com/product/5-amino-1mq-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/03/5-Amino-1MQ-300x300.jpg",
+      "selectorHints": [
+        "5-Amino-1MQ",
+        "5-Amino-1MQ (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-kisspeptin-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "Kisspeptin-10",
+      "pageUrl": "https://biolongevitylabs.com/product/kisspeptin-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/04/Kisspeptin-10mg-300x300.jpg",
+      "selectorHints": [
+        "Kisspeptin-10",
+        "Kisspeptin-10 (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-livagen-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Livagen Peptide",
+      "pageUrl": "https://biolongevitylabs.com/product/livagen-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/04/Livagen-20mg-300x300.jpg",
+      "selectorHints": [
+        "Livagen Peptide",
+        "Livagen Peptide (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-ovagen-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Ovagen Peptide",
+      "pageUrl": "https://biolongevitylabs.com/product/ovagen-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/04/Ovagen-20mg-300x300.jpg",
+      "selectorHints": [
+        "Ovagen Peptide",
+        "Ovagen Peptide (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-thymulin-peptide-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "Thymulin Peptide",
+      "pageUrl": "https://biolongevitylabs.com/product/thymulin-peptide-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2026/01/Thymulin-300x300.jpg",
+      "selectorHints": [
+        "Thymulin Peptide",
+        "Thymulin Peptide (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-oxytocin-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "Oxytocin",
+      "pageUrl": "https://biolongevitylabs.com/product/oxytocin-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/03/Oxytocin-10mg-300x300.jpg",
+      "selectorHints": [
+        "Oxytocin",
+        "Oxytocin (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-pancragen-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Pancragen Peptide",
+      "pageUrl": "https://biolongevitylabs.com/product/pancragen-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/04/Pancragen-20mg-300x300.jpg",
+      "selectorHints": [
+        "Pancragen Peptide",
+        "Pancragen Peptide (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-peg-mgf-5mg",
+      "platform": "BioLongevity Labs",
+      "product": "PEG-MGF",
+      "pageUrl": "https://biolongevitylabs.com/product/peg-mgf-5mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/03/PEG-MGF-5MG-300x300.jpg",
+      "selectorHints": [
+        "PEG-MGF",
+        "PEG-MGF (5mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-pnc-27-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "PNC-27",
+      "pageUrl": "https://biolongevitylabs.com/product/pnc-27-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/03/PNC-27-10mg-300x300.jpg",
+      "selectorHints": [
+        "PNC-27",
+        "PNC-27 (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-prostamax-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Prostamax Peptide",
+      "pageUrl": "https://biolongevitylabs.com/product/prostamax-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/04/Prostamax-20mg-300x300.jpg",
+      "selectorHints": [
+        "Prostamax Peptide",
+        "Prostamax Peptide (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-testagen-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Testagen Peptide",
+      "pageUrl": "https://biolongevitylabs.com/product/testagen-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/04/Testagen-20mg-300x300.jpg",
+      "selectorHints": [
+        "Testagen Peptide",
+        "Testagen Peptide (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-thymagen-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Thymagen (Thymogen)",
+      "pageUrl": "https://biolongevitylabs.com/product/thymagen-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/04/Thymagen-20mg-300x300.jpg",
+      "selectorHints": [
+        "Thymagen (Thymogen)",
+        "Thymagen (Thymogen) (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-vesilute-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Vesilute Peptide",
+      "pageUrl": "https://biolongevitylabs.com/product/vesilute-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/04/Vesilute-20mg-300x300.jpg",
+      "selectorHints": [
+        "Vesilute Peptide",
+        "Vesilute Peptide (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-vesugen-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Vesugen Peptide",
+      "pageUrl": "https://biolongevitylabs.com/product/vesugen-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/04/Vesugen-20mg-300x300.jpg",
+      "selectorHints": [
+        "Vesugen Peptide",
+        "Vesugen Peptide (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-vilon-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Vilon Peptide",
+      "pageUrl": "https://biolongevitylabs.com/product/vilon-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/04/Vilon-20mg-300x300.jpg",
+      "selectorHints": [
+        "Vilon Peptide",
+        "Vilon Peptide (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-vip-5mg",
+      "platform": "BioLongevity Labs",
+      "product": "VIP (Vasoactive Intestinal Peptide)",
+      "pageUrl": "https://biolongevitylabs.com/product/vip-5mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/04/VIP-5mg-300x300.jpg",
+      "selectorHints": [
+        "VIP (Vasoactive Intestinal Peptide)",
+        "VIP (Vasoactive Intestinal Peptide) (5mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-cagrilintide-amylin-analog",
+      "platform": "BioLongevity Labs",
+      "product": "Cagrilintide (Amylin Analog)",
+      "pageUrl": "https://biolongevitylabs.com/product/cagrilintide-amylin-analog/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/02/Cagrilintide-5MG-300x300.jpg",
+      "selectorHints": [
+        "Cagrilintide (Amylin Analog)",
+        "Cagrilintide (Amylin Analog) (5mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-glow-blend-ghk-cu-bpc-157-tb-500",
+      "platform": "BioLongevity Labs",
+      "product": "GLOW Blend (GHK-Cu, BPC-157, TB-500)",
+      "pageUrl": "https://biolongevitylabs.com/product/glow-blend-ghk-cu-bpc-157-tb-500/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/03/BPC-157-TB-500-GHK-Cu-10MG-10MG-50MG-300x300.jpg",
+      "selectorHints": [
+        "GLOW Blend (GHK-Cu, BPC-157, TB-500)",
+        "GLOW Blend (GHK-Cu, BPC-157, TB-500) 70mg"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-klow-blend-ghk-cu-bpc-157-tb-500-kpv",
+      "platform": "BioLongevity Labs",
+      "product": "KLOW Blend (GHK-Cu, BPC-157, TB-500, KPV)",
+      "pageUrl": "https://biolongevitylabs.com/product/klow-blend-ghk-cu-bpc-157-tb-500-kpv/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/08/BPC-157-TB-500-KPV-GHK-Cu-300x300.jpg",
+      "selectorHints": [
+        "KLOW Blend (GHK-Cu, BPC-157, TB-500, KPV)",
+        "KLOW Blend (GHK-Cu, BPC-157, TB-500, KPV) 80mg"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-kpv-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "KPV",
+      "pageUrl": "https://biolongevitylabs.com/product/kpv-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/08/KPV-10mg-300x300.jpg",
+      "selectorHints": [
+        "KPV",
+        "KPV (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-nad-mots-c-5-amino-1mq-blend-120mg-100mg-10mg-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "NAD+ / MOTS-c / 5-Amino-1MQ Blend -",
+      "pageUrl": "https://biolongevitylabs.com/product/nad-mots-c-5-amino-1mq-blend-120mg-100mg-10mg-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/08/Metabolic-Blend-NAD-MOTS-c-5-Amino-1MQ-300x300.jpg",
+      "selectorHints": [
+        "NAD+ / MOTS-c / 5-Amino-1MQ Blend -",
+        "NAD+ / MOTS-c / 5-Amino-1MQ Blend - 120mg (100mg / 10mg / 10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-tesamorelin-6mg-ipamorelin-2mg-blend",
+      "platform": "BioLongevity Labs",
+      "product": "Tesamorelin and Ipamorelin (Blend)",
+      "pageUrl": "https://biolongevitylabs.com/product/tesamorelin-6mg-ipamorelin-2mg-blend/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/02/Tesamorelin-Ipamorelin-6-2MG-300x300.jpg",
+      "selectorHints": [
+        "Tesamorelin and Ipamorelin (Blend)",
+        "Tesamorelin and Ipamorelin (Blend) (8mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-ara-290-15mg",
+      "platform": "BioLongevity Labs",
+      "product": "ARA-290",
+      "pageUrl": "https://biolongevitylabs.com/product/ara-290-15mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/ARA-290-300x300.jpg",
+      "selectorHints": [
+        "ARA-290",
+        "ARA-290 (15mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-bronchogen-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Bronchogen",
+      "pageUrl": "https://biolongevitylabs.com/product/bronchogen-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/Bronchogen-20mg-300x300.jpg",
+      "selectorHints": [
+        "Bronchogen",
+        "Bronchogen (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-cardiogen-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Cardiogen",
+      "pageUrl": "https://biolongevitylabs.com/product/cardiogen-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/Cardiogen-20mg-2-300x300.jpg",
+      "selectorHints": [
+        "Cardiogen",
+        "Cardiogen (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-cartalax-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Cartalax",
+      "pageUrl": "https://biolongevitylabs.com/product/cartalax-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/Cartalax-20mg-2-300x300.jpg",
+      "selectorHints": [
+        "Cartalax",
+        "Cartalax (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-chonluten-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Chonluten",
+      "pageUrl": "https://biolongevitylabs.com/product/chonluten-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/Chonluten-20mg-2-300x300.jpg",
+      "selectorHints": [
+        "Chonluten",
+        "Chonluten (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-cortagen-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Cortagen",
+      "pageUrl": "https://biolongevitylabs.com/product/cortagen-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/Cortagen-20mg-2-300x300.jpg",
+      "selectorHints": [
+        "Cortagen",
+        "Cortagen (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-foxo4-dri-10-mg",
+      "platform": "BioLongevity Labs",
+      "product": "FOXO4-DRI (10 mg)",
+      "pageUrl": "https://biolongevitylabs.com/product/foxo4-dri-10-mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/Fox04-dri-10mg-300x300.jpg",
+      "selectorHints": [
+        "FOXO4-DRI (10 mg)",
+        "FOXO4-DRI (10 mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-l-carnitine",
+      "platform": "BioLongevity Labs",
+      "product": "L-Carnitine",
+      "pageUrl": "https://biolongevitylabs.com/product/l-carnitine/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/L-Carnitine-600mg_ml-300x300.jpg",
+      "selectorHints": [
+        "L-Carnitine",
+        "L-Carnitine (600mg/mL)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-n-acetyl-selank-amidate-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "N-Acetyl Selank Amidate",
+      "pageUrl": "https://biolongevitylabs.com/product/n-acetyl-selank-amidate-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/N-Acetyl-Selank-300x300.png",
+      "selectorHints": [
+        "N-Acetyl Selank Amidate",
+        "N-Acetyl Selank Amidate (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-n-acetyl-semax-amidate-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "N-Acetyl Semax Amidate",
+      "pageUrl": "https://biolongevitylabs.com/product/n-acetyl-semax-amidate-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/N-Acetyl-Semax-20mg-300x300.png",
+      "selectorHints": [
+        "N-Acetyl Semax Amidate",
+        "N-Acetyl Semax Amidate (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-nad-500mg",
+      "platform": "BioLongevity Labs",
+      "product": "NAD+",
+      "pageUrl": "https://biolongevitylabs.com/product/nad-500mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/NAD-500mg-300x300.jpg",
+      "selectorHints": [
+        "NAD+",
+        "NAD+ (500mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-pinealon-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Pinealon",
+      "pageUrl": "https://biolongevitylabs.com/product/pinealon-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/Pinealon-20mg-1-300x300.jpg",
+      "selectorHints": [
+        "Pinealon",
+        "Pinealon (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-pt141-5mg",
+      "platform": "BioLongevity Labs",
+      "product": "PT-141",
+      "pageUrl": "https://biolongevitylabs.com/product/pt141-5mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/PT141-5mg-300x300.jpg",
+      "selectorHints": [
+        "PT-141",
+        "PT-141 (5mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-reconstitution-solution-30ml",
+      "platform": "BioLongevity Labs",
+      "product": "Reconstitution Solution",
+      "pageUrl": "https://biolongevitylabs.com/product/reconstitution-solution-30ml/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/Reconstitution-Solution-30ml-300x300.jpg",
+      "selectorHints": [
+        "Reconstitution Solution",
+        "Reconstitution Solution (30ml) (BAC Water)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-cjc-1295-no-dac-ipamorelin-blend-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "CJC 1295 & Ipamorelin Blend",
+      "pageUrl": "https://biolongevitylabs.com/product/cjc-1295-no-dac-ipamorelin-blend-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2024/11/CJC-1295_ipamorelin-5_5mg-300x300.jpg",
+      "selectorHints": [
+        "CJC 1295 & Ipamorelin Blend",
+        "CJC 1295 & Ipamorelin Blend (10mg) (No DAC)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-bpc157-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "BPC-157",
+      "pageUrl": "https://biolongevitylabs.com/product/bpc157-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/BPC-157-10mg-300x300.jpg",
+      "selectorHints": [
+        "BPC-157",
+        "BPC-157 (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-blend-bpc157-tb500-10mg-blend",
+      "platform": "BioLongevity Labs",
+      "product": "BPC-157 TB-500 Blend",
+      "pageUrl": "https://biolongevitylabs.com/product/blend-bpc157-tb500-10mg-blend/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2024/11/BPC-157_tb-500-300x300.jpg",
+      "selectorHints": [
+        "BPC-157 TB-500 Blend",
+        "BPC-157 TB-500 Blend (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-dsip-5mg",
+      "platform": "BioLongevity Labs",
+      "product": "DSIP (Delta Sleep-Inducing Peptide)",
+      "pageUrl": "https://biolongevitylabs.com/product/dsip-5mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2024/11/DSIP-5mg-3-300x300.jpg",
+      "selectorHints": [
+        "DSIP (Delta Sleep-Inducing Peptide)",
+        "DSIP (Delta Sleep-Inducing Peptide) (5mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-epithalon-20mg",
+      "platform": "BioLongevity Labs",
+      "product": "Epithalon",
+      "pageUrl": "https://biolongevitylabs.com/product/epithalon-20mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/Epithalon-20mg-1-300x300.jpg",
+      "selectorHints": [
+        "Epithalon",
+        "Epithalon (20mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-ghk-cu-50mg",
+      "platform": "BioLongevity Labs",
+      "product": "GHK-Cu Copper Peptide",
+      "pageUrl": "https://biolongevitylabs.com/product/ghk-cu-50mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2024/11/GHK-CU-50mg-2-300x300.jpg",
+      "selectorHints": [
+        "GHK-Cu Copper Peptide",
+        "GHK-Cu Copper Peptide (50mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-ipamorelin-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "Ipamorelin",
+      "pageUrl": "https://biolongevitylabs.com/product/ipamorelin-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/ipamorelin-10mg-1-300x300.jpg",
+      "selectorHints": [
+        "Ipamorelin",
+        "Ipamorelin (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-ll-37-5mg",
+      "platform": "BioLongevity Labs",
+      "product": "LL-37",
+      "pageUrl": "https://biolongevitylabs.com/product/ll-37-5mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2024/11/LL-37-5mg-3-300x300.jpg",
+      "selectorHints": [
+        "LL-37",
+        "LL-37 (5mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-melanotan-1-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "Melanotan 1",
+      "pageUrl": "https://biolongevitylabs.com/product/melanotan-1-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2024/11/Melanotan-1-10mg-300x300.png",
+      "selectorHints": [
+        "Melanotan 1",
+        "Melanotan 1 (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-motsc-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "MOTS-c",
+      "pageUrl": "https://biolongevitylabs.com/product/motsc-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2024/11/MOTSc-10mg-300x300.png",
+      "selectorHints": [
+        "MOTS-c",
+        "MOTS-c (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-tb500-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "TB-500",
+      "pageUrl": "https://biolongevitylabs.com/product/tb500-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/TB-500-10mg-1-300x300.jpg",
+      "selectorHints": [
+        "TB-500",
+        "TB-500 (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-tesamorelin-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "Tesamorelin",
+      "pageUrl": "https://biolongevitylabs.com/product/tesamorelin-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/Tesamorelin-10MG-1-300x300.jpg",
+      "selectorHints": [
+        "Tesamorelin",
+        "Tesamorelin (10mg)"
+      ]
+    },
+    {
+      "id": "biolongevity-labs-thymosin-alpha-1-10mg",
+      "platform": "BioLongevity Labs",
+      "product": "Thymosin Alpha 1",
+      "pageUrl": "https://biolongevitylabs.com/product/thymosin-alpha-1-10mg/",
+      "enabled": true,
+      "imageUrl": "https://biolongevitylabs.com/wp-content/uploads/2025/01/Thymosin-Alpha-1-10MG-1-300x300.jpg",
+      "selectorHints": [
+        "Thymosin Alpha 1",
+        "Thymosin Alpha 1 (10mg)"
+      ]
+    },
+    {
+      "id": "limitless-biotech-5-amino-1mq-50mg-capsules-60",
+      "platform": "Limitless Biotech",
+      "product": "5-Amino-1MQ",
+      "pageUrl": "https://limitlesslifenootropics.com/product/5-amino-1mq-50mg-capsules-60/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/164/895/5-AMINO_1MQ_CAPSULES__20439.1762297599.png?c=1",
+      "selectorHints": [
+        "5-Amino-1MQ",
+        "5-Amino-1MQ Capsules"
+      ]
+    },
+    {
+      "id": "limitless-biotech-5-amino-1mq",
+      "platform": "Limitless Biotech",
+      "product": "5-Amino-1MQ",
+      "pageUrl": "https://limitlesslifenootropics.com/product/5-amino-1mq/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/155/1075/5-AMINO-1MQ_9G_POWDER__77903.1763083741.png?c=1",
+      "selectorHints": [
+        "5-Amino-1MQ",
+        "5-Amino-1MQ Powder"
+      ]
+    },
+    {
+      "id": "limitless-biotech-9-me-bc",
+      "platform": "Limitless Biotech",
+      "product": "9-Me-BC Powder",
+      "pageUrl": "https://limitlesslifenootropics.com/product/9-me-bc/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/198/1068/9-ME-BC_POWDER_1G__59862.1763083433.png?c=1",
+      "selectorHints": [
+        "9-Me-BC Powder",
+        "9-Me-BC Powder"
+      ]
+    },
+    {
+      "id": "limitless-biotech-adalank-nootropic-peptide-nasal-spray-10ml-10mg",
+      "platform": "Limitless Biotech",
+      "product": "Adalank",
+      "pageUrl": "https://limitlesslifenootropics.com/product/adalank-nootropic-peptide-nasal-spray-10ml-10mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/275/906/ADALANK_10MG_SPRAY__36472.1762298999.png?c=1",
+      "selectorHints": [
+        "Adalank",
+        "Adalank Peptide Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-adamax-adalank-spray-combo-pack-10mg-10mg",
+      "platform": "Limitless Biotech",
+      "product": "Adamax + Adalank",
+      "pageUrl": "https://limitlesslifenootropics.com/product/adamax-adalank-spray-combo-pack-10mg-10mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/276/905/ADAMAX_ADALANK_COMBO_PACK_10MG_SPRAY__28038.1762298928.png?c=1",
+      "selectorHints": [
+        "Adamax + Adalank",
+        "Adamax / Adalank Spray Combo Pack (10mg/10mg)"
+      ]
+    },
+    {
+      "id": "limitless-biotech-adamax-99-nasal-spray-10-mg",
+      "platform": "Limitless Biotech",
+      "product": "Adamax",
+      "pageUrl": "https://limitlesslifenootropics.com/product/adamax-99-nasal-spray-10-mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/171/911/ADAMAX_10MG_SPRAY__66341.1762299480.png?c=1",
+      "selectorHints": [
+        "Adamax",
+        "Adamax Peptide Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-aod-9604",
+      "platform": "Limitless Biotech",
+      "product": "AOD-9604",
+      "pageUrl": "https://limitlesslifenootropics.com/product/aod-9604/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/188/822/AOD-9604_5MG_.SINGLE.VIAL__59723.1761890890.png?c=1",
+      "selectorHints": [
+        "AOD-9604",
+        "AOD 9604"
+      ]
+    },
+    {
+      "id": "limitless-biotech-ara-290",
+      "platform": "Limitless Biotech",
+      "product": "ARA-290",
+      "pageUrl": "https://limitlesslifenootropics.com/product/ara-290/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/205/820/ARA-290_8MG_.SINGLE.VIAL__29851.1761890848.png?c=1",
+      "selectorHints": [
+        "ARA-290",
+        "ARA-290"
+      ]
+    },
+    {
+      "id": "limitless-biotech-bpc-157",
+      "platform": "Limitless Biotech",
+      "product": "BPC-157",
+      "pageUrl": "https://limitlesslifenootropics.com/product/bpc-157/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/217/824/BPC-157_10MG_.SINGLE.VIAL__08417.1780584885.png?c=1",
+      "selectorHints": [
+        "BPC-157",
+        "BPC-157"
+      ]
+    },
+    {
+      "id": "limitless-biotech-bpc-157-acetate",
+      "platform": "Limitless Biotech",
+      "product": "BPC-157",
+      "pageUrl": "https://limitlesslifenootropics.com/product/bpc-157-acetate/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/184/825/BPC-157_ACETATE_10MG_.SINGLE.VIAL__44780.1763488483.png?c=1",
+      "selectorHints": [
+        "BPC-157",
+        "BPC-157 Acetate"
+      ]
+    },
+    {
+      "id": "limitless-biotech-bpc-157-acetate-spray",
+      "platform": "Limitless Biotech",
+      "product": "BPC-157",
+      "pageUrl": "https://limitlesslifenootropics.com/product/bpc-157-acetate-spray/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/281/909/BPC-157_ACETATE_1OMG_SPRAY__86576.1762299253.png?c=1",
+      "selectorHints": [
+        "BPC-157",
+        "BPC-157 Acetate Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-bpc-157-capsules-250mcg-per-capsule-60-capsules",
+      "platform": "Limitless Biotech",
+      "product": "BPC-157",
+      "pageUrl": "https://limitlesslifenootropics.com/product/bpc-157-capsules-250mcg-per-capsule-60-capsules/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/166/940/BPC157_CAPSULES__12565.1762395691.png?c=1",
+      "selectorHints": [
+        "BPC-157",
+        "BPC-157 Capsules"
+      ]
+    },
+    {
+      "id": "limitless-biotech-bpc-157-spray",
+      "platform": "Limitless Biotech",
+      "product": "BPC-157",
+      "pageUrl": "https://limitlesslifenootropics.com/product/bpc-157-spray/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/282/907/BPC-157_6MG_SPRAY__56988.1762299147.png?c=1",
+      "selectorHints": [
+        "BPC-157",
+        "BPC-157 Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-bronchogen-20mg",
+      "platform": "Limitless Biotech",
+      "product": "Bronchogen Peptide",
+      "pageUrl": "https://limitlesslifenootropics.com/product/bronchogen-20mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/356/933/BRONCHOGEN_20MG_.SINGLE.VIAL__95328.1762390154.png?c=1",
+      "selectorHints": [
+        "Bronchogen Peptide",
+        "Bronchogen Peptide 20mg"
+      ]
+    },
+    {
+      "id": "limitless-biotech-cardio-cytogen-20mg",
+      "platform": "Limitless Biotech",
+      "product": "CardioCytogen",
+      "pageUrl": "https://limitlesslifenootropics.com/product/cardio-cytogen-20mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/246/828/CARDIOCYTOGEN_20MG_.SINGLE.VIAL__19248.1761892046.png?c=1",
+      "selectorHints": [
+        "CardioCytogen",
+        "CardioCytogen 20mg"
+      ]
+    },
+    {
+      "id": "limitless-biotech-ipamorelin-cjc-1295-no-dac",
+      "platform": "Limitless Biotech",
+      "product": "CJC-1295 + Ipamorelin",
+      "pageUrl": "https://limitlesslifenootropics.com/product/ipamorelin-cjc-1295-no-dac/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/191/832/CJC-1295-IPAMORELIN_12-6MG_.SINGLE.VIAL__49839.1761892586.png?c=1",
+      "selectorHints": [
+        "CJC-1295 + Ipamorelin",
+        "CJC-1295 + Ipamorelin Blend"
+      ]
+    },
+    {
+      "id": "limitless-biotech-cjc-1295-no-dac-mod-grf-1-29",
+      "platform": "Limitless Biotech",
+      "product": "CJC-1295",
+      "pageUrl": "https://limitlesslifenootropics.com/product/cjc-1295-no-dac-mod-grf-1-29/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/204/830/CJC-1295_5MG_.SINGLE.VIAL__18677.1761892161.png?c=1",
+      "selectorHints": [
+        "CJC-1295",
+        "CJC-1295 no DAC (Mod GRF 1-29)"
+      ]
+    },
+    {
+      "id": "limitless-biotech-cortexin-10mg",
+      "platform": "Limitless Biotech",
+      "product": "Cortexin",
+      "pageUrl": "https://limitlesslifenootropics.com/product/cortexin-10mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/176/834/CORTEXIN_5MG_.SINGLE.VIAL__07908.1762208127.png?c=1",
+      "selectorHints": [
+        "Cortexin",
+        "Cortexin 10mg"
+      ]
+    },
+    {
+      "id": "limitless-biotech-dsip-delta-sleep-inducing-peptide",
+      "platform": "Limitless Biotech",
+      "product": "DSIP",
+      "pageUrl": "https://limitlesslifenootropics.com/product/dsip-delta-sleep-inducing-peptide/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/150/836/DSIP_5MG_.SINGLE.VIAL__49900.1762208512.png?c=1",
+      "selectorHints": [
+        "DSIP",
+        "DSIP Delta Sleep-Inducing Peptide"
+      ]
+    },
+    {
+      "id": "limitless-biotech-dsip-spray",
+      "platform": "Limitless Biotech",
+      "product": "DSIP",
+      "pageUrl": "https://limitlesslifenootropics.com/product/dsip-spray/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/239/910/DSIP_5MG_SPRAY__72017.1762299401.png?c=1",
+      "selectorHints": [
+        "DSIP",
+        "DSIP Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-foxo4-dri-10mg",
+      "platform": "Limitless Biotech",
+      "product": "FOXO4-DRI",
+      "pageUrl": "https://limitlesslifenootropics.com/product/foxo4-dri-10mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/172/1072/FOX04-DRI_10MG_.SINGLE.VIAL__46083.1763083555.png?c=1",
+      "selectorHints": [
+        "FOXO4-DRI",
+        "FOXO4-DRI 10mg"
+      ]
+    },
+    {
+      "id": "limitless-biotech-gastro-inflammation-research-formula-60-capsules",
+      "platform": "Limitless Biotech",
+      "product": "BPC-157",
+      "pageUrl": "https://limitlesslifenootropics.com/product/gastro-inflammation-research-formula-60-capsules/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/163/896/GASTRO_INFLAMATION_CAPSULES__30286.1762297761.png?c=1",
+      "selectorHints": [
+        "BPC-157",
+        "Gastro Inflammation Research Formula (BPC-157, KPV, N-Acetyl Larazotide)"
+      ]
+    },
+    {
+      "id": "limitless-biotech-ghk-basic",
+      "platform": "Limitless Biotech",
+      "product": "GHK Basic",
+      "pageUrl": "https://limitlesslifenootropics.com/product/ghk-basic/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/211/838/GHK_BASIC_100MG_.SINGLE.VIAL__32699.1762208592.png?c=1",
+      "selectorHints": [
+        "GHK Basic",
+        "GHK Basic 100mg"
+      ]
+    },
+    {
+      "id": "limitless-biotech-ghk-cu",
+      "platform": "Limitless Biotech",
+      "product": "GHK-Cu",
+      "pageUrl": "https://limitlesslifenootropics.com/product/ghk-cu/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/142/839/GHK-CU_100MG_.SINGLE.VIAL__54194.1762208846.png?c=1",
+      "selectorHints": [
+        "GHK-Cu",
+        "GHK-Cu (Copper Peptide)"
+      ]
+    },
+    {
+      "id": "limitless-biotech-ghk-cu-capsules-2mg",
+      "platform": "Limitless Biotech",
+      "product": "GHK-Cu",
+      "pageUrl": "https://limitlesslifenootropics.com/product/ghk-cu-capsules-2mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/233/897/GHK-CU_2MG_CAPSULES__28085.1762297853.png?c=1",
+      "selectorHints": [
+        "GHK-Cu",
+        "GHK-Cu Capsules"
+      ]
+    },
+    {
+      "id": "limitless-biotech-ghk-cu-spray",
+      "platform": "Limitless Biotech",
+      "product": "GHK-Cu",
+      "pageUrl": "https://limitlesslifenootropics.com/product/ghk-cu-spray/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/243/912/GHK-CU_100MG_SPRAY__15112.1762299691.png?c=1",
+      "selectorHints": [
+        "GHK-Cu",
+        "GHK-Cu Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-healing-and-repair-research-blend-60-capsules",
+      "platform": "Limitless Biotech",
+      "product": "BPC-157",
+      "pageUrl": "https://limitlesslifenootropics.com/product/healing-and-repair-research-blend-60-capsules/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/227/898/HEALING_AND_REPAIR_BELND_CAPSULES__16745.1764600601.png?c=1",
+      "selectorHints": [
+        "BPC-157",
+        "Healing and Repair Research Blend (BPC-157, TB4 Frag 1-4, GHK-Cu)"
+      ]
+    },
+    {
+      "id": "limitless-biotech-humanin-5mg",
+      "platform": "Limitless Biotech",
+      "product": "Humanin",
+      "pageUrl": "https://limitlesslifenootropics.com/product/humanin-5mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/147/841/HUMANIN_5MG_.SINGLE.VIAL_1__88705.1762208963.png?c=1",
+      "selectorHints": [
+        "Humanin",
+        "Humanin"
+      ]
+    },
+    {
+      "id": "limitless-biotech-ipamorelin",
+      "platform": "Limitless Biotech",
+      "product": "CJC-1295 + Ipamorelin",
+      "pageUrl": "https://limitlesslifenootropics.com/product/ipamorelin/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/216/843/IPAMORELIN_10MG_.SINGLE.VIAL__95527.1762209355.png?c=1",
+      "selectorHints": [
+        "CJC-1295 + Ipamorelin",
+        "Ipamorelin"
+      ]
+    },
+    {
+      "id": "limitless-biotech-kisspeptin-10",
+      "platform": "Limitless Biotech",
+      "product": "Kisspeptin-10",
+      "pageUrl": "https://limitlesslifenootropics.com/product/kisspeptin-10/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/334/844/KISSPEPTIN_5MG_.SINGLE.VIAL__40596.1762209455.png?c=1",
+      "selectorHints": [
+        "Kisspeptin-10",
+        "Kisspeptin-10"
+      ]
+    },
+    {
+      "id": "limitless-biotech-kpv",
+      "platform": "Limitless Biotech",
+      "product": "BPC-157 + KPV + N-Acetyl Larazotide",
+      "pageUrl": "https://limitlesslifenootropics.com/product/kpv/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/189/845/KPV_5MG_.SINGLE.VIAL__45257.1762209520.png?c=1",
+      "selectorHints": [
+        "BPC-157 + KPV + N-Acetyl Larazotide",
+        "KPV"
+      ]
+    },
+    {
+      "id": "limitless-biotech-kpv-250mcg-capsules-60",
+      "platform": "Limitless Biotech",
+      "product": "KPV",
+      "pageUrl": "https://limitlesslifenootropics.com/product/kpv-250mcg-capsules-60/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/162/899/KPV_250MCG_CAPSULES__34371.1762297975.png?c=1",
+      "selectorHints": [
+        "KPV",
+        "KPV Capsules"
+      ]
+    },
+    {
+      "id": "limitless-biotech-l-glutathione-500mg",
+      "platform": "Limitless Biotech",
+      "product": "Glutathione",
+      "pageUrl": "https://limitlesslifenootropics.com/product/l-glutathione-500mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/153/848/L-GLUTATHIONE_500MG_.SINGLE.VIAL__36564.1762231052.png?c=1",
+      "selectorHints": [
+        "Glutathione",
+        "L-Glutathione (500mg)"
+      ]
+    },
+    {
+      "id": "limitless-biotech-livagen",
+      "platform": "Limitless Biotech",
+      "product": "Livagen Peptide",
+      "pageUrl": "https://limitlesslifenootropics.com/product/livagen/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/352/936/LIVAGEN_20MG_.SINGLE.VIAL__02189.1762390273.png?c=1",
+      "selectorHints": [
+        "Livagen Peptide",
+        "Livagen Peptide"
+      ]
+    },
+    {
+      "id": "limitless-biotech-ll-37-antimicrobial-peptide",
+      "platform": "Limitless Biotech",
+      "product": "LL-37",
+      "pageUrl": "https://limitlesslifenootropics.com/product/ll-37-antimicrobial-peptide/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/267/849/ll-37_5MG_.SINGLE.VIAL__77404.1762231112.png?c=1",
+      "selectorHints": [
+        "LL-37",
+        "LL-37"
+      ]
+    },
+    {
+      "id": "limitless-biotech-mif-1",
+      "platform": "Limitless Biotech",
+      "product": "MIF-1",
+      "pageUrl": "https://limitlesslifenootropics.com/product/mif-1/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/209/1066/MIF-1_50MG_.SINGLE.VIAL__36500.1763083297.png?c=1",
+      "selectorHints": [
+        "MIF-1",
+        "MIF-1"
+      ]
+    },
+    {
+      "id": "limitless-biotech-mk-677-12-5mg-60-capsules",
+      "platform": "Limitless Biotech",
+      "product": "MK-777 (Acetamoren), 60 Capsules",
+      "pageUrl": "https://limitlesslifenootropics.com/product/mk-677-12-5mg-60-capsules/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/335/1087/MK-777_12.5MG_CAPSULES__33297.1763583879.png?c=1",
+      "selectorHints": [
+        "MK-777 (Acetamoren), 60 Capsules",
+        "MK-777 (Acetamoren), 60 Capsules"
+      ]
+    },
+    {
+      "id": "limitless-biotech-mots-c",
+      "platform": "Limitless Biotech",
+      "product": "MOTS-C",
+      "pageUrl": "https://limitlesslifenootropics.com/product/mots-c/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/187/851/MOTS-C_5MG_.SINGLE.VIAL__16835.1762231455.png?c=1",
+      "selectorHints": [
+        "MOTS-C",
+        "MOTS-C"
+      ]
+    },
+    {
+      "id": "limitless-biotech-mots-c-5mg-humanin-5mg",
+      "platform": "Limitless Biotech",
+      "product": "Humanin",
+      "pageUrl": "https://limitlesslifenootropics.com/product/mots-c-5mg-humanin-5mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/154/1076/MOTS-C_HUMANIN_BLEND_5.5MG_.SINGLE.VIAL__10669.1767127055.png?c=1",
+      "selectorHints": [
+        "Humanin",
+        "MOTS-C/Humanin (Blend)"
+      ]
+    },
+    {
+      "id": "limitless-biotech-n-acetyl-larazotide",
+      "platform": "Limitless Biotech",
+      "product": "Larazotide",
+      "pageUrl": "https://limitlesslifenootropics.com/product/n-acetyl-larazotide",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/170/901/N-ACETYL_LARAZOTIDE_250MCG_CAPSULES__60679.1762298143.png?c=1",
+      "selectorHints": [
+        "Larazotide",
+        "N-Acetyl Larazotide 250mcg (60 Capsules)"
+      ]
+    },
+    {
+      "id": "limitless-biotech-n-acetyl-selank",
+      "platform": "Limitless Biotech",
+      "product": "N-Acetyl Selank",
+      "pageUrl": "https://limitlesslifenootropics.com/product/n-acetyl-selank/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/261/853/N-ACETYL_SELANK_20MG_.SINGLE.VIAL__87101.1762232441.png?c=1",
+      "selectorHints": [
+        "N-Acetyl Selank",
+        "N-Acetyl Selank"
+      ]
+    },
+    {
+      "id": "limitless-biotech-n-acetyl-selank-amidate-30mg",
+      "platform": "Limitless Biotech",
+      "product": "N-Acetyl Selank",
+      "pageUrl": "https://limitlesslifenootropics.com/product/n-acetyl-selank-amidate-30mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/260/856/N-ACETYL_SELANK_AMIDATE_20MG_.SINGLE.VIA__55874.1762232620.png?c=1",
+      "selectorHints": [
+        "N-Acetyl Selank",
+        "N-Acetyl Selank Amidate"
+      ]
+    },
+    {
+      "id": "limitless-biotech-n-acetyl-selank-amidate-10ml",
+      "platform": "Limitless Biotech",
+      "product": "N-Acetyl Selank",
+      "pageUrl": "https://limitlesslifenootropics.com/product/n-acetyl-selank-amidate-10ml/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/199/921/N-ACETYL_SELANK_AMIDATE_20MG_SPRAY__94806.1762375946.png?c=1",
+      "selectorHints": [
+        "N-Acetyl Selank",
+        "N-Acetyl Selank Amidate Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-n-acetyl-selank-nasal-spray-10ml",
+      "platform": "Limitless Biotech",
+      "product": "N-Acetyl Selank",
+      "pageUrl": "https://limitlesslifenootropics.com/product/n-acetyl-selank-nasal-spray-10ml/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/140/919/N-ACETYL_SELANK_30MG_SPRAY__55761.1767996777.png?c=1",
+      "selectorHints": [
+        "N-Acetyl Selank",
+        "N-Acetyl Selank Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-n-acetyl-semax",
+      "platform": "Limitless Biotech",
+      "product": "N-Acetyl Semax",
+      "pageUrl": "https://limitlesslifenootropics.com/product/n-acetyl-semax/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/279/858/N-ACETYL_SEMAX_20MG_.SINGLE.VIAL__48059.1762232930.png?c=1",
+      "selectorHints": [
+        "N-Acetyl Semax",
+        "N-Acetyl Semax"
+      ]
+    },
+    {
+      "id": "limitless-biotech-n-acetyl-semax-amidate",
+      "platform": "Limitless Biotech",
+      "product": "N-Acetyl Semax",
+      "pageUrl": "https://limitlesslifenootropics.com/product/n-acetyl-semax-amidate/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/262/859/N-ACETYL_SEMAX_AMIDATE_20MG_.SINGLE.VIAL__81017.1762233057.png?c=1",
+      "selectorHints": [
+        "N-Acetyl Semax",
+        "N-Acetyl Semax Amidate"
+      ]
+    },
+    {
+      "id": "limitless-biotech-n-acetyl-semax-amidate-30mg-n-acetyl-selank-amidate-30mg-blend",
+      "platform": "Limitless Biotech",
+      "product": "N-Acetyl Selank",
+      "pageUrl": "https://limitlesslifenootropics.com/product/n-acetyl-semax-amidate-30mg-n-acetyl-selank-amidate-30mg-blend/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/161/1073/N-ACETYL_SELANK_AMIDATE_N-ACETYL_SEMAX_AMIDATE_BLEND_30MG_SPRAY__12160.1763083580.png?c=1",
+      "selectorHints": [
+        "N-Acetyl Selank",
+        "N-Acetyl Semax Amidate / N-Acetyl Selank Amidate Blend"
+      ]
+    },
+    {
+      "id": "limitless-biotech-n-acetyl-semax-amidate-spray-10ml",
+      "platform": "Limitless Biotech",
+      "product": "N-Acetyl Semax",
+      "pageUrl": "https://limitlesslifenootropics.com/product/n-acetyl-semax-amidate-spray-10ml/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/141/916/N-ACETYL_SEMAX_AMIDATE_30MG_SPRAY__52303.1762375556.png?c=1",
+      "selectorHints": [
+        "N-Acetyl Semax",
+        "N-Acetyl Semax Amidate Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-n-acetyl-semax-nasal-spray-10ml",
+      "platform": "Limitless Biotech",
+      "product": "N-Acetyl Semax",
+      "pageUrl": "https://limitlesslifenootropics.com/product/n-acetyl-semax-nasal-spray-10ml/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/232/918/N-ACETYL_SEMAX_20MG_SPRAY__19199.1762375675.png?c=1",
+      "selectorHints": [
+        "N-Acetyl Semax",
+        "N-Acetyl Semax Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-nmn-powder",
+      "platform": "Limitless Biotech",
+      "product": "NMN Powder",
+      "pageUrl": "https://limitlesslifenootropics.com/product/nmn-powder/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/215/1065/NMN_POWDER_100G__47981.1765122661.png?c=1",
+      "selectorHints": [
+        "NMN Powder",
+        "NMN Powder"
+      ]
+    },
+    {
+      "id": "limitless-biotech-noopept-150mg-spray-1-5mg",
+      "platform": "Limitless Biotech",
+      "product": "Noopept Spray",
+      "pageUrl": "https://limitlesslifenootropics.com/product/noopept-150mg-spray-1-5mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/197/924/NOOPEPT_.5MG_SPRAY__13336.1762376098.png?c=1",
+      "selectorHints": [
+        "Noopept Spray",
+        "Noopept Spray 150 mg (1.5mg/spray)"
+      ]
+    },
+    {
+      "id": "limitless-biotech-orexin-a-nasal-spray-5mg",
+      "platform": "Limitless Biotech",
+      "product": "Orexin A",
+      "pageUrl": "https://limitlesslifenootropics.com/product/orexin-a-nasal-spray-5mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/143/925/OREXIN-A_5MG_SPRAY__25737.1762376179.png?c=1",
+      "selectorHints": [
+        "Orexin A",
+        "Orexin A Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-oxytocin",
+      "platform": "Limitless Biotech",
+      "product": "Oxytocin",
+      "pageUrl": "https://limitlesslifenootropics.com/product/oxytocin/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/244/866/OXYTOCIN_5MG_.SINGLE.VIAL__78199.1762234946.png?c=1",
+      "selectorHints": [
+        "Oxytocin",
+        "Oxytocin"
+      ]
+    },
+    {
+      "id": "limitless-biotech-oxytocin-sprayer",
+      "platform": "Limitless Biotech",
+      "product": "Oxytocin",
+      "pageUrl": "https://limitlesslifenootropics.com/product/oxytocin-sprayer/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/173/927/OXYTOCIN_5MG_SPRAY__84663.1762376268.png?c=1",
+      "selectorHints": [
+        "Oxytocin",
+        "Oxytocin Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-p-21-nasal-spray",
+      "platform": "Limitless Biotech",
+      "product": "P21",
+      "pageUrl": "https://limitlesslifenootropics.com/product/p-21-nasal-spray/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/201/928/P-21_500MCG_SPRAY__89292.1762376332.png?c=1",
+      "selectorHints": [
+        "P21",
+        "P21 Peptide Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-pancragen-peptide-lys-glu-asp-trp-20mg",
+      "platform": "Limitless Biotech",
+      "product": "Pancragen Peptide",
+      "pageUrl": "https://limitlesslifenootropics.com/product/pancragen-peptide-lys-glu-asp-trp-20mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/353/935/PANCRAGEN_20MG_.SINGLE.VIAL__49694.1762390222.png?c=1",
+      "selectorHints": [
+        "Pancragen Peptide",
+        "Pancragen Peptide"
+      ]
+    },
+    {
+      "id": "limitless-biotech-pe-22-28",
+      "platform": "Limitless Biotech",
+      "product": "PE-22-28",
+      "pageUrl": "https://limitlesslifenootropics.com/product/pe-22-28/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/148/929/PE-22-28_200MCG_SPRAY__14107.1762376421.png?c=1",
+      "selectorHints": [
+        "PE-22-28",
+        "PE-22-28 Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-pnc-28-peptide-5mg-vial",
+      "platform": "Limitless Biotech",
+      "product": "PNC-27/28",
+      "pageUrl": "https://limitlesslifenootropics.com/product/pnc-28-peptide-5mg-vial/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/240/867/PNC_28_5MG_.SINGLE.VIAL__81923.1762237353.png?c=1",
+      "selectorHints": [
+        "PNC-27/28",
+        "PNC-28"
+      ]
+    },
+    {
+      "id": "limitless-biotech-prostamax-20mg",
+      "platform": "Limitless Biotech",
+      "product": "Prostamax",
+      "pageUrl": "https://limitlesslifenootropics.com/product/prostamax-20mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/354/934/PROSTAMAX_20MG_.SINGLE.VIAL__80745.1762390192.png?c=1",
+      "selectorHints": [
+        "Prostamax",
+        "Prostamax"
+      ]
+    },
+    {
+      "id": "limitless-biotech-semax-30mg",
+      "platform": "Limitless Biotech",
+      "product": "N-Acetyl Semax",
+      "pageUrl": "https://limitlesslifenootropics.com/product/semax-30mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/263/875/SEMAX_30MG.SINGLE.VIAL__65563.1762239189.png?c=1",
+      "selectorHints": [
+        "N-Acetyl Semax",
+        "Semax"
+      ]
+    },
+    {
+      "id": "limitless-biotech-semax-10ml-nasal-spray-30mg",
+      "platform": "Limitless Biotech",
+      "product": "N-Acetyl Semax",
+      "pageUrl": "https://limitlesslifenootropics.com/product/semax-10ml-nasal-spray-30mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/160/931/SEMAX_300MCG_SPRAY__41293.1762376566.png?c=1",
+      "selectorHints": [
+        "N-Acetyl Semax",
+        "Semax Spray"
+      ]
+    },
+    {
+      "id": "limitless-biotech-sermorelin",
+      "platform": "Limitless Biotech",
+      "product": "Sermorelin",
+      "pageUrl": "https://limitlesslifenootropics.com/product/sermorelin/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/280/876/SERMORELIN_5MG.SINGLE.VIAL__18895.1762239250.png?c=1",
+      "selectorHints": [
+        "Sermorelin",
+        "Sermorelin"
+      ]
+    },
+    {
+      "id": "limitless-biotech-slu-pp-332-250mcg-60-capsules",
+      "platform": "Limitless Biotech",
+      "product": "SLU-PP-332",
+      "pageUrl": "https://limitlesslifenootropics.com/product/slu-pp-332-250mcg-60-capsules/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/336/902/SLU-PP-332_250MCG_CAPSULES__98612.1773420535.png?c=1",
+      "selectorHints": [
+        "SLU-PP-332",
+        "SLU-PP-332"
+      ]
+    },
+    {
+      "id": "limitless-biotech-tb-500",
+      "platform": "Limitless Biotech",
+      "product": "TB-500",
+      "pageUrl": "https://limitlesslifenootropics.com/product/tb-500/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/186/892/THYMOSIN_BETA_4_TB-500_5MG.SINGLE.VIAL__76592.1762297179.png?c=1",
+      "selectorHints": [
+        "TB-500",
+        "TB-500 (Thymosin Beta-4)"
+      ]
+    },
+    {
+      "id": "limitless-biotech-tb-500-1-4",
+      "platform": "Limitless Biotech",
+      "product": "TB-500",
+      "pageUrl": "https://limitlesslifenootropics.com/product/tb-500-1-4/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/235/888/THYMOSIN_BETA_4_FRAG_1-4_5MG.SINGLE.VIAL__04201.1765127649.png?c=1",
+      "selectorHints": [
+        "TB-500",
+        "TB-500 Thymosin Beta-4 Fragment 1-4"
+      ]
+    },
+    {
+      "id": "limitless-biotech-tb-500-17-23",
+      "platform": "Limitless Biotech",
+      "product": "TB-500",
+      "pageUrl": "https://limitlesslifenootropics.com/product/tb-500-17-23/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/206/889/THYMOSIN_BETA_4_FRAG_17-23_5MG.SINGLE.VIAL__46096.1765128152.png?c=1",
+      "selectorHints": [
+        "TB-500",
+        "TB-500 Thymosin Beta-4 Fragment 17-23"
+      ]
+    },
+    {
+      "id": "limitless-biotech-testagen",
+      "platform": "Limitless Biotech",
+      "product": "Testagen",
+      "pageUrl": "https://limitlesslifenootropics.com/product/testagen/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/351/937/TESTAGEN_20MG_.SINGLE.VIAL__81641.1762390319.png?c=1",
+      "selectorHints": [
+        "Testagen",
+        "Testagen"
+      ]
+    },
+    {
+      "id": "limitless-biotech-ta1-rgdr-us-10mg",
+      "platform": "Limitless Biotech",
+      "product": "Thymosin Alpha-1",
+      "pageUrl": "https://limitlesslifenootropics.com/product/ta1-rgdr-us-10mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/245/886/THYMOSIN_ALPHA_1_RGDR_10MG.SINGLE.VIAL__33340.1762296488.png?c=1",
+      "selectorHints": [
+        "Thymosin Alpha-1",
+        "Thymosin Alpha 1 RGDR"
+      ]
+    },
+    {
+      "id": "limitless-biotech-thymosin-alpha-1",
+      "platform": "Limitless Biotech",
+      "product": "Thymosin Alpha-1",
+      "pageUrl": "https://limitlesslifenootropics.com/product/thymosin-alpha-1/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/185/885/THYMOSIN_ALPHA_1_10MG.SINGLE.VIAL__29102.1762296430.png?c=1",
+      "selectorHints": [
+        "Thymosin Alpha-1",
+        "Thymosin Alpha-1"
+      ]
+    },
+    {
+      "id": "limitless-biotech-thymulin-10mg",
+      "platform": "Limitless Biotech",
+      "product": "Thymulin",
+      "pageUrl": "https://limitlesslifenootropics.com/product/thymulin-10mg/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/175/1097/THYMULIN_10MG_.SINGLE.VIAL__09438.1765129877.png?c=1",
+      "selectorHints": [
+        "Thymulin",
+        "Thymulin 10mg"
+      ]
+    },
+    {
+      "id": "limitless-biotech-vip",
+      "platform": "Limitless Biotech",
+      "product": "VIP",
+      "pageUrl": "https://limitlesslifenootropics.com/product/vip/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/208/893/VIP.SINGLE.VIAL__77477.1762297282.png?c=1",
+      "selectorHints": [
+        "VIP",
+        "VIP"
+      ]
+    },
+    {
+      "id": "limitless-biotech-vip-spray",
+      "platform": "Limitless Biotech",
+      "product": "VIP",
+      "pageUrl": "https://limitlesslifenootropics.com/product/vip-spray/",
+      "enabled": true,
+      "imageUrl": "https://cdn11.bigcommerce.com/s-abfevmkahe/images/stencil/1280w/products/259/932/VIP_SPRAY_50MCG__99654.1762376638.png?c=1",
+      "selectorHints": [
+        "VIP",
+        "VIP Spray"
+      ]
+    },
+    {
+      "id": "biov8-5-amino-1mq",
+      "platform": "BIOV8",
+      "product": "5-Amino-1MQ",
+      "pageUrl": "https://biov8.com.au/products/5-amino-1mq",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Suplements_box_mockup_7.png?v=1740527211",
+      "selectorHints": [
+        "5-Amino-1MQ",
+        "5-Amino-1MQ"
+      ]
+    },
+    {
+      "id": "biov8-5-amino-1mq-copy",
+      "platform": "BIOV8",
+      "product": "5-Amino-1MQ",
+      "pageUrl": "https://biov8.com.au/products/5-amino-1mq-copy",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Suplements_box_mockup_7.png?v=1740527211",
+      "selectorHints": [
+        "5-Amino-1MQ",
+        "5-Amino-1MQ ICCC"
+      ]
+    },
+    {
+      "id": "biov8-aod-9604",
+      "platform": "BIOV8",
+      "product": "AOD-9604",
+      "pageUrl": "https://biov8.com.au/products/aod-9604",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Vaccine-Glass-Vial-Medical-B2ottle-Mockup-01.png?v=1740527620",
+      "selectorHints": [
+        "AOD-9604",
+        "AOD-9604"
+      ]
+    },
+    {
+      "id": "biov8-aod-9604-copy",
+      "platform": "BIOV8",
+      "product": "AOD-9604",
+      "pageUrl": "https://biov8.com.au/products/aod-9604-copy",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Vaccine-Glass-Vial-Medical-B2ottle-Mockup-01.png?v=1740527620",
+      "selectorHints": [
+        "AOD-9604",
+        "AOD-9604 ICCC"
+      ]
+    },
+    {
+      "id": "biov8-bpc-157",
+      "platform": "BIOV8",
+      "product": "BPC-157",
+      "pageUrl": "https://biov8.com.au/products/bpc-157",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Vaccine-Glass-Vial-Medical-Bottle-Mockup-01.png?v=1740533186",
+      "selectorHints": [
+        "BPC-157",
+        "BPC-157"
+      ]
+    },
+    {
+      "id": "biov8-bpc157-iccc",
+      "platform": "BIOV8",
+      "product": "BPC-157",
+      "pageUrl": "https://biov8.com.au/products/bpc157-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-03-13at1.30.58PM.png?v=1773372684",
+      "selectorHints": [
+        "BPC-157",
+        "BPC-157 ICCC"
+      ]
+    },
+    {
+      "id": "biov8-bpc-157-thymosin-beta-vial",
+      "platform": "BIOV8",
+      "product": "BPC-157",
+      "pageUrl": "https://biov8.com.au/products/bpc-157-thymosin-beta-vial",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/BPC-157_Thymosin_Beta-4_6ad2b47c-ec04-4a8e-8c69-1e1738815c51.png?v=1740534127",
+      "selectorHints": [
+        "BPC-157",
+        "BPC-157/Thymosin Beta-4 - Vial"
+      ]
+    },
+    {
+      "id": "biov8-bpc157-thymosin-beta-4-iccc",
+      "platform": "BIOV8",
+      "product": "BPC-157 + TB-500/Thymosin Beta-4",
+      "pageUrl": "https://biov8.com.au/products/bpc157-thymosin-beta-4-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-03-13at1.40.57PM.png?v=1773373294",
+      "selectorHints": [
+        "BPC-157 + TB-500/Thymosin Beta-4",
+        "BPC157/ Thymosin Beta 4 ICCC"
+      ]
+    },
+    {
+      "id": "biov8-pt-141",
+      "platform": "BIOV8",
+      "product": "PT-141",
+      "pageUrl": "https://biov8.com.au/products/pt-141",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Bremelanotide_PT-141.png?v=1740534301",
+      "selectorHints": [
+        "PT-141",
+        "Bremelanotide PT-141"
+      ]
+    },
+    {
+      "id": "biov8-cjc-1295-ipamorelin",
+      "platform": "BIOV8",
+      "product": "CJC-1295",
+      "pageUrl": "https://biov8.com.au/products/cjc-1295-ipamorelin",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/CJC-1295-_-Ipamorelin--2000-mcg_ml_-5ml-Vials-Primary.png?v=1741748975",
+      "selectorHints": [
+        "CJC-1295",
+        "CJC 1295/ Ipamorelin"
+      ]
+    },
+    {
+      "id": "biov8-cjc-1295-ipamorelin-copy",
+      "platform": "BIOV8",
+      "product": "CJC-1295",
+      "pageUrl": "https://biov8.com.au/products/cjc-1295-ipamorelin-copy",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/CJC-1295-_-Ipamorelin--2000-mcg_ml_-5ml-Vials-Primary.png?v=1741748975",
+      "selectorHints": [
+        "CJC-1295",
+        "CJC 1295/ Ipamorelin ICCC"
+      ]
+    },
+    {
+      "id": "biov8-cjc-1295",
+      "platform": "BIOV8",
+      "product": "CJC-1295",
+      "pageUrl": "https://biov8.com.au/products/cjc-1295",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/CJC-1295-Main.png?v=1740537354",
+      "selectorHints": [
+        "CJC-1295",
+        "CJC-1295"
+      ]
+    },
+    {
+      "id": "biov8-cjc-1295-ghrp-6",
+      "platform": "BIOV8",
+      "product": "CJC-1295",
+      "pageUrl": "https://biov8.com.au/products/cjc-1295-ghrp-6",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/CJC-1295-_-GHRP-6-Main.png?v=1747780430",
+      "selectorHints": [
+        "CJC-1295",
+        "CJC-1295 + GHRP-6"
+      ]
+    },
+    {
+      "id": "biov8-cjc-1295-ghrp2-1",
+      "platform": "BIOV8",
+      "product": "CJC-1295",
+      "pageUrl": "https://biov8.com.au/products/cjc-1295-ghrp2-1",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/CJC-1295--GHRP2-Main.png?v=1740538615",
+      "selectorHints": [
+        "CJC-1295",
+        "CJC-1295 + GHRP2 ICCC"
+      ]
+    },
+    {
+      "id": "biov8-cjc-1295-ghrp2",
+      "platform": "BIOV8",
+      "product": "CJC-1295",
+      "pageUrl": "https://biov8.com.au/products/cjc-1295-ghrp2",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/CJC-1295--GHRP2-Main.png?v=1740538615",
+      "selectorHints": [
+        "CJC-1295",
+        "CJC-1295/ GHRP2"
+      ]
+    },
+    {
+      "id": "biov8-cjc1295-ghrp6",
+      "platform": "BIOV8",
+      "product": "CJC-1295",
+      "pageUrl": "https://biov8.com.au/products/cjc1295-ghrp6",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-03-13at1.57.27PM.png?v=1773374279",
+      "selectorHints": [
+        "CJC-1295",
+        "CJC1295 + GHRP6 ICCC"
+      ]
+    },
+    {
+      "id": "biov8-cjc1295-iccc",
+      "platform": "BIOV8",
+      "product": "CJC-1295",
+      "pageUrl": "https://biov8.com.au/products/cjc1295-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-03-13at1.47.39PM.png?v=1773373688",
+      "selectorHints": [
+        "CJC-1295",
+        "CJC1295 ICCC"
+      ]
+    },
+    {
+      "id": "biov8-copper-peptide-ahk-cu-scalp-serum-30ml",
+      "platform": "BIOV8",
+      "product": "AHK-Cu",
+      "pageUrl": "https://biov8.com.au/products/copper-peptide-ahk-cu-scalp-serum-30ml",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/A1.png?v=1764041724",
+      "selectorHints": [
+        "AHK-Cu",
+        "Copper Peptide AHK-Cu Scalp Serum 30ml"
+      ]
+    },
+    {
+      "id": "biov8-copper-peptide-ghk-cu-face-serum-30-ml",
+      "platform": "BIOV8",
+      "product": "GHK-Cu",
+      "pageUrl": "https://biov8.com.au/products/copper-peptide-ghk-cu-face-serum-30-ml",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/g1.png?v=1764293426",
+      "selectorHints": [
+        "GHK-Cu",
+        "Copper Peptide GHK-CU Face Serum 30 ml"
+      ]
+    },
+    {
+      "id": "biov8-copper-peptide-hydrating-night-cream-50g",
+      "platform": "BIOV8",
+      "product": "GHK-Cu",
+      "pageUrl": "https://biov8.com.au/products/copper-peptide-hydrating-night-cream-50g",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/N1.png?v=1764226755",
+      "selectorHints": [
+        "GHK-Cu",
+        "Copper Peptide Hydrating Night Cream 50g"
+      ]
+    },
+    {
+      "id": "biov8-copper-peptide-moisturising-day-cream-50g",
+      "platform": "BIOV8",
+      "product": "GHK-Cu",
+      "pageUrl": "https://biov8.com.au/products/copper-peptide-moisturising-day-cream-50g",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/M1.png?v=1764226661",
+      "selectorHints": [
+        "GHK-Cu",
+        "Copper Peptide Moisturising Day Cream 50g"
+      ]
+    },
+    {
+      "id": "biov8-dihexa",
+      "platform": "BIOV8",
+      "product": "Dihexa",
+      "pageUrl": "https://biov8.com.au/products/dihexa",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/DIHEXA_Main.png?v=1740540095",
+      "selectorHints": [
+        "Dihexa",
+        "DIHEXA"
+      ]
+    },
+    {
+      "id": "biov8-dsip-1000mcg-x-3ml-vial",
+      "platform": "BIOV8",
+      "product": "DSIP",
+      "pageUrl": "https://biov8.com.au/products/dsip-1000mcg-x-3ml-vial",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/1_d4a9a07a-6766-4a05-868e-abbb44cfdf88.jpg?v=1770346561",
+      "selectorHints": [
+        "DSIP",
+        "DSIP (DELTA SLEEP INDUCING PEPTIDE) NASAL SPRAY"
+      ]
+    },
+    {
+      "id": "biov8-epitalon-10mg",
+      "platform": "BIOV8",
+      "product": "Epitalon",
+      "pageUrl": "https://biov8.com.au/products/epitalon-10mg",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Vial-MainMain_feed4b02-2f70-445b-8206-181b2a73cc2a.png?v=1740541423",
+      "selectorHints": [
+        "Epitalon",
+        "Epitalon"
+      ]
+    },
+    {
+      "id": "biov8-ghk-cu-injectable-iccc",
+      "platform": "BIOV8",
+      "product": "GHK-Cu",
+      "pageUrl": "https://biov8.com.au/products/ghk-cu-injectable-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/1-1_430b6128-ecaf-4c3b-b2ba-b9f18360a551.png?v=1775087815",
+      "selectorHints": [
+        "GHK-Cu",
+        "GHK-Cu Injectable ICCC"
+      ]
+    },
+    {
+      "id": "biov8-ghrp2",
+      "platform": "BIOV8",
+      "product": "GHRP-2",
+      "pageUrl": "https://biov8.com.au/products/ghrp2",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/GHRP-2-VialArtboard-1.png?v=1740541816",
+      "selectorHints": [
+        "GHRP-2",
+        "GHRP-2"
+      ]
+    },
+    {
+      "id": "biov8-ghrp6",
+      "platform": "BIOV8",
+      "product": "CJC-1295 + GHRP-6",
+      "pageUrl": "https://biov8.com.au/products/ghrp6",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Vial-MainArtboard-1.png?v=1740542067",
+      "selectorHints": [
+        "CJC-1295 + GHRP-6",
+        "GHRP-6"
+      ]
+    },
+    {
+      "id": "biov8-glutathione-200mg-ml",
+      "platform": "BIOV8",
+      "product": "Glutathione",
+      "pageUrl": "https://biov8.com.au/products/glutathione-200mg-ml",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Glutathione-Image.png?v=1740541522",
+      "selectorHints": [
+        "Glutathione",
+        "Glutathione 200mg/ml"
+      ]
+    },
+    {
+      "id": "biov8-glutathione-200mg-ml-formulae",
+      "platform": "BIOV8",
+      "product": "Glutathione",
+      "pageUrl": "https://biov8.com.au/products/glutathione-200mg-ml-formulae",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Glutathione-Image.png?v=1740541522",
+      "selectorHints": [
+        "Glutathione",
+        "Glutathione 200mg/ml ICCC"
+      ]
+    },
+    {
+      "id": "biov8-ipamorelin",
+      "platform": "BIOV8",
+      "product": "CJC-1295 + Ipamorelin",
+      "pageUrl": "https://biov8.com.au/products/ipamorelin",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Ipamorelin_Artboard-1.png?v=1740543409",
+      "selectorHints": [
+        "CJC-1295 + Ipamorelin",
+        "Ipamorelin"
+      ]
+    },
+    {
+      "id": "biov8-ipamorelin-iccc",
+      "platform": "BIOV8",
+      "product": "Ipamorelin",
+      "pageUrl": "https://biov8.com.au/products/ipamorelin-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-03-13at2.02.16PM.png?v=1773374558",
+      "selectorHints": [
+        "Ipamorelin",
+        "Ipamorelin ICCC"
+      ]
+    },
+    {
+      "id": "biov8-kpv-capsules-1",
+      "platform": "BIOV8",
+      "product": "KPV",
+      "pageUrl": "https://biov8.com.au/products/kpv-capsules-1",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/KPV.png?v=1743650246",
+      "selectorHints": [
+        "KPV",
+        "KPV Capsules - 60 capsules"
+      ]
+    },
+    {
+      "id": "biov8-larazotide-500mcg-60-caps",
+      "platform": "BIOV8",
+      "product": "Larazotide",
+      "pageUrl": "https://biov8.com.au/products/larazotide-500mcg-60-caps",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Larazotide-Main.png?v=1740544491",
+      "selectorHints": [
+        "Larazotide",
+        "Larazotide 500mcg 60 caps."
+      ]
+    },
+    {
+      "id": "biov8-mots-c-10mg-ml-x-10ml-vial",
+      "platform": "BIOV8",
+      "product": "MOTS-C",
+      "pageUrl": "https://biov8.com.au/products/mots-c-10mg-ml-x-10ml-vial",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/MOTS-CArtboard-1_a6f62940-c9a6-4fca-8c6f-d5aff54746a2.png?v=1740559130",
+      "selectorHints": [
+        "MOTS-C",
+        "MOTS-C"
+      ]
+    },
+    {
+      "id": "biov8-mots-c-iccc",
+      "platform": "BIOV8",
+      "product": "MOTS-C",
+      "pageUrl": "https://biov8.com.au/products/mots-c-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-03-13at2.07.07PM.png?v=1773374849",
+      "selectorHints": [
+        "MOTS-C",
+        "MOTS-C ICCC"
+      ]
+    },
+    {
+      "id": "biov8-rapid-repair",
+      "platform": "BIOV8",
+      "product": "Rapid Repair Peptide Bundle",
+      "pageUrl": "https://biov8.com.au/products/rapid-repair",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Rapid-Repair-Peptide-Bundle.png?v=1746508259",
+      "selectorHints": [
+        "Rapid Repair Peptide Bundle",
+        "Rapid Repair Peptide Bundle"
+      ]
+    },
+    {
+      "id": "biov8-rapid-repair-peptide-bundle-iccc",
+      "platform": "BIOV8",
+      "product": "Rapid Repair Peptide Bundle",
+      "pageUrl": "https://biov8.com.au/products/rapid-repair-peptide-bundle-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-03-13at2.26.59PM.png?v=1773376038",
+      "selectorHints": [
+        "Rapid Repair Peptide Bundle",
+        "Rapid Repair Peptide Bundle ICCC"
+      ]
+    },
+    {
+      "id": "biov8-rapid-repair-program",
+      "platform": "BIOV8",
+      "product": "Rapid Repair Program",
+      "pageUrl": "https://biov8.com.au/products/rapid-repair-program",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/RapidRepairProgram-8Week.png?v=1749522646",
+      "selectorHints": [
+        "Rapid Repair Program",
+        "Rapid Repair Program"
+      ]
+    },
+    {
+      "id": "biov8-selank",
+      "platform": "BIOV8",
+      "product": "Selank",
+      "pageUrl": "https://biov8.com.au/products/selank",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Selank.jpg?v=1740561221",
+      "selectorHints": [
+        "Selank",
+        "Selank"
+      ]
+    },
+    {
+      "id": "biov8-selank-iccc",
+      "platform": "BIOV8",
+      "product": "Selank",
+      "pageUrl": "https://biov8.com.au/products/selank-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-04-08at8.42.55AM.png?v=1775601805",
+      "selectorHints": [
+        "Selank",
+        "Selank ICCC"
+      ]
+    },
+    {
+      "id": "biov8-semax",
+      "platform": "BIOV8",
+      "product": "Semax",
+      "pageUrl": "https://biov8.com.au/products/semax",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Semax.jpg?v=1740561539",
+      "selectorHints": [
+        "Semax",
+        "Semax"
+      ]
+    },
+    {
+      "id": "biov8-semax-iccc",
+      "platform": "BIOV8",
+      "product": "Semax",
+      "pageUrl": "https://biov8.com.au/products/semax-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-04-08at8.48.09AM.png?v=1775602121",
+      "selectorHints": [
+        "Semax",
+        "Semax ICCC"
+      ]
+    },
+    {
+      "id": "biov8-slu-pp-332",
+      "platform": "BIOV8",
+      "product": "SLU-PP-332",
+      "pageUrl": "https://biov8.com.au/products/slu-pp-332",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/SLUPP32_61163909-5d54-4621-89b5-c949436d5f6c.png?v=1771819900",
+      "selectorHints": [
+        "SLU-PP-332",
+        "SLU-PP-332"
+      ]
+    },
+    {
+      "id": "biov8-slu-pp-332-iccc",
+      "platform": "BIOV8",
+      "product": "SLU-PP-332",
+      "pageUrl": "https://biov8.com.au/products/slu-pp-332-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-03-16at3.24.20PM.png?v=1773638679",
+      "selectorHints": [
+        "SLU-PP-332",
+        "SLU-PP-332 ICCC"
+      ]
+    },
+    {
+      "id": "biov8-tesamorelin",
+      "platform": "BIOV8",
+      "product": "Tesamorelin",
+      "pageUrl": "https://biov8.com.au/products/tesamorelin",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Tesamorelin-main.png?v=1741769300",
+      "selectorHints": [
+        "Tesamorelin",
+        "Tesamorelin"
+      ]
+    },
+    {
+      "id": "biov8-tesamorelin-iccc",
+      "platform": "BIOV8",
+      "product": "Tesamorelin",
+      "pageUrl": "https://biov8.com.au/products/tesamorelin-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-03-13at2.12.12PM.png?v=1773375157",
+      "selectorHints": [
+        "Tesamorelin",
+        "Tesamorelin ICCC"
+      ]
+    },
+    {
+      "id": "biov8-the-ultimate-repair-bundle",
+      "platform": "BIOV8",
+      "product": "The Ultimate Healing & Repair Bundle (Combo)",
+      "pageUrl": "https://biov8.com.au/products/the-ultimate-repair-bundle",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/The-Ultimate-Healing-_-Repair-Bundle.png?v=1746508227",
+      "selectorHints": [
+        "The Ultimate Healing & Repair Bundle (Combo)",
+        "The Ultimate Healing & Repair Bundle (Combo)"
+      ]
+    },
+    {
+      "id": "biov8-the-ultimate-healing-repair-bundle-individual-products",
+      "platform": "BIOV8",
+      "product": "The Ultimate Healing & Repair Bundle (Single Products)",
+      "pageUrl": "https://biov8.com.au/products/the-ultimate-healing-repair-bundle-individual-products",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/The-Ultimate-Healing-_-Repair-Bundle.png?v=1746508227",
+      "selectorHints": [
+        "The Ultimate Healing & Repair Bundle (Single Products)",
+        "The Ultimate Healing & Repair Bundle (Single Products)"
+      ]
+    },
+    {
+      "id": "biov8-the-ultimate-healing-repair-bundle-single-products-iccc",
+      "platform": "BIOV8",
+      "product": "The Ultimate Healing & Repair Bundle (Single Products)",
+      "pageUrl": "https://biov8.com.au/products/the-ultimate-healing-repair-bundle-single-products-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-03-13at2.30.09PM.png?v=1773376230",
+      "selectorHints": [
+        "The Ultimate Healing & Repair Bundle (Single Products)",
+        "The Ultimate Healing & Repair Bundle (Single Products) ICCC"
+      ]
+    },
+    {
+      "id": "biov8-thymosin-alpha-1",
+      "platform": "BIOV8",
+      "product": "Thymosin Alpha-1",
+      "pageUrl": "https://biov8.com.au/products/thymosin-alpha-1",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Thymosin-Alpha-1-primary.png?v=1740528498",
+      "selectorHints": [
+        "Thymosin Alpha-1",
+        "Thymosin Alpha 1"
+      ]
+    },
+    {
+      "id": "biov8-thymosin-alpha-1-iccc",
+      "platform": "BIOV8",
+      "product": "Thymosin Alpha-1",
+      "pageUrl": "https://biov8.com.au/products/thymosin-alpha-1-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-03-13at2.18.44PM.png?v=1773375546",
+      "selectorHints": [
+        "Thymosin Alpha-1",
+        "Thymosin Alpha 1 ICCC"
+      ]
+    },
+    {
+      "id": "biov8-tb500",
+      "platform": "BIOV8",
+      "product": "BPC-157 + TB-500/Thymosin Beta-4",
+      "pageUrl": "https://biov8.com.au/products/tb500",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Vial-MainArtboard-1_ec6751a8-5f5b-458a-8b7b-af49a5884bec.png?v=1747780284",
+      "selectorHints": [
+        "BPC-157 + TB-500/Thymosin Beta-4",
+        "Thymosin Beta 4"
+      ]
+    },
+    {
+      "id": "biov8-thymosin-beta-4-iccc",
+      "platform": "BIOV8",
+      "product": "Thymosin Beta-4",
+      "pageUrl": "https://biov8.com.au/products/thymosin-beta-4-iccc",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/Screenshot2026-03-13at2.23.02PM.png?v=1773375809",
+      "selectorHints": [
+        "Thymosin Beta-4",
+        "Thymosin Beta 4 ICCC"
+      ]
+    },
+    {
+      "id": "biov8-ultimate-healing-repair-program",
+      "platform": "BIOV8",
+      "product": "Ultimate Healing & Repair Program",
+      "pageUrl": "https://biov8.com.au/products/ultimate-healing-repair-program",
+      "enabled": true,
+      "imageUrl": "https://cdn.shopify.com/s/files/1/0403/0077/3532/files/4_-_Ultimate_Healing_Repair_Program_-_XL.png?v=1749522966",
+      "selectorHints": [
+        "Ultimate Healing & Repair Program",
+        "Ultimate Healing & Repair Program"
+      ]
     }
   ]
 }
