@@ -301,5 +301,3 @@ function RegulatoryRiskLink({
     </Link>
   );
 }
-
-function RegulatoryRiskLink({

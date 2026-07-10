@@ -62,7 +62,7 @@ export function normalizeHeatImpact(impact: number): number {
 export function calcPlatformDepthScore(record: ProductMonitorRecord): number {
   const levels = Object.values(record.platformPresence);
   if (levels.length === 0) return 0;
-  const sum = levels.reduce((acc, level) => acc + PRESENCE_WEIGHT[level], 0);
+  const sum = levels.reduce<number>((acc, level) => acc + PRESENCE_WEIGHT[level], 0);
   return clamp(sum / levels.length);
 }
 
