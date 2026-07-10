@@ -1,16 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { dbUnavailableResponse, requireApiKey } from "@/lib/api/auth";
-import { runRedditHeatScan } from "@/lib/social/heat-aggregator";
+import {
+  runRedditHeatScan,
+  type RedditHeatScanPhase,
+} from "@/lib/social/heat-aggregator";
 
-export async function POST(request: NextRequest) {
+export const maxDuration = 60;
+
+function parsePhase(value: string | null): RedditHeatScanPhase {
+  if (value === "start" || value === "complete" || value === "sync") {
+    return value;
+  }
+  return "sync";
+}
+
+async function handle(request: NextRequest) {
   const authErr = requireApiKey(request);
   if (authErr) return authErr;
   if (!isSupabaseConfigured()) return dbUnavailableResponse();
 
+  const phase = parsePhase(request.nextUrl.searchParams.get("phase"));
+
   try {
-    const result = await runRedditHeatScan();
-    const status = result.ok ? 200 : 503;
+    const result = await runRedditHeatScan(phase);
+    const status =
+      result.ok || phase === "start" || result.apifyStatus === "RUNNING"
+        ? 200
+        : 503;
     return NextResponse.json(result, { status });
   } catch (err) {
     return NextResponse.json(
@@ -20,6 +37,10 @@ export async function POST(request: NextRequest) {
   }
 }
 
+export async function POST(request: NextRequest) {
+  return handle(request);
+}
+
 export async function GET(request: NextRequest) {
-  return POST(request);
+  return handle(request);
 }

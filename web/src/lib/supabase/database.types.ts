@@ -328,6 +328,25 @@ export interface Database {
         };
         Update: Partial<Database["public"]["Tables"]["social_posts"]["Insert"]>;
       };
+      social_scan_jobs: {
+        Row: {
+          id: string;
+          apify_run_id: string;
+          dataset_id: string | null;
+          status: string;
+          error_message: string | null;
+          fetched: number | null;
+          upserted_posts: number | null;
+          signals_upserted: number | null;
+          started_at: string;
+          completed_at: string | null;
+        };
+        Insert: Omit<
+          Database["public"]["Tables"]["social_scan_jobs"]["Row"],
+          "started_at"
+        > & { started_at?: string };
+        Update: Partial<Database["public"]["Tables"]["social_scan_jobs"]["Insert"]>;
+      };
       sku_opportunities: {
         Row: {
           id: string;

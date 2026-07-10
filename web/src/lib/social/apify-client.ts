@@ -16,6 +16,8 @@ import {
 } from "./matcher";
 import type { NormalizedSocialPost, SocialFetchResult } from "./types";
 
+export type ApifyRunStatus = "RUNNING" | "SUCCEEDED" | "FAILED" | "ABORTED" | "TIMED-OUT";
+
 interface ApifyRedditItem {
   id?: string;
   parsedId?: string;
@@ -49,13 +51,19 @@ export function isApifyConfigured(): boolean {
   return Boolean(apifyToken());
 }
 
+function sourceCounts() {
+  return {
+    subredditPulls: Math.min(2, REDDIT_SUBREDDITS.length),
+    searchPulls: Math.min(2, REDDIT_SEARCH_TERMS.length),
+  };
+}
+
 function postDateLimit(): string {
   const d = new Date(Date.now() - SCAN_LOOKBACK_DAYS * 24 * 60 * 60 * 1000);
   return d.toISOString().slice(0, 10);
 }
 
 function buildStartUrls(): { url: string }[] {
-  // MVP: core peptide subs first; keyword search URLs are slower on Apify.
   const coreSubs = REDDIT_SUBREDDITS.slice(0, 2);
   const coreSearches = REDDIT_SEARCH_TERMS.slice(0, 2);
   const subs = coreSubs.map((sub) => ({
@@ -78,9 +86,7 @@ function buildActorInput() {
     skipUserPosts: true,
     skipCommunity: true,
     postDateLimit: postDateLimit(),
-    proxy: {
-      useApifyProxy: true,
-    },
+    proxy: { useApifyProxy: true },
   };
 }
 
@@ -102,27 +108,65 @@ async function apifyFetch(path: string, init?: RequestInit): Promise<Response> {
   });
 }
 
+export async function startApifyRedditRun(): Promise<{
+  runId: string;
+  datasetId: string;
+}> {
+  const actorId = apifyActorId();
+  const startRes = await apifyFetch(`/acts/${actorId}/runs`, {
+    method: "POST",
+    body: JSON.stringify(buildActorInput()),
+  });
+
+  if (!startRes.ok) {
+    const text = await startRes.text();
+    throw new Error(`Apify start failed (${startRes.status}): ${text.slice(0, 300)}`);
+  }
+
+  const startJson = (await startRes.json()) as {
+    data: { id: string; defaultDatasetId: string };
+  };
+
+  return {
+    runId: startJson.data.id,
+    datasetId: startJson.data.defaultDatasetId,
+  };
+}
+
+export async function getApifyRunStatus(runId: string): Promise<{
+  status: ApifyRunStatus;
+  datasetId: string | null;
+  statusMessage?: string;
+}> {
+  const res = await apifyFetch(`/actor-runs/${runId}`);
+  if (!res.ok) {
+    throw new Error(`Apify status check failed (${res.status})`);
+  }
+
+  const json = (await res.json()) as {
+    data: {
+      status: ApifyRunStatus;
+      statusMessage?: string;
+      defaultDatasetId: string | null;
+    };
+  };
+
+  return {
+    status: json.data.status,
+    datasetId: json.data.defaultDatasetId,
+    statusMessage: json.data.statusMessage,
+  };
+}
+
 async function waitForApifyRun(runId: string): Promise<string> {
   const deadline = Date.now() + APIFY_RUN_TIMEOUT_MS;
-  console.log(`[apify] waiting for run ${runId}…`);
 
   while (Date.now() < deadline) {
-    const res = await apifyFetch(`/actor-runs/${runId}`);
-    if (!res.ok) {
-      throw new Error(`Apify status check failed (${res.status})`);
-    }
-
-    const json = (await res.json()) as {
-      data: { status: string; statusMessage?: string; defaultDatasetId: string };
-    };
-    const { status, statusMessage, defaultDatasetId } = json.data;
-    console.log(`[apify] status=${status}`);
-
-    if (status === "SUCCEEDED") return defaultDatasetId;
+    const { status, datasetId, statusMessage } = await getApifyRunStatus(runId);
+    if (status === "SUCCEEDED" && datasetId) return datasetId;
     if (status === "FAILED" || status === "ABORTED" || status === "TIMED-OUT") {
       throw new Error(`Apify run ${status}: ${statusMessage ?? "unknown error"}`);
     }
-
     await new Promise((r) => setTimeout(r, 5000));
   }
 
@@ -200,9 +244,35 @@ function withinLookback(postedAt: string, days: number): boolean {
   return new Date(postedAt).getTime() >= cutoff;
 }
 
-/**
- * Fetch peptide-related Reddit posts via Apify (trudax/reddit-scraper-lite).
- */
+export function itemsToSocialFetchResult(
+  items: ApifyRedditItem[],
+  errors: string[] = [],
+): SocialFetchResult {
+  const byId = new Map<string, NormalizedSocialPost>();
+  for (const item of items) {
+    const post = normalizeApifyItem(item);
+    if (!post) continue;
+    if (!withinLookback(post.postedAt, SCAN_LOOKBACK_DAYS)) continue;
+    byId.set(post.externalId, post);
+  }
+
+  return {
+    posts: [...byId.values()],
+    configured: true,
+    provider: "apify",
+    sources: sourceCounts(),
+    errors,
+  };
+}
+
+export async function fetchApifyDatasetPosts(
+  datasetId: string,
+): Promise<SocialFetchResult> {
+  const items = await fetchDatasetItems(datasetId);
+  return itemsToSocialFetchResult(items);
+}
+
+/** Local CLI: start Apify and block until complete. */
 export async function fetchRedditPeptidePostsViaApify(): Promise<SocialFetchResult> {
   if (!isApifyConfigured()) {
     return {
@@ -215,48 +285,15 @@ export async function fetchRedditPeptidePostsViaApify(): Promise<SocialFetchResu
   }
 
   const errors: string[] = [];
-  const actorId = apifyActorId();
 
   try {
-    const startRes = await apifyFetch(`/acts/${actorId}/runs`, {
-      method: "POST",
-      body: JSON.stringify(buildActorInput()),
-    });
-
-    if (!startRes.ok) {
-      const text = await startRes.text();
-      throw new Error(`Apify start failed (${startRes.status}): ${text.slice(0, 300)}`);
-    }
-
-    const startJson = (await startRes.json()) as {
-      data: { id: string; defaultDatasetId: string };
-    };
-    const runId = startJson.data.id;
+    const { runId } = await startApifyRedditRun();
     console.log(`[apify] started run ${runId}`);
-
     const datasetId = await waitForApifyRun(runId);
     console.log(`[apify] succeeded, dataset=${datasetId}`);
     const items = await fetchDatasetItems(datasetId);
     console.log(`[apify] raw items=${items.length}`);
-
-    const byId = new Map<string, NormalizedSocialPost>();
-    for (const item of items) {
-      const post = normalizeApifyItem(item);
-      if (!post) continue;
-      if (!withinLookback(post.postedAt, SCAN_LOOKBACK_DAYS)) continue;
-      byId.set(post.externalId, post);
-    }
-
-    return {
-      posts: [...byId.values()],
-      configured: true,
-      provider: "apify",
-      sources: {
-        subredditPulls: Math.min(2, REDDIT_SUBREDDITS.length),
-        searchPulls: Math.min(2, REDDIT_SEARCH_TERMS.length),
-      },
-      errors,
-    };
+    return itemsToSocialFetchResult(items, errors);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     errors.push(msg);
@@ -264,10 +301,7 @@ export async function fetchRedditPeptidePostsViaApify(): Promise<SocialFetchResu
       posts: [],
       configured: true,
       provider: "apify",
-      sources: {
-        subredditPulls: Math.min(2, REDDIT_SUBREDDITS.length),
-        searchPulls: Math.min(2, REDDIT_SEARCH_TERMS.length),
-      },
+      sources: sourceCounts(),
       errors,
     };
   }

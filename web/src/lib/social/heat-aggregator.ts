@@ -1,11 +1,19 @@
 import { createServiceClient } from "@/lib/supabase/client";
 import type { Database } from "@/lib/supabase/database.types";
 import { HEAT_THRESHOLDS, PRODUCT_ALIASES } from "./config";
+import {
+  fetchApifyDatasetPosts,
+  getApifyRunStatus,
+  isApifyConfigured,
+  startApifyRedditRun,
+} from "./apify-client";
 import { fetchSocialPeptidePosts } from "./social-fetcher";
 import type { NormalizedSocialPost } from "./types";
 
 type SocialPostInsert = Database["public"]["Tables"]["social_posts"]["Insert"];
 type SignalInsert = Database["public"]["Tables"]["intelligence_signals"]["Insert"];
+
+export type RedditHeatScanPhase = "sync" | "start" | "complete";
 
 export interface ProductHeatStats {
   product: string;
@@ -207,7 +215,11 @@ function toRow(post: NormalizedSocialPost): SocialPostInsert {
 export interface RedditHeatScanResult {
   ok: boolean;
   configured: boolean;
+  phase?: RedditHeatScanPhase;
   provider?: "apify" | "reddit" | "none";
+  jobId?: string;
+  apifyRunId?: string;
+  apifyStatus?: string;
   fetched: number;
   upsertedPosts: number;
   signalsUpserted: number;
@@ -225,53 +237,16 @@ export interface RedditHeatScanResult {
   error?: string;
 }
 
-/**
- * Daily Reddit heat scan: fetch → upsert social_posts → promote heat signals.
- */
-export async function runRedditHeatScan(): Promise<RedditHeatScanResult> {
-  const { posts, configured, provider, sources, errors } =
-    await fetchSocialPeptidePosts();
-
-  if (!configured) {
-    return {
-      ok: false,
-      configured: false,
-      provider,
-      fetched: 0,
-      upsertedPosts: 0,
-      signalsUpserted: 0,
-      productStats: [],
-      sources,
-      errors,
-      error:
-        "Social fetch not configured. Set APIFY_API_TOKEN (recommended) or Reddit OAuth credentials.",
-    };
-  }
-
-  if (posts.length === 0) {
-    return {
-      ok: false,
-      configured: true,
-      provider,
-      fetched: 0,
-      upsertedPosts: 0,
-      signalsUpserted: 0,
-      productStats: [],
-      sources,
-      errors,
-      error:
-        provider === "apify"
-          ? `Apify run returned no peptide posts. ${errors[0] ?? "Check actor quota and Apify console."}`
-          : "Reddit OAuth returned no peptide posts.",
-    };
-  }
-
+async function ingestFetchedPosts(
+  posts: NormalizedSocialPost[],
+  provider: RedditHeatScanResult["provider"],
+  sources: { subredditPulls: number; searchPulls: number },
+): Promise<RedditHeatScanResult> {
   const supabase = createServiceClient();
 
   let upsertedPosts = 0;
   const rows = posts.map(toRow);
 
-  // Upsert in chunks
   for (let i = 0; i < rows.length; i += 50) {
     const chunk = rows.slice(i, i + 50);
     const { error } = await supabase.from("social_posts").upsert(chunk, {
@@ -281,7 +256,6 @@ export async function runRedditHeatScan(): Promise<RedditHeatScanResult> {
     upsertedPosts += chunk.length;
   }
 
-  // Re-read last 7d from DB so heat uses persisted + newly fetched set
   const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const { data: dbPosts, error: readErr } = await supabase
     .from("social_posts")
@@ -341,6 +315,276 @@ export async function runRedditHeatScan(): Promise<RedditHeatScanResult> {
     })),
     sources,
   };
+}
+
+/**
+ * Vercel Cron phase 1: start Apify run and return immediately.
+ */
+export async function runRedditHeatScanStart(): Promise<RedditHeatScanResult> {
+  if (!isApifyConfigured()) {
+    return {
+      ok: false,
+      configured: false,
+      phase: "start",
+      provider: "none",
+      fetched: 0,
+      upsertedPosts: 0,
+      signalsUpserted: 0,
+      productStats: [],
+      sources: { subredditPulls: 0, searchPulls: 0 },
+      error: "APIFY_API_TOKEN not set",
+    };
+  }
+
+  const supabase = createServiceClient();
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const { data: existing } = await supabase
+    .from("social_scan_jobs")
+    .select("*")
+    .eq("status", "running")
+    .gte("started_at", since)
+    .order("started_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (existing) {
+    return {
+      ok: true,
+      configured: true,
+      phase: "start",
+      provider: "apify",
+      jobId: existing.id,
+      apifyRunId: existing.apify_run_id,
+      apifyStatus: "RUNNING",
+      fetched: 0,
+      upsertedPosts: 0,
+      signalsUpserted: 0,
+      productStats: [],
+      sources: { subredditPulls: 2, searchPulls: 2 },
+      error: "Apify run already in progress",
+    };
+  }
+
+  const { runId, datasetId } = await startApifyRedditRun();
+  const jobId = `scan-${runId}`;
+  const { error } = await supabase.from("social_scan_jobs").insert({
+    id: jobId,
+    apify_run_id: runId,
+    dataset_id: datasetId,
+    status: "running",
+  });
+  if (error) throw error;
+
+  return {
+    ok: true,
+    configured: true,
+    phase: "start",
+    provider: "apify",
+    jobId,
+    apifyRunId: runId,
+    apifyStatus: "RUNNING",
+    fetched: 0,
+    upsertedPosts: 0,
+    signalsUpserted: 0,
+    productStats: [],
+    sources: { subredditPulls: 2, searchPulls: 2 },
+  };
+}
+
+/**
+ * Vercel Cron phase 2: poll Apify once, ingest when ready.
+ */
+export async function runRedditHeatScanComplete(): Promise<RedditHeatScanResult> {
+  if (!isApifyConfigured()) {
+    return {
+      ok: false,
+      configured: false,
+      phase: "complete",
+      provider: "none",
+      fetched: 0,
+      upsertedPosts: 0,
+      signalsUpserted: 0,
+      productStats: [],
+      sources: { subredditPulls: 0, searchPulls: 0 },
+      error: "APIFY_API_TOKEN not set",
+    };
+  }
+
+  const supabase = createServiceClient();
+  const since = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+  const { data: job, error: jobErr } = await supabase
+    .from("social_scan_jobs")
+    .select("*")
+    .eq("status", "running")
+    .gte("started_at", since)
+    .order("started_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (jobErr) throw jobErr;
+
+  if (!job) {
+    return {
+      ok: true,
+      configured: true,
+      phase: "complete",
+      provider: "apify",
+      fetched: 0,
+      upsertedPosts: 0,
+      signalsUpserted: 0,
+      productStats: [],
+      sources: { subredditPulls: 2, searchPulls: 2 },
+      error: "No running Apify job to complete",
+    };
+  }
+
+  const { status, datasetId, statusMessage } = await getApifyRunStatus(job.apify_run_id);
+
+  if (status === "RUNNING") {
+    return {
+      ok: true,
+      configured: true,
+      phase: "complete",
+      provider: "apify",
+      jobId: job.id,
+      apifyRunId: job.apify_run_id,
+      apifyStatus: status,
+      fetched: 0,
+      upsertedPosts: 0,
+      signalsUpserted: 0,
+      productStats: [],
+      sources: { subredditPulls: 2, searchPulls: 2 },
+      error: "Apify run still in progress — retry later",
+    };
+  }
+
+  if (status !== "SUCCEEDED" || !datasetId) {
+    await supabase
+      .from("social_scan_jobs")
+      .update({
+        status: "failed",
+        error_message: statusMessage ?? status,
+        completed_at: new Date().toISOString(),
+      })
+      .eq("id", job.id);
+
+    return {
+      ok: false,
+      configured: true,
+      phase: "complete",
+      provider: "apify",
+      jobId: job.id,
+      apifyRunId: job.apify_run_id,
+      apifyStatus: status,
+      fetched: 0,
+      upsertedPosts: 0,
+      signalsUpserted: 0,
+      productStats: [],
+      sources: { subredditPulls: 2, searchPulls: 2 },
+      error: `Apify run ${status}: ${statusMessage ?? "failed"}`,
+    };
+  }
+
+  const fetchResult = await fetchApifyDatasetPosts(datasetId);
+  if (fetchResult.posts.length === 0) {
+    await supabase
+      .from("social_scan_jobs")
+      .update({
+        status: "failed",
+        error_message: fetchResult.errors[0] ?? "No peptide posts matched",
+        completed_at: new Date().toISOString(),
+      })
+      .eq("id", job.id);
+
+    return {
+      ok: false,
+      configured: true,
+      phase: "complete",
+      provider: "apify",
+      jobId: job.id,
+      apifyRunId: job.apify_run_id,
+      apifyStatus: status,
+      fetched: 0,
+      upsertedPosts: 0,
+      signalsUpserted: 0,
+      productStats: [],
+      sources: fetchResult.sources,
+      errors: fetchResult.errors,
+      error: "Apify returned no peptide posts",
+    };
+  }
+
+  const result = await ingestFetchedPosts(
+    fetchResult.posts,
+    "apify",
+    fetchResult.sources,
+  );
+
+  await supabase
+    .from("social_scan_jobs")
+    .update({
+      status: "succeeded",
+      dataset_id: datasetId,
+      fetched: result.fetched,
+      upserted_posts: result.upsertedPosts,
+      signals_upserted: result.signalsUpserted,
+      completed_at: new Date().toISOString(),
+    })
+    .eq("id", job.id);
+
+  return { ...result, phase: "complete", jobId: job.id, apifyRunId: job.apify_run_id, apifyStatus: status };
+}
+
+/**
+ * Daily Reddit heat scan.
+ * - sync: local CLI — wait for Apify and ingest (slow)
+ * - start / complete: Vercel Cron — async two-phase
+ */
+export async function runRedditHeatScan(
+  phase: RedditHeatScanPhase = "sync",
+): Promise<RedditHeatScanResult> {
+  if (phase === "start") return runRedditHeatScanStart();
+  if (phase === "complete") return runRedditHeatScanComplete();
+
+  const { posts, configured, provider, sources, errors } =
+    await fetchSocialPeptidePosts();
+
+  if (!configured) {
+    return {
+      ok: false,
+      configured: false,
+      provider,
+      fetched: 0,
+      upsertedPosts: 0,
+      signalsUpserted: 0,
+      productStats: [],
+      sources,
+      errors,
+      error:
+        "Social fetch not configured. Set APIFY_API_TOKEN (recommended) or Reddit OAuth credentials.",
+    };
+  }
+
+  if (posts.length === 0) {
+    return {
+      ok: false,
+      configured: true,
+      phase: "sync",
+      provider,
+      fetched: 0,
+      upsertedPosts: 0,
+      signalsUpserted: 0,
+      productStats: [],
+      sources,
+      errors,
+      error:
+        provider === "apify"
+          ? `Apify run returned no peptide posts. ${errors[0] ?? "Check actor quota and Apify console."}`
+          : "Reddit OAuth returned no peptide posts.",
+    };
+  }
+
+  const result = await ingestFetchedPosts(posts, provider, sources);
+  return { ...result, phase: "sync" };
 }
 
 function hasAuFromRow(row: {

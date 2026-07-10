@@ -1,8 +1,12 @@
 {
   "crons": [
     {
-      "path": "/api/cron/reddit-heat-scan",
+      "path": "/api/cron/reddit-heat-scan?phase=start",
       "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/reddit-heat-scan?phase=complete",
+      "schedule": "0 3 * * *"
     }
   ]
 }

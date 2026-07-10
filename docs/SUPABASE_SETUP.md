@@ -135,24 +135,39 @@ curl -X POST http://localhost:3000/api/cron/reddit-heat-scan \
 
 ## 7c. Vercel 每日自动扫描（Cron）
 
-项目已包含 `web/vercel.json`，每天 **UTC 02:00**（北京时间 **10:00**）自动调用 `/api/cron/reddit-heat-scan`。
+Apify 抓取通常需要 **5–20 分钟**，超过 Vercel 单次函数时限，因此拆成两阶段：
+
+| 时间 (UTC) | 北京时间 | 路径 | 作用 |
+|---|---|---|---|
+| 02:00 | 10:00 | `?phase=start` | 启动 Apify，立即返回 |
+| 03:00 | 11:00 | `?phase=complete` | 检查结果并写入数据库 |
+
+配置见 `web/vercel.json`。还需在 Supabase 运行 `005_social_scan_jobs.sql`。
 
 在 Vercel → **Settings → Environment Variables** 确保已配置：
 
 | 变量 | 说明 |
 |------|------|
 | `APIFY_API_TOKEN` | Apify 抓取 Reddit |
-| `APIFY_REDDIT_ACTOR` | 可选，默认 `trudax/reddit-scraper-lite` |
-| `CRON_SECRET` | 长随机字符串；Vercel Cron 用此鉴权 |
+| `CRON_SECRET` | Vercel Cron 鉴权（长随机字符串） |
 | `SUPABASE_SERVICE_ROLE_KEY` 等 | 写库所需 |
 
-`CRON_SECRET` 与 `MCP_API_KEY` 可设为相同值；cron 路由两者任一即可通过鉴权。
-
-部署后可在 Vercel → **Settings → Cron Jobs** 查看任务状态。手动测试：
+手动测试（应 **几秒内** 返回，不会卡住）：
 
 ```bash
-curl "https://YOUR_DOMAIN/api/cron/reddit-heat-scan" \
+# 启动 Apify
+curl "https://YOUR_DOMAIN/api/cron/reddit-heat-scan?phase=start" \
   -H "Authorization: Bearer YOUR_CRON_SECRET"
+
+# 约 1 小时后收尾入库
+curl "https://YOUR_DOMAIN/api/cron/reddit-heat-scan?phase=complete" \
+  -H "Authorization: Bearer YOUR_CRON_SECRET"
+```
+
+本地完整同步扫描（会等 Apify 跑完，较慢）：
+
+```bash
+cd web && npm run reddit-heat-scan
 ```
 
 > Apify 按量计费（lite 版约 $0.004/结果）。每日扫描约 4 个 URL（MVP 范围），通常每次几十条结果。
