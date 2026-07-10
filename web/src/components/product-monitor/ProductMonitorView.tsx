@@ -1,35 +1,23 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { CommandCard } from "@/components/ui/CommandCard";
-import {
-  BlendStrip,
-  StrategySummary,
-} from "@/components/product-monitor/CompactSections";
+import { BlendStrip } from "@/components/product-monitor/CompactSections";
 import { ProductMonitorKpiBar } from "@/components/product-monitor/ProductMonitorKpiBar";
 import { ProductDecisionMatrix } from "@/components/product-monitor/ProductDecisionMatrix";
 import { ProductDetailPanel } from "@/components/product-monitor/ProductDetailPanel";
 import { useProductMonitor } from "@/components/providers/ProductMonitorProvider";
-import { useProductViability } from "@/hooks/useProductViability";
 
 export function ProductMonitorView() {
   const t = useTranslations("productMonitor");
   const { data, loading } = useProductMonitor();
-  const { index } = useProductViability();
   const { meta, records: productMonitorRecords } = data;
   const [selectedId, setSelectedId] = useState<string | null>(
     productMonitorRecords[0]?.id ?? null,
   );
 
   const selected = productMonitorRecords.find((r) => r.id === selectedId) ?? null;
-
-  const byActionTier = useMemo(() => {
-    const core = productMonitorRecords.filter((r) => index.get(r.id)?.actionTier === "core");
-    const trial = productMonitorRecords.filter((r) => index.get(r.id)?.actionTier === "trial");
-    const avoid = productMonitorRecords.filter((r) => index.get(r.id)?.actionTier === "avoid");
-    return { core, trial, avoid };
-  }, [productMonitorRecords, index]);
 
   if (loading && productMonitorRecords.length === 0) {
     return <div className="p-6 text-sm text-command-text-muted">Loading…</div>;
@@ -40,13 +28,6 @@ export function ProductMonitorView() {
       <ProductMonitorKpiBar records={productMonitorRecords} />
 
       <div className="space-y-4 p-4 md:p-6">
-        <StrategySummary
-          core={byActionTier.core}
-          trial={byActionTier.trial}
-          avoid={byActionTier.avoid}
-          budgets={meta.budgetSplit}
-        />
-
         <CommandCard title={t("title")}>
           <div id="decision-matrix" className="grid gap-4 lg:grid-cols-[1fr_300px]">
             <ProductDecisionMatrix
