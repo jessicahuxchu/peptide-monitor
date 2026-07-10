@@ -110,14 +110,3 @@ export interface MonitorMeta {
   sourceFiles: string[];
   budgetSplit: { core: string; trial: string; avoid: string };
 }
-
-export type CoverageBand = "high" | "medium" | "low" | "none";
-
-export interface CatalogEntry {
-  id: string;
-  product: string;
-  platformCoverage: number;
-  platformTotal: number;
-  coverageBand: CoverageBand;
-  decisionId?: string;
-}

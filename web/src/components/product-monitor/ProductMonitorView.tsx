@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { CommandCard } from "@/components/ui/CommandCard";
-import { CatalogOverview } from "@/components/product-monitor/CatalogOverview";
 import {
   BlendStrip,
   StrategySummary,
@@ -31,11 +30,6 @@ export function ProductMonitorView() {
     const avoid = productMonitorRecords.filter((r) => index.get(r.id)?.actionTier === "avoid");
     return { core, trial, avoid };
   }, [productMonitorRecords, index]);
-
-  const handleSelectDecision = (id: string) => {
-    setSelectedId(id);
-    document.getElementById("decision-matrix")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
 
   if (loading && productMonitorRecords.length === 0) {
     return <div className="p-6 text-sm text-command-text-muted">Loading…</div>;
@@ -76,8 +70,6 @@ export function ProductMonitorView() {
             <BlendStrip />
           </div>
         </CommandCard>
-
-        <CatalogOverview onSelectDecision={handleSelectDecision} />
 
         <p className="text-[10px] text-command-text-muted">
           {t("sources")}: {meta.sourceFiles.join(" · ")}

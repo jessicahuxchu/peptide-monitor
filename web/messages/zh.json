@@ -629,22 +629,6 @@
       "trend": "趋势",
       "regulatoryRef": "监管风险见",
       "regulatoryLink": "合规矩阵 →"
-    },
-    "catalog": {
-      "title": "平台全库目录",
-      "types": "种多肽",
-      "inDecision": "已纳入决策",
-      "searchPlaceholder": "搜索产品名称…",
-      "noResults": "无匹配产品",
-      "showAll": "展开全部 {count} 种",
-      "showLess": "收起",
-      "decision": "决策",
-      "bands": {
-        "high": "广覆盖 10–12",
-        "medium": "中等 5–9",
-        "low": "小众 1–4",
-        "none": "未上架"
-      }
     }
   },
   "finance": {

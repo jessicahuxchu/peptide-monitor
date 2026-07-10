@@ -621,22 +621,6 @@
       "trend": "Trend",
       "regulatoryRef": "Regulatory risk:",
       "regulatoryLink": "Compliance matrix →"
-    },
-    "catalog": {
-      "title": "Full Platform Catalog",
-      "types": "peptide types",
-      "inDecision": "in decision set",
-      "searchPlaceholder": "Search product name…",
-      "noResults": "No matching products",
-      "showAll": "Show all {count}",
-      "showLess": "Show less",
-      "decision": "Decision",
-      "bands": {
-        "high": "Wide 10–12",
-        "medium": "Medium 5–9",
-        "low": "Niche 1–4",
-        "none": "Not listed"
-      }
     }
   },
   "finance": {
