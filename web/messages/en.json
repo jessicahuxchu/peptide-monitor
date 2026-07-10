@@ -486,8 +486,8 @@
   },
   "productMonitor": {
     "title": "Product Analysis",
-    "subtitle": "12 AU benchmark platforms · 221 peptides · three-tier opportunity view",
-    "introShort": "Key conclusions above; 23 priority SKUs for detailed analysis below. Coverage ≠ sales.",
+    "subtitle": "12 AU benchmark platforms · 221 peptides · viability × opportunity views",
+    "introShort": "Viability integrates intel opportunity, platform coverage, and regulatory constraints to answer whether and how to pursue each SKU. Opportunity is a separate commercial lens.",
     "intro": "Multi-dimensional analysis from benchmark platform matrices (2026-06-22). Platform coverage reflects listing prevalence, not actual sales; combine with regulatory risk and customer demand before decisions.",
     "sources": "Sources",
     "tabs": {
@@ -496,14 +496,14 @@
       "strategy": "Conclusions"
     },
     "tiers": {
-      "core": "Core",
-      "trial": "Watch",
-      "avoid": "Avoid"
+      "core": "Core Focus",
+      "trial": "Trial Batch",
+      "avoid": "Order Only"
     },
     "kpi": {
-      "core": "Core SKUs",
-      "trial": "Trial SKUs",
-      "avoid": "Avoid",
+      "core": "Core Focus",
+      "trial": "Trial Batch",
+      "avoid": "Order Only",
       "avgCoverage": "Avg Coverage",
       "highRisk": "High Reg. Risk",
       "benchmarkPlatforms": "Platforms",
@@ -518,7 +518,7 @@
       "product": "Product",
       "productIntro": "Product Intro",
       "tier": "Tier",
-      "score": "Score",
+      "score": "Composite",
       "coverage": "Coverage",
       "conclusion": "Conclusion",
       "spec": "Consensus Spec",
@@ -540,6 +540,8 @@
     "coverage": {
       "title": "Platform Coverage",
       "platformsListed": "platforms listed",
+      "legendTitle": "Platform coverage legend",
+      "legendIntro": "Each segment is one benchmark platform. Shade indicates listing depth:",
       "level": {
         "0": "Not listed",
         "1": "Weak (1 SKU)",
@@ -580,22 +582,41 @@
       "regulatory": "AU Regulatory Notes"
     },
     "strategy": {
-      "title": "Analysis Summary",
-      "coreTitle": "Tier 1 · Core Opportunities",
-      "trialTitle": "Tier 2 · Watch List",
-      "avoidTitle": "Tier 3 · Avoid"
+      "title": "Viability Summary",
+      "coreTitle": "Tier 1 · Core Focus",
+      "trialTitle": "Tier 2 · Trial Batch",
+      "avoidTitle": "Tier 3 · Order Only"
+    },
+    "viability": {
+      "score": "Viability",
+      "topSku": "Top Viable",
+      "topScore": "Viability",
+      "formula": "Dimensions",
+      "formulaShort": "Intel × Coverage × Reg × Ops",
+      "layerHint": "Viability answers whether and how to pursue a SKU — combining intel opportunity, social heat, platform depth, and regulatory constraints. Opportunity is a separate commercial lens and is not double-counted here.",
+      "breakdownTitle": "Viability Breakdown",
+      "marketSignal": "Market Signal",
+      "platformValidation": "Platform Validation",
+      "operationalFit": "Operational Fit",
+      "regulatoryAllowance": "Regulatory Room",
+      "opportunityRef": "Opportunity ref.",
+      "action": {
+        "core": "Core focus — deep raw-material stock, support singles and blends",
+        "trial": "Trial batch — validate demand before scaling",
+        "avoid": "Order only — produce on demand, no proactive stock"
+      }
     },
     "opportunity": {
       "title": "SKU Opportunity Ranking",
-      "subtitle": "Decision layer output — demand momentum, price gap, and compliance constraints",
-      "layerHint": "Opportunity score is driven by intel-layer variables. AU regulatory risk references the compliance matrix — click to drill down.",
+      "subtitle": "Independent commercial lens — demand momentum, price gap, compliance",
+      "layerHint": "Opportunity is an independent commercial angle. Use alongside viability — it does not replace the feasibility conclusion.",
       "topSku": "Top SKU",
       "topScore": "Opportunity",
       "formula": "Formula",
       "formulaShort": "Demand × Price × Compliance",
       "product": "Product",
-      "score": "Score",
-      "demand": "Demand",
+      "score": "Opportunity",
+      "demand": "Opp. Demand",
       "priceGap": "Price gap",
       "trend": "Trend",
       "regulatoryRef": "Regulatory risk:",

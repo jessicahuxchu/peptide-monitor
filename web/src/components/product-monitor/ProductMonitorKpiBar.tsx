@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useProductMonitor } from "@/components/providers/ProductMonitorProvider";
-import { summarizeByTier } from "@/lib/product-monitor/scoring";
+import { useProductViability } from "@/hooks/useProductViability";
 import type { ProductMonitorRecord } from "@/lib/product-monitor/types";
 
 interface ProductMonitorKpiBarProps {
@@ -12,7 +12,7 @@ interface ProductMonitorKpiBarProps {
 export function ProductMonitorKpiBar({ records }: ProductMonitorKpiBarProps) {
   const t = useTranslations("productMonitor.kpi");
   const { data } = useProductMonitor();
-  const summary = summarizeByTier(records);
+  const { summary } = useProductViability();
 
   const items = [
     { label: t("core"), value: summary.core, accent: "text-command-teal-bright" },

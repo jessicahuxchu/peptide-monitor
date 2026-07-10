@@ -8,14 +8,14 @@ import { PlatformCoverageMap } from "@/components/product-monitor/PlatformCovera
 import { SpecConsensusPanel } from "@/components/product-monitor/BlendCompositionView";
 import { TierBadge } from "@/components/product-monitor/TierBadge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { useDbResource } from "@/hooks/useDbResource";
+import { useProductViability } from "@/hooks/useProductViability";
 import {
   getBlendsForProductFromData,
   useProductMonitor,
 } from "@/components/providers/ProductMonitorProvider";
-import { regulatoryEntries as fallbackRegulatory } from "@/lib/supply-chain/seed-data";
 import { getProductRegulatoryRisk } from "@/lib/regulatory/matrix";
 import type { ProductMonitorRecord } from "@/lib/product-monitor/types";
+import { cn } from "@/lib/utils";
 
 const riskVariant = {
   low: "optimal" as const,
@@ -30,12 +30,12 @@ interface ProductDetailPanelProps {
 
 export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps) {
   const t = useTranslations("productMonitor");
+  const tVia = useTranslations("productMonitor.viability");
   const locale = useLocale();
   const { data } = useProductMonitor();
-  const { data: regulatoryEntries } = useDbResource(
-    "/api/regulatory",
-    fallbackRegulatory,
-  );
+  const { index, skuByProduct, regulatoryEntries } = useProductViability();
+  const assessment = index.get(record.id);
+  const sku = skuByProduct.get(record.product.toLowerCase());
   const matrixRisk = getProductRegulatoryRisk(record.product, regulatoryEntries);
   const blends = getBlendsForProductFromData(data, record.id);
   const [showPlatforms, setShowPlatforms] = useState(false);
@@ -45,23 +45,28 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
       : record.productIntro.en
     : undefined;
 
+  const actionTier = assessment?.actionTier ?? record.tier;
+  const viabilityScore = assessment?.viabilityScore ?? record.compositeScore;
+  const breakdown = assessment?.breakdown;
+
   return (
     <aside className="flex max-h-[70vh] flex-col rounded-xl border border-command-border bg-command-card lg:max-h-none lg:h-full">
       <header className="flex items-start justify-between gap-3 border-b border-command-border p-3">
         <div>
           <div className="mb-1.5 flex flex-wrap items-center gap-2">
-            <TierBadge tier={record.tier} />
+            <TierBadge tier={actionTier} />
             <Link href="/regulatory" className="inline-flex">
               <StatusBadge variant={riskVariant[matrixRisk]}>
                 {t(`risk.${matrixRisk}`)}
               </StatusBadge>
             </Link>
             <span className="text-lg font-bold tabular-nums text-command-teal-bright">
-              {record.compositeScore}
+              {viabilityScore}
             </span>
           </div>
           <h3 className="text-sm font-semibold text-command-text">{record.product}</h3>
           <p className="text-[11px] text-command-text-muted">{record.primarySpec}</p>
+          <p className="mt-1 text-[10px] text-command-text-muted">{tVia(`action.${actionTier}`)}</p>
         </div>
         <button
           type="button"
@@ -74,6 +79,31 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
       </header>
 
       <div className="flex-1 space-y-4 overflow-y-auto p-3">
+        {breakdown && (
+          <section>
+            <h4 className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
+              {tVia("breakdownTitle")}
+            </h4>
+            <dl className="space-y-1.5">
+              <BreakdownRow label={tVia("marketSignal")} value={breakdown.marketSignal} />
+              <BreakdownRow
+                label={tVia("platformValidation")}
+                value={breakdown.platformValidation}
+              />
+              <BreakdownRow label={tVia("operationalFit")} value={breakdown.operationalFit} />
+              <BreakdownRow
+                label={tVia("regulatoryAllowance")}
+                value={breakdown.regulatoryAllowance}
+              />
+            </dl>
+            {sku && (
+              <p className="mt-2 text-[10px] text-command-text-muted">
+                {tVia("opportunityRef")}: {sku.opportunityScore}
+              </p>
+            )}
+          </section>
+        )}
+
         <section>
           <h4 className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
             {t("detail.productIntro")}
@@ -147,6 +177,24 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
         )}
       </div>
     </aside>
+  );
+}
+
+function BreakdownRow({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="flex items-center gap-2 text-[11px]">
+      <span className="w-24 shrink-0 text-command-text-muted">{label}</span>
+      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-command-border/60">
+        <div
+          className={cn(
+            "h-full rounded-full",
+            value >= 65 ? "bg-command-green/70" : value >= 42 ? "bg-command-orange/70" : "bg-command-text-muted/50",
+          )}
+          style={{ width: `${value}%` }}
+        />
+      </div>
+      <span className="w-6 text-right tabular-nums text-command-text-secondary">{value}</span>
+    </div>
   );
 }
 

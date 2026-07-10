@@ -5,15 +5,11 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Sparkline } from "@/components/ui/Sparkline";
+import { CoverageLegendHelp } from "@/components/product-monitor/CoverageLegendHelp";
 import { useProductMonitor } from "@/components/providers/ProductMonitorProvider";
-import { useDbResource } from "@/hooks/useDbResource";
-import {
-  regulatoryEntries as fallbackRegulatory,
-  skuOpportunities as fallbackSku,
-} from "@/lib/supply-chain/seed-data";
+import { useProductViability } from "@/hooks/useProductViability";
 import { getProductRegulatoryRisk } from "@/lib/regulatory/matrix";
 import type { InventoryTier, ProductMonitorRecord } from "@/lib/product-monitor/types";
-import type { SkuOpportunity } from "@/lib/supply-chain/seed-data";
 import { TrendingDown, TrendingUp, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -37,11 +33,6 @@ const strategyTitleKey: Record<InventoryTier, "coreTitle" | "trialTitle" | "avoi
 
 const trendIcon = { up: TrendingUp, down: TrendingDown, stable: Minus };
 
-const intelligenceFallback = {
-  signals: [],
-  skuOpportunities: fallbackSku,
-};
-
 function introForLocale(
   intro: ProductMonitorRecord["productIntro"],
   locale: string,
@@ -63,49 +54,27 @@ export function ProductDecisionMatrix({
 }: ProductDecisionMatrixProps) {
   const t = useTranslations("productMonitor");
   const tOpp = useTranslations("productMonitor.opportunity");
+  const tVia = useTranslations("productMonitor.viability");
   const locale = useLocale();
-  const { data: intel } = useDbResource("/api/intelligence", intelligenceFallback);
-  const { data: regulatoryEntries } = useDbResource(
-    "/api/regulatory",
-    fallbackRegulatory,
-  );
+  const { index, skuByProduct, regulatoryEntries } = useProductViability();
   const [tierFilter, setTierFilter] = useState<InventoryTier | "all">("all");
-
-  const skuByProduct = useMemo(() => {
-    const map = new Map<string, SkuOpportunity>();
-    for (const sku of intel.skuOpportunities) {
-      map.set(sku.product.toLowerCase(), sku);
-    }
-    return map;
-  }, [intel.skuOpportunities]);
 
   const filtered = useMemo(() => {
     const list =
-      tierFilter === "all" ? records : records.filter((r) => r.tier === tierFilter);
-    return [...list].sort((a, b) => b.compositeScore - a.compositeScore);
-  }, [records, tierFilter]);
-
-  const topOpportunity = useMemo(
-    () =>
-      [...intel.skuOpportunities].sort(
-        (a, b) => b.opportunityScore - a.opportunityScore,
-      )[0],
-    [intel.skuOpportunities],
-  );
+      tierFilter === "all"
+        ? records
+        : records.filter((r) => index.get(r.id)?.actionTier === tierFilter);
+    return [...list].sort((a, b) => {
+      const av = index.get(a.id)?.viabilityScore ?? 0;
+      const bv = index.get(b.id)?.viabilityScore ?? 0;
+      return bv - av;
+    });
+  }, [records, tierFilter, index]);
 
   const tiers: (InventoryTier | "all")[] = ["all", "core", "trial", "avoid"];
 
   return (
     <div>
-      <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <Kpi label={tOpp("topSku")} value={topOpportunity?.product ?? "—"} accent />
-        <Kpi
-          label={tOpp("topScore")}
-          value={String(topOpportunity?.opportunityScore ?? "—")}
-        />
-        <Kpi label={tOpp("formula")} value={tOpp("formulaShort")} />
-      </div>
-
       <div className="mb-4 flex flex-wrap gap-2">
         {tiers.map((tier) => (
           <button
@@ -131,22 +100,30 @@ export function ProductDecisionMatrix({
               <th className="pb-3 pr-3">{t("table.product")}</th>
               <th className="pb-3 pr-3">{t("table.productIntro")}</th>
               <th className="pb-3 pr-3">{t("table.conclusion")}</th>
-              <th className="pb-3 pr-3">{t("table.score")}</th>
+              <th className="pb-3 pr-3">{tVia("score")}</th>
               <th className="pb-3 pr-3">{tOpp("score")}</th>
               <th className="pb-3 pr-3">{tOpp("demand")}</th>
               <th className="pb-3 pr-3">{tOpp("priceGap")}</th>
-              <th className="pb-3 pr-3">{t("table.coverage")}</th>
+              <th className="pb-3 pr-3">
+                <span className="inline-flex items-center gap-1">
+                  {t("table.coverage")}
+                  <CoverageLegendHelp />
+                </span>
+              </th>
               <th className="pb-3 pr-3">{tOpp("trend")}</th>
               <th className="pb-3">{t("table.auRisk")}</th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((record) => {
+              const assessment = index.get(record.id);
               const sku = skuByProduct.get(record.product.toLowerCase());
               const gap =
                 sku != null ? sku.localPrice - sku.competitivePrice : null;
               const TrendIcon = sku ? trendIcon[sku.trend] : null;
               const intro = introForLocale(record.productIntro, locale);
+              const viabilityScore = assessment?.viabilityScore ?? 0;
+              const actionTier = assessment?.actionTier ?? record.tier;
 
               return (
                 <tr
@@ -174,20 +151,20 @@ export function ProductDecisionMatrix({
                     )}
                   </td>
                   <td className="py-3 pr-3">
-                    <StrategyTierBadge tier={record.tier} />
+                    <StrategyTierBadge tier={actionTier} />
                   </td>
                   <td className="py-3 pr-3">
                     <span
                       className={cn(
                         "text-lg font-bold tabular-nums",
-                        record.compositeScore >= 70
+                        viabilityScore >= 65
                           ? "text-command-green"
-                          : record.compositeScore >= 45
+                          : viabilityScore >= 42
                             ? "text-command-orange"
                             : "text-command-text-secondary",
                       )}
                     >
-                      {record.compositeScore}
+                      {viabilityScore}
                     </span>
                   </td>
                   <td className="py-3 pr-3">
@@ -276,47 +253,6 @@ function StrategyTierBadge({ tier }: { tier: InventoryTier }) {
   );
 }
 
-function Kpi({
-  label,
-  value,
-  accent,
-}: {
-  label: string;
-  value: string;
-  accent?: boolean;
-}) {
-  return (
-    <div className="rounded-lg border border-command-border bg-command-card-elevated p-3">
-      <p className="text-[10px] text-command-text-muted">{label}</p>
-      <p
-        className={cn(
-          "mt-0.5 text-lg font-bold tabular-nums",
-          accent ? "text-command-teal-bright" : "text-command-text",
-        )}
-      >
-        {value}
-      </p>
-    </div>
-  );
-}
-
-function RegulatoryRiskLink({
-  product,
-  entries,
-  label,
-}: {
-  product: string;
-  entries: typeof fallbackRegulatory;
-  label: string;
-}) {
-  const risk = getProductRegulatoryRisk(product, entries);
-  return (
-    <Link href="/regulatory" className="inline-flex" title={product}>
-      <StatusBadge variant={riskVariant[risk]}>{label}</StatusBadge>
-    </Link>
-  );
-}
-
 function CoverageMiniBar({ record }: { record: ProductMonitorRecord }) {
   const { data } = useProductMonitor();
   const platforms = data.platforms;
@@ -348,3 +284,22 @@ function CoverageMiniBar({ record }: { record: ProductMonitorRecord }) {
     </div>
   );
 }
+
+function RegulatoryRiskLink({
+  product,
+  entries,
+  label,
+}: {
+  product: string;
+  entries: Parameters<typeof getProductRegulatoryRisk>[1];
+  label: string;
+}) {
+  const risk = getProductRegulatoryRisk(product, entries);
+  return (
+    <Link href="/regulatory" className="inline-flex" title={product}>
+      <StatusBadge variant={riskVariant[risk]}>{label}</StatusBadge>
+    </Link>
+  );
+}
+
+function RegulatoryRiskLink({

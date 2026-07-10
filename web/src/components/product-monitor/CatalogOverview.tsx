@@ -45,8 +45,6 @@ export function CatalogOverview({ onSelectDecision }: CatalogOverviewProps) {
     return map;
   }, [filtered]);
 
-  const decisionInCatalog = catalogEntries.filter((e) => e.decisionId).length;
-
   const toggleBand = (band: CoverageBand) => {
     setExpandedBands((prev) => {
       const next = new Set(prev);
@@ -70,9 +68,6 @@ export function CatalogOverview({ onSelectDecision }: CatalogOverviewProps) {
             <ChevronRight className="h-4 w-4 shrink-0 text-command-text-muted" />
           )}
           <span className="text-sm font-medium text-command-text">{t("title")}</span>
-          <span className="text-xs text-command-text-muted">
-            {catalogEntries.length} {t("types")} · {decisionInCatalog} {t("inDecision")}
-          </span>
         </div>
         <div className="hidden flex-wrap gap-2 sm:flex">
           {BAND_ORDER.map((band) => (

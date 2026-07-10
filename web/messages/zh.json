@@ -494,8 +494,8 @@
   },
   "productMonitor": {
     "title": "产品分析",
-    "subtitle": "澳洲 12 个对标平台 · 221 种多肽 · 三档机会评估",
-    "introShort": "上方为关键结论指标；下方 23 个重点 SKU 可展开分析。覆盖率 ≠ 销量。",
+    "subtitle": "澳洲 12 个对标平台 · 221 种多肽 · 综合评判 × 机会视角",
+    "introShort": "综合评判整合情报机会、平台覆盖与监管约束，输出品类可行性及落地方式；机会分为独立商业视角。",
     "intro": "基于对标平台产品矩阵的多维度分析（2026-06-22）。平台覆盖率反映上架普遍程度，不等同于真实销量；决策前须结合监管风险与客户需求。",
     "sources": "数据来源",
     "tabs": {
@@ -504,14 +504,14 @@
       "strategy": "分析结论"
     },
     "tiers": {
-      "core": "核心品类",
-      "trial": "观察品类",
-      "avoid": "不建议"
+      "core": "核心布局",
+      "trial": "小批量试销",
+      "avoid": "订单制"
     },
     "kpi": {
-      "core": "核心 SKU",
-      "trial": "试销 SKU",
-      "avoid": "不建议",
+      "core": "核心布局",
+      "trial": "小批量试销",
+      "avoid": "订单制",
       "avgCoverage": "平均覆盖率",
       "highRisk": "高监管风险",
       "benchmarkPlatforms": "对标平台",
@@ -526,7 +526,7 @@
       "product": "产品",
       "productIntro": "产品介绍",
       "tier": "档位",
-      "score": "综合分",
+      "score": "综合分（策略）",
       "coverage": "平台覆盖",
       "conclusion": "分析结论",
       "spec": "共识规格",
@@ -548,6 +548,8 @@
     "coverage": {
       "title": "跨平台覆盖率",
       "platformsListed": "平台上架",
+      "legendTitle": "平台覆盖图例",
+      "legendIntro": "每段代表一个对标平台，颜色深浅表示上架深度：",
       "level": {
         "0": "未上架",
         "1": "弱（1 SKU）",
@@ -588,22 +590,41 @@
       "regulatory": "澳洲监管备注"
     },
     "strategy": {
-      "title": "分析结论摘要",
-      "coreTitle": "第一梯队 · 核心机会",
-      "trialTitle": "第二梯队 · 观察品类",
+      "title": "可行性结论摘要",
+      "coreTitle": "第一梯队 · 核心布局",
+      "trialTitle": "第二梯队 · 小批量试销",
       "avoidTitle": "第三梯队 · 订单制"
+    },
+    "viability": {
+      "score": "综合评判",
+      "topSku": "最高可行",
+      "topScore": "综合评判",
+      "formula": "评判维度",
+      "formulaShort": "情报 × 覆盖 × 监管 × 运营",
+      "layerHint": "综合评判回答「该不该做、怎么做」——整合情报机会分、社媒热度、平台覆盖深度与监管约束；机会分为独立商业视角，不参与本列计算。",
+      "breakdownTitle": "评判拆解",
+      "marketSignal": "市场信号",
+      "platformValidation": "平台验证",
+      "operationalFit": "运营可行",
+      "regulatoryAllowance": "合规空间",
+      "opportunityRef": "参考机会分",
+      "action": {
+        "core": "建议核心布局 — 深备母库存，支持单品与组合分装",
+        "trial": "建议小批量试销 — 验证需求后再加大投入",
+        "avoid": "建议订单制 — 按单排产，不主动备货"
+      }
     },
     "opportunity": {
       "title": "SKU 机会排行",
-      "subtitle": "决策层输出 — 综合需求动量、价格差与监管约束",
-      "layerHint": "机会分由情报层变量驱动；AU 监管风险引用合规矩阵，点击可 drill 至监管页。",
+      "subtitle": "独立商业视角 — 需求动量、价格差与合规约束",
+      "layerHint": "机会分是独立评判角度，反映商业拉力；与综合评判并列参考，不直接替代可行性结论。",
       "topSku": "最高机会",
       "topScore": "机会分",
       "formula": "评分公式",
       "formulaShort": "需求 × 价格 × 合规",
       "product": "产品",
-      "score": "机会分",
-      "demand": "需求",
+      "score": "机会分（商业）",
+      "demand": "需求动量",
       "priceGap": "价差",
       "trend": "趋势",
       "regulatoryRef": "监管风险见",
