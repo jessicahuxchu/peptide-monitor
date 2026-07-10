@@ -132,9 +132,30 @@ curl -X POST http://localhost:3000/api/cron/reddit-heat-scan \
 - Apify 抓取原始帖 → 写入 `social_posts`  
 - 内部核对：`/zh/social-posts`（不进导航）  
 - 过门槛热度 → `intelligence_signals`（`source=social`）→ `/intelligence`  
-- 建议 **每天 1 次** 调度 `reddit-heat-scan`
 
-> Apify 按量计费（lite 版约 $0.004/结果）。每日扫描约 9 个 URL，通常每次几十到几百条结果。
+## 7c. Vercel 每日自动扫描（Cron）
+
+项目已包含 `web/vercel.json`，每天 **UTC 02:00**（北京时间 **10:00**）自动调用 `/api/cron/reddit-heat-scan`。
+
+在 Vercel → **Settings → Environment Variables** 确保已配置：
+
+| 变量 | 说明 |
+|------|------|
+| `APIFY_API_TOKEN` | Apify 抓取 Reddit |
+| `APIFY_REDDIT_ACTOR` | 可选，默认 `trudax/reddit-scraper-lite` |
+| `CRON_SECRET` | 长随机字符串；Vercel Cron 用此鉴权 |
+| `SUPABASE_SERVICE_ROLE_KEY` 等 | 写库所需 |
+
+`CRON_SECRET` 与 `MCP_API_KEY` 可设为相同值；cron 路由两者任一即可通过鉴权。
+
+部署后可在 Vercel → **Settings → Cron Jobs** 查看任务状态。手动测试：
+
+```bash
+curl "https://YOUR_DOMAIN/api/cron/reddit-heat-scan" \
+  -H "Authorization: Bearer YOUR_CRON_SECRET"
+```
+
+> Apify 按量计费（lite 版约 $0.004/结果）。每日扫描约 4 个 URL（MVP 范围），通常每次几十条结果。
 
 ## API Routes
 
@@ -147,7 +168,7 @@ curl -X POST http://localhost:3000/api/cron/reddit-heat-scan \
 | GET | `/api/risk` | — | 风险信号 |
 | GET | `/api/intelligence` | — | 情报 + SKU 机会 |
 | GET | `/api/social-posts` | — | Reddit 原始帖（内部） |
-| GET/POST | `/api/cron/reddit-heat-scan` | MCP_API_KEY | 每日 Reddit 热度扫描 |
+| GET/POST | `/api/cron/reddit-heat-scan` | MCP_API_KEY 或 CRON_SECRET | 每日 Reddit 热度扫描（Vercel Cron） |
 | GET | `/api/finance` | — | 销售记录 |
 | GET | `/api/product-monitor` | — | 产品监控全量 |
 | GET | `/api/relations` | — | 供应商 + 客户需求 |
