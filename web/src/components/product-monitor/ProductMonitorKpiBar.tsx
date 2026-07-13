@@ -12,12 +12,13 @@ interface ProductMonitorKpiBarProps {
 export function ProductMonitorKpiBar({ records }: ProductMonitorKpiBarProps) {
   const t = useTranslations("productMonitor.kpi");
   const { data } = useProductMonitor();
-  const { summary } = useProductViability();
+  const { summary, ready } = useProductViability();
 
+  const dash = "—";
   const items = [
-    { label: t("core"), value: summary.core, accent: "text-command-teal-bright" },
-    { label: t("trial"), value: summary.trial, accent: "text-command-orange" },
-    { label: t("avoid"), value: summary.avoid, accent: "text-command-red" },
+    { label: t("core"), value: ready ? summary.core : dash, accent: "text-command-teal-bright" },
+    { label: t("trial"), value: ready ? summary.trial : dash, accent: "text-command-orange" },
+    { label: t("avoid"), value: ready ? summary.avoid : dash, accent: "text-command-red" },
     {
       label: t("avgCoverage"),
       value: `${summary.avgCoverage}%`,

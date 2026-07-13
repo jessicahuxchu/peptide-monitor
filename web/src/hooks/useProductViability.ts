@@ -18,12 +18,17 @@ const intelligenceFallback = {
 };
 
 export function useProductViability() {
-  const { data: monitor } = useProductMonitor();
-  const { data: intel } = useDbResource("/api/intelligence", intelligenceFallback);
-  const { data: regulatoryEntries } = useDbResource(
+  const { data: monitor, loading: monitorLoading } = useProductMonitor();
+  const { data: intel, loading: intelLoading } = useDbResource(
+    "/api/intelligence",
+    intelligenceFallback,
+  );
+  const { data: regulatoryEntries, loading: regulatoryLoading } = useDbResource(
     "/api/regulatory",
     fallbackRegulatory,
   );
+
+  const ready = !monitorLoading && !intelLoading && !regulatoryLoading;
 
   const skuByProduct = useMemo(() => {
     const map = new Map<string, (typeof intel.skuOpportunities)[number]>();
@@ -33,23 +38,25 @@ export function useProductViability() {
     return map;
   }, [intel.skuOpportunities]);
 
-  const index = useMemo(
-    () =>
-      buildViabilityIndex(monitor.records, {
-        skuByProduct,
-        signals: intel.signals,
-        regulatoryEntries,
-      }),
-    [monitor.records, skuByProduct, intel.signals, regulatoryEntries],
-  );
+  const index = useMemo(() => {
+    if (!ready) return new Map<string, ViabilityAssessment>();
+    return buildViabilityIndex(monitor.records, {
+      skuByProduct,
+      signals: intel.signals,
+      regulatoryEntries,
+    });
+  }, [ready, monitor.records, skuByProduct, intel.signals, regulatoryEntries]);
 
   const summary = useMemo(
-    () => summarizeByActionTier(monitor.records, index),
-    [monitor.records, index],
+    () =>
+      ready
+        ? summarizeByActionTier(monitor.records, index)
+        : { core: 0, trial: 0, avoid: 0, avgCoverage: 0, highRisk: 0 },
+    [ready, monitor.records, index],
   );
 
   const getAssessment = (recordId: string): ViabilityAssessment | undefined =>
     index.get(recordId);
 
-  return { index, summary, skuByProduct, regulatoryEntries };
+  return { index, summary, skuByProduct, regulatoryEntries, ready };
 }

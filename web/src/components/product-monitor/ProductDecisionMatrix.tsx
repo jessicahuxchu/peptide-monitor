@@ -30,10 +30,10 @@ const tierVariant: Record<InventoryTier, "optimal" | "delayed" | "critical"> = {
   avoid: "critical",
 };
 
-const strategyTitleKey: Record<InventoryTier, "coreTitle" | "trialTitle" | "avoidTitle"> = {
-  core: "coreTitle",
-  trial: "trialTitle",
-  avoid: "avoidTitle",
+const strategyShortKey: Record<InventoryTier, "tier1Short" | "tier2Short" | "tier3Short"> = {
+  core: "tier1Short",
+  trial: "tier2Short",
+  avoid: "tier3Short",
 };
 
 const trendIcon = { up: TrendingUp, down: TrendingDown, stable: Minus };
@@ -53,20 +53,21 @@ export function ProductDecisionMatrix({
   const tOpp = useTranslations("productMonitor.opportunity");
   const tVia = useTranslations("productMonitor.viability");
   const locale = useLocale();
-  const { index, skuByProduct, regulatoryEntries } = useProductViability();
+  const { index, skuByProduct, regulatoryEntries, ready } = useProductViability();
   const [tierFilter, setTierFilter] = useState<InventoryTier | "all">("all");
 
   const filtered = useMemo(() => {
     const list =
-      tierFilter === "all"
+      tierFilter === "all" || !ready
         ? records
         : records.filter((r) => index.get(r.id)?.actionTier === tierFilter);
+    if (!ready) return list;
     return [...list].sort((a, b) => {
       const av = index.get(a.id)?.viabilityScore ?? 0;
       const bv = index.get(b.id)?.viabilityScore ?? 0;
       return bv - av;
     });
-  }, [records, tierFilter, index]);
+  }, [records, tierFilter, index, ready]);
 
   const tiers: (InventoryTier | "all")[] = ["all", "core", "trial", "avoid"];
 
@@ -85,7 +86,7 @@ export function ProductDecisionMatrix({
                 : "border-command-border text-command-text-muted hover:text-command-text-secondary",
             )}
           >
-            {tier === "all" ? t("filters.allTiers") : t(`strategy.${strategyTitleKey[tier]}`)}
+            {tier === "all" ? t("filters.allTiers") : t(`strategy.${strategyShortKey[tier]}`)}
           </button>
         ))}
       </div>
@@ -146,8 +147,8 @@ export function ProductDecisionMatrix({
                   ? record.productIntro.zh
                   : record.productIntro.en
                 : undefined;
-              const viabilityScore = assessment?.viabilityScore ?? 0;
-              const actionTier = assessment?.actionTier ?? record.tier;
+              const viabilityScore = ready ? assessment?.viabilityScore : undefined;
+              const actionTier = ready ? assessment?.actionTier : undefined;
 
               return (
                 <tr
@@ -179,21 +180,29 @@ export function ProductDecisionMatrix({
                     )}
                   </td>
                   <td className="py-3 pr-3">
-                    <StrategyTierBadge tier={actionTier} />
+                    {actionTier ? (
+                      <StrategyTierBadge tier={actionTier} />
+                    ) : (
+                      <span className="text-[10px] text-command-text-muted">—</span>
+                    )}
                   </td>
                   <td className="py-3 pr-3">
-                    <span
-                      className={cn(
-                        "text-lg font-bold tabular-nums",
-                        viabilityScore >= 65
-                          ? "text-command-green"
-                          : viabilityScore >= 42
-                            ? "text-command-orange"
-                            : "text-command-text-secondary",
-                      )}
-                    >
-                      {viabilityScore}
-                    </span>
+                    {viabilityScore != null ? (
+                      <span
+                        className={cn(
+                          "text-lg font-bold tabular-nums",
+                          viabilityScore >= 65
+                            ? "text-command-green"
+                            : viabilityScore >= 42
+                              ? "text-command-orange"
+                              : "text-command-text-secondary",
+                        )}
+                      >
+                        {viabilityScore}
+                      </span>
+                    ) : (
+                      <span className="text-lg text-command-text-muted">—</span>
+                    )}
                   </td>
                   <td className="py-3 pr-3 tabular-nums text-command-text-secondary">
                     {formatPriceGap(gap)}
@@ -202,7 +211,7 @@ export function ProductDecisionMatrix({
                     <CoverageMiniBar record={record} />
                   </td>
                   <td className="py-3 pr-3">
-                    {sku && TrendIcon ? (
+                    {ready && sku && TrendIcon ? (
                       <div className="flex items-center gap-2">
                         <TrendIcon
                           className={cn(
@@ -212,7 +221,12 @@ export function ProductDecisionMatrix({
                             sku.trend === "stable" && "text-command-text-muted",
                           )}
                         />
-                        <Sparkline data={sku.sparkline} width={64} height={20} />
+                        <Sparkline
+                          data={sku.sparkline}
+                          width={64}
+                          height={20}
+                          strokeWidth={1}
+                        />
                       </div>
                     ) : (
                       <span className="text-command-text-muted">—</span>
@@ -248,7 +262,7 @@ function StrategyTierBadge({ tier }: { tier: InventoryTier }) {
   const t = useTranslations("productMonitor.strategy");
   return (
     <StatusBadge variant={tierVariant[tier]} className="whitespace-nowrap text-[10px]">
-      {t(strategyTitleKey[tier])}
+      {t(strategyShortKey[tier])}
     </StatusBadge>
   );
 }

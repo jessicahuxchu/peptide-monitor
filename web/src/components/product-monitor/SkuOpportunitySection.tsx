@@ -88,7 +88,7 @@ export function SkuOpportunitySection() {
                           sku.trend === "stable" && "text-command-text-muted",
                         )}
                       />
-                      <Sparkline data={sku.sparkline} width={64} height={20} />
+                      <Sparkline data={sku.sparkline} width={64} height={20} strokeWidth={1} />
                     </div>
                   </td>
                 </tr>

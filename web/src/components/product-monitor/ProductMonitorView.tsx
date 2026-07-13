@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { CommandCard } from "@/components/ui/CommandCard";
-import { BlendStrip } from "@/components/product-monitor/CompactSections";
 import { ProductMonitorKpiBar } from "@/components/product-monitor/ProductMonitorKpiBar";
 import { ProductDecisionMatrix } from "@/components/product-monitor/ProductDecisionMatrix";
 import { ProductDetailPanel } from "@/components/product-monitor/ProductDetailPanel";
@@ -42,13 +41,6 @@ export function ProductMonitorView() {
                 {t("detail.selectHint")}
               </div>
             )}
-          </div>
-
-          <div className="mt-5 space-y-1">
-            <p className="text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
-              {t("blends.title")}
-            </p>
-            <BlendStrip />
           </div>
         </CommandCard>
 

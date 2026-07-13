@@ -582,7 +582,10 @@
     "strategy": {
       "coreTitle": "Tier 1 · Core Focus",
       "trialTitle": "Tier 2 · Trial Batch",
-      "avoidTitle": "Tier 3 · Order Only"
+      "avoidTitle": "Tier 3 · Order Only",
+      "tier1Short": "TIER 1",
+      "tier2Short": "TIER 2",
+      "tier3Short": "TIER 3"
     },
     "viability": {
       "score": "Viability",

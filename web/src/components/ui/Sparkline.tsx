@@ -5,6 +5,7 @@ interface SparklineProps {
   className?: string;
   width?: number;
   height?: number;
+  strokeWidth?: number;
 }
 
 export function Sparkline({
@@ -12,6 +13,7 @@ export function Sparkline({
   className,
   width = 200,
   height = 48,
+  strokeWidth = 1.5,
 }: SparklineProps) {
   const padding = 4;
 
@@ -48,7 +50,7 @@ export function Sparkline({
         points={points}
         fill="none"
         stroke="#14b8a6"
-        strokeWidth="2"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />

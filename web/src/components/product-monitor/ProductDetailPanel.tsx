@@ -34,16 +34,16 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
   const tVia = useTranslations("productMonitor.viability");
   const locale = useLocale();
   const { data } = useProductMonitor();
-  const { index, regulatoryEntries } = useProductViability();
+  const { index, regulatoryEntries, ready } = useProductViability();
   const assessment = index.get(record.id);
   const matrixRisk = getProductRegulatoryRisk(record.product, regulatoryEntries);
   const blends = getBlendsForProductFromData(data, record.id);
   const [showPlatforms, setShowPlatforms] = useState(false);
   const intro = introFullForLocale(record.productIntro, locale);
 
-  const actionTier = assessment?.actionTier ?? record.tier;
-  const viabilityScore = assessment?.viabilityScore ?? record.compositeScore;
-  const breakdown = assessment?.breakdown;
+  const actionTier = ready ? (assessment?.actionTier ?? record.tier) : record.tier;
+  const viabilityScore = ready ? assessment?.viabilityScore : undefined;
+  const breakdown = ready ? assessment?.breakdown : undefined;
 
   return (
     <aside className="flex max-h-[70vh] flex-col rounded-xl border border-command-border bg-command-card lg:max-h-none lg:h-full">
@@ -59,15 +59,17 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
             <span
               className={cn(
                 "text-lg font-bold tabular-nums",
-                viabilityScore >= 65
-                  ? "text-command-green"
-                  : viabilityScore >= 42
-                    ? "text-command-orange"
-                    : "text-command-text-secondary",
+                viabilityScore == null
+                  ? "text-command-text-muted"
+                  : viabilityScore >= 65
+                    ? "text-command-green"
+                    : viabilityScore >= 42
+                      ? "text-command-orange"
+                      : "text-command-text-secondary",
               )}
               title={tVia("score")}
             >
-              {viabilityScore}
+              {viabilityScore ?? "—"}
             </span>
             <span className="text-[10px] text-command-text-muted">{tVia("score")}</span>
           </div>
