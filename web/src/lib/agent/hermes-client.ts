@@ -1,12 +1,17 @@
+import "server-only";
+
 import { generateChatResponse, type ChatMessage } from "./chat-responder";
+import { buildKnowledgeSystemAddon } from "./platform-knowledge";
 
 const SYSTEM_PROMPT_ZH = `你是 Peptide Monitor 平台的 AI Agent（Hermes + Qwen 模式）。
 你帮助用户处理多肽跨境供应链、AU 监管合规矩阵、供应商报价与客户询盘。
+你可以根据注入的平台源码摘录，回答产品监控、综合评判、评分规则、页面功能等问题。
 回答应简洁、专业、可操作。涉及法律结论时必须提醒需澳洲律师复核。
 当用户提交报价、询盘或监管更新时，提炼关键字段并说明将生成待确认的结构化更新。`;
 
 const SYSTEM_PROMPT_EN = `You are the Peptide Monitor AI Agent (Hermes + Qwen mode).
 You assist with peptide cross-border supply chain, AU regulatory compliance, supplier quotes and customer inquiries.
+You may use injected platform source excerpts to explain product monitor features, viability scoring, and business rules.
 Be concise and actionable. Remind users that legal conclusions require Australian counsel review.
 When users submit quotes, inquiries or regulatory updates, extract key fields and note that a pending structured update will be created.`;
 
@@ -24,6 +29,7 @@ export interface HermesChatResult {
   provider: "hermes-qwen" | "fallback";
   shouldQueueInbox: boolean;
   inboxContent?: string;
+  knowledgeSources?: { id: string; filePath: string; description: string }[];
 }
 
 function buildUserPayload(req: HermesChatRequest): string {
@@ -38,6 +44,8 @@ export async function callHermesChat(req: HermesChatRequest): Promise<HermesChat
   const intent = req.intent ?? "chat";
   const messages = req.messages;
   const userPayload = buildUserPayload(req);
+  const { addon: knowledgeAddon, sources: knowledgeSources } =
+    buildKnowledgeSystemAddon(userPayload, locale);
 
   const gateway =
     process.env.HERMES_GATEWAY_URL ??
@@ -60,10 +68,13 @@ export async function callHermesChat(req: HermesChatRequest): Promise<HermesChat
 
   if (gateway && apiKey) {
     try {
+      const systemContent =
+        (locale === "zh" ? SYSTEM_PROMPT_ZH : SYSTEM_PROMPT_EN) + knowledgeAddon;
+
       const apiMessages = [
         {
           role: "system" as const,
-          content: locale === "zh" ? SYSTEM_PROMPT_ZH : SYSTEM_PROMPT_EN,
+          content: systemContent,
         },
         ...messages.slice(0, -1),
         { role: "user" as const, content: userPayload },
@@ -94,7 +105,7 @@ export async function callHermesChat(req: HermesChatRequest): Promise<HermesChat
   }
 
   if (!reply) {
-    reply = generateChatResponse(messages, locale);
+    reply = generateChatResponse(messages, locale, userPayload);
   }
 
   const shouldQueueInbox = intent !== "chat";
@@ -105,5 +116,6 @@ export async function callHermesChat(req: HermesChatRequest): Promise<HermesChat
     provider: reply && gateway && apiKey ? "hermes-qwen" : "fallback",
     shouldQueueInbox,
     inboxContent,
+    knowledgeSources: knowledgeSources.length > 0 ? knowledgeSources : undefined,
   };
 }

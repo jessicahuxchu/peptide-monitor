@@ -80,8 +80,11 @@ export async function fetchIntelligenceData(): Promise<{
   ]);
   if (signalsRes.error) throw signalsRes.error;
   if (skuRes.error) throw skuRes.error;
+  const signals = (signalsRes.data ?? [])
+    .filter((row) => !/^il\d+$/.test(row.id))
+    .map(mapIntelSignal);
   return {
-    signals: (signalsRes.data ?? []).map(mapIntelSignal),
+    signals,
     skuOpportunities: (skuRes.data ?? []).map(mapSkuOpportunity),
   };
 }

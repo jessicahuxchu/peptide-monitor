@@ -18,7 +18,7 @@ export interface ViabilityBreakdown {
   platformValidation: number;
   /** Supply chain feasibility + turnover */
   operationalFit: number;
-  /** Inverse regulatory pressure (higher = more room to operate) */
+  /** Inverse matrix regulatory pressure (higher = more room to operate) */
   regulatoryAllowance: number;
   /** Sources used for marketSignal (for UI transparency) */
   marketSignalSources: {
@@ -119,13 +119,8 @@ function calcOperationalFit(record: ProductMonitorRecord): number {
   return clamp(supplyFeasibility * 0.5 + turnover * 0.5);
 }
 
-function calcRegulatoryAllowance(
-  risk: RiskLevel,
-  regulatorySensitivity?: number,
-): number {
-  if (regulatorySensitivity != null) {
-    return clamp((1 - regulatorySensitivity) * 100);
-  }
+/** Compliance allowance from matrix max risk — higher = more room to operate. */
+function calcRegulatoryAllowance(risk: RiskLevel): number {
   return clamp(100 - riskToScore(risk));
 }
 
@@ -137,10 +132,8 @@ export function deriveActionTier(
   viabilityScore: number,
   regulatoryRisk: RiskLevel,
   marketSignal: number,
-  regulatorySensitivity?: number,
 ): InventoryTier {
-  const regPressure =
-    regulatorySensitivity ?? riskToScore(regulatoryRisk) / 100;
+  const regPressure = riskToScore(regulatoryRisk) / 100;
 
   if (viabilityScore < 32) return "avoid";
   if (regPressure > 0.82 && marketSignal < 38) return "avoid";
@@ -178,10 +171,7 @@ export function assessViability(
   );
 
   const operationalFit = calcOperationalFit(record);
-  const regulatoryAllowance = calcRegulatoryAllowance(
-    record.auRegulatoryRisk,
-    context.sku?.regulatorySensitivity,
-  );
+  const regulatoryAllowance = calcRegulatoryAllowance(matrixRisk);
 
   const viabilityScore = clamp(
     WEIGHTS.marketSignal * marketSignal +
@@ -203,9 +193,8 @@ export function assessViability(
     breakdown,
     actionTier: deriveActionTier(
       viabilityScore,
-      record.auRegulatoryRisk,
+      matrixRisk,
       marketSignal,
-      context.sku?.regulatorySensitivity,
     ),
     regulatoryRisk: matrixRisk,
   };

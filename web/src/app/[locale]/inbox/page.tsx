@@ -110,8 +110,13 @@ export default function InboxPage() {
       const data = (await res.json()) as {
         reply: string;
         inboxQueued?: boolean;
+        knowledgeSources?: { filePath: string }[];
       };
       let reply = data.reply;
+      if (data.knowledgeSources?.length) {
+        const paths = data.knowledgeSources.map((s) => s.filePath).join(", ");
+        reply += `\n\n---\n${t("inboxPage.knowledgeSources", { paths })}`;
+      }
       if (data.inboxQueued) {
         reply += `\n\n${t("inboxPage.inboxQueued")}`;
         await reload();

@@ -32,6 +32,10 @@ export const PRODUCT_ALIASES: ProductAlias[] = [
     aliases: ["semaglutide", "ozempic", "wegovy"],
   },
   {
+    product: "Retatrutide",
+    aliases: ["retatrutide", "reta-trutide", "ly3437943"],
+  },
+  {
     product: "Tirzepatide",
     aliases: ["tirzepatide", "mounjaro", "zepbound"],
   },
@@ -114,4 +118,5 @@ export const REDDIT_SEARCH_TERMS = [
   "GHK-Cu",
   "Semaglutide peptide",
   "Tirzepatide",
+  "Retatrutide",
 ] as const;

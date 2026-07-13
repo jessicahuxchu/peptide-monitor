@@ -117,7 +117,7 @@ function normalizeChild(child: RedditListingChild): NormalizedSocialPost | null 
   const title = d.title ?? "";
   const body = truncate(d.selftext ?? "", BODY_MAX_CHARS);
   const text = `${title}\n${body}`;
-  const products = matchProducts(text);
+  const products = matchProducts(text, d.subreddit);
   if (products.length === 0) return null;
 
   const permalink = d.permalink.startsWith("http")

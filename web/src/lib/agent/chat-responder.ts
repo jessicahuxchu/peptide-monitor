@@ -1,3 +1,9 @@
+import {
+  buildKnowledgeSystemAddon,
+  isPlatformKnowledgeQuery,
+  retrievePlatformKnowledge,
+} from "./platform-knowledge";
+
 export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
@@ -36,18 +42,57 @@ const TOPICS: { pattern: RegExp; reply: string }[] = [
   },
 ];
 
+function buildKnowledgeFallbackReply(
+  query: string,
+  locale: "en" | "zh",
+): string | null {
+  if (!isPlatformKnowledgeQuery(query)) return null;
+
+  const { context, sources } = retrievePlatformKnowledge(query);
+  const sourceList = sources.map((s) => `- \`${s.filePath}\` — ${s.description}`).join("\n");
+
+  if (locale === "zh") {
+    return [
+      "当前未连接 Hermes/Qwen，以下为根据你的问题从平台源码中检索到的相关片段（离线模式）。",
+      "配置 `DASHSCOPE_API_KEY` 或 `HERMES_API_KEY` 后可获得自然语言解读。",
+      "",
+      "**已检索文件：**",
+      sourceList || "（无）",
+      "",
+      "**源码摘录：**",
+      context,
+    ].join("\n");
+  }
+
+  return [
+    "Hermes/Qwen is not configured — showing matched platform source excerpts (offline mode).",
+    "Set `DASHSCOPE_API_KEY` or `HERMES_API_KEY` for natural-language answers.",
+    "",
+    "**Retrieved files:**",
+    sourceList || "(none)",
+    "",
+    "**Excerpts:**",
+    context,
+  ].join("\n");
+}
+
 export function generateChatResponse(
   messages: ChatMessage[],
   locale: "en" | "zh" = "zh",
+  latestUserText?: string,
 ): string {
   const lastUser = [...messages].reverse().find((m) => m.role === "user");
   if (!lastUser) {
     return locale === "zh"
-      ? "你好，我是 Peptide Monitor 助手。可以问我供应链、监管、产品机会或供应商匹配相关问题。"
-      : "Hello, I'm the Peptide Monitor assistant. Ask about supply chain, regulatory, product opportunities, or supplier matching.";
+      ? "你好，我是 Peptide Monitor 助手。可以问我供应链、监管、产品机会、评分规则或平台功能相关问题。"
+      : "Hello, I'm the Peptide Monitor assistant. Ask about supply chain, regulatory, opportunities, scoring rules, or platform features.";
   }
 
-  const text = lastUser.content;
+  const text = latestUserText ?? lastUser.content;
+
+  const knowledgeReply = buildKnowledgeFallbackReply(text, locale);
+  if (knowledgeReply) return knowledgeReply;
+
   for (const topic of TOPICS) {
     if (topic.pattern.test(text)) {
       return topic.reply;
@@ -55,8 +100,8 @@ export function generateChatResponse(
   }
 
   if (locale === "zh") {
-    return `关于「${text.slice(0, 40)}${text.length > 40 ? "…" : ""}」，我建议：\n\n1. 在「情报」页查看相关 SKU 机会分\n2. 在「供应链」页检查对应节点文件要求\n3. 如需录入新信息，可在左侧收件箱提交，我会帮你解析为结构化更新。`;
+    return `关于「${text.slice(0, 40)}${text.length > 40 ? "…" : ""}」，我建议：\n\n1. 在「情报」页查看相关 SKU 机会分\n2. 在「供应链」页检查对应节点文件要求\n3. 如需录入新信息，可在左侧收件箱提交，我会帮你解析为结构化更新。\n\n也可直接问「综合评判怎么算」「平台覆盖深度评分标准」等平台规则问题。`;
   }
 
-  return `Regarding "${text.slice(0, 40)}${text.length > 40 ? "…" : ""}", I suggest:\n\n1. Check SKU opportunity scores on Intelligence\n2. Review node document requirements on Supply Chain\n3. Submit updates via the inbox on the left for structured parsing.`;
+  return `Regarding "${text.slice(0, 40)}${text.length > 40 ? "…" : ""}", I suggest:\n\n1. Check SKU opportunity scores on Intelligence\n2. Review node document requirements on Supply Chain\n3. Submit updates via the inbox on the left for structured parsing.\n\nYou can also ask platform rule questions, e.g. how viability scoring works.`;
 }

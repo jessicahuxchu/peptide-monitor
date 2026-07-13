@@ -45,6 +45,7 @@ export async function POST(request: Request) {
       reply: result.reply,
       provider: result.provider,
       inboxQueued,
+      knowledgeSources: result.knowledgeSources,
     });
   } catch {
     return NextResponse.json({ error: "Chat failed" }, { status: 500 });

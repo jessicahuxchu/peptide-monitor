@@ -157,7 +157,15 @@ export function mapIntelSignal(row: SignalRow): IntelSignal {
   const source = row.source as IntelSignal["source"];
 
   let dimension: IntelSignal["dimension"] = "demand";
-  if (source === "news_legal" || (regulatoryImpact ?? 0) !== 0) {
+  if (source === "social") {
+    // Reddit heat signals are demand-first; regulatory only when explicitly scored.
+    dimension =
+      row.id.startsWith("reddit-heat-") && (regulatoryImpact ?? 0) <= 0
+        ? "demand"
+        : (regulatoryImpact ?? 0) > 0
+          ? "regulatory"
+          : "demand";
+  } else if (source === "news_legal" || (regulatoryImpact ?? 0) !== 0) {
     dimension = "regulatory";
   } else if (source === "insider" && (heatImpact ?? 0) === 0) {
     dimension = "competitive";

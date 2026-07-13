@@ -2,7 +2,6 @@ import { createServiceClient } from "@/lib/supabase/client";
 import { productRecordToRow } from "@/lib/db/platform-mappers";
 import { nodeToRow } from "@/lib/db/mappers";
 import { salesRecords } from "@/lib/finance/seed-data";
-import { intelligenceSignals } from "@/lib/intelligence/seed-data";
 import {
   monitorMeta,
   platforms,
@@ -42,7 +41,6 @@ export async function seedDatabase() {
   await supabase.from("supplier_profiles").delete().neq("id", "");
   await supabase.from("sales_records").delete().neq("id", "");
   await supabase.from("sku_opportunities").delete().neq("id", "");
-  await supabase.from("intelligence_signals").delete().neq("id", "");
   await supabase.from("product_blends").delete().neq("id", "");
   await supabase.from("product_monitor_records").delete().neq("id", "");
   await supabase.from("monitor_platforms").delete().neq("id", "");
@@ -195,23 +193,6 @@ export async function seedDatabase() {
     })),
   );
   if (blendErr) throw blendErr;
-
-  const { error: sigErr } = await supabase.from("intelligence_signals").insert(
-    intelligenceSignals.map((s) => ({
-      id: s.id,
-      source: s.source,
-      title: s.title,
-      summary: s.summary,
-      signal_date: s.date,
-      region: s.region ?? null,
-      products: s.products,
-      heat_impact: s.heatImpact ?? null,
-      regulatory_impact: s.regulatoryImpact ?? null,
-      trend: s.trend ?? null,
-      url: s.url ?? null,
-    })),
-  );
-  if (sigErr) throw sigErr;
 
   const { error: skuErr } = await supabase.from("sku_opportunities").insert(
     skuOpportunities.map((s) => ({

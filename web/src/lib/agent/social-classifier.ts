@@ -23,12 +23,12 @@ const BODY_SNIPPET_CHARS = 1200;
 const SYSTEM_PROMPT = `You classify Reddit posts about peptides for a supply-chain intelligence platform.
 
 For each post, decide:
-- hasRegulatory: true ONLY if the post discusses real regulatory/compliance/enforcement risk — e.g. FDA/TGA actions, bans, seizures, customs, scheduling, prescription requirements, enforcement raids, illegal sales allegations. Standard "research use only / not FDA approved" disclaimers on vendor or educational posts count as regulatory ONLY when they are central to the post's compliance discussion, not mere boilerplate footers.
+- hasRegulatory: true ONLY if the post's main topic is real regulatory/compliance/enforcement risk — e.g. FDA/TGA actions, bans, seizures, customs holds, scheduling changes, prescription requirements, enforcement raids, illegal sales allegations, or active legal compliance strategy.
+- hasRegulatory: false for dosing questions, injury/recovery anecdotes, stack protocols, side effects, vendor reviews, and educational/science explainers — even if they mention legality in passing.
+- hasRegulatory: false for boilerplate vendor/educational footers such as "for research use only", "not FDA approved", "not evaluated by the FDA", or "not intended to diagnose/treat" when those phrases appear only as disclaimers and are NOT the focus of the discussion.
 - auContext: true if Australia-specific (TGA, Aussie locations, AU market).
-- reason: one short sentence in Chinese explaining the decision (or why not regulatory). Null if hasRegulatory is false.
+- reason: one short sentence in Chinese explaining why hasRegulatory is true. Must be null when hasRegulatory is false.
 - confidence: 0.0–1.0
-
-Do NOT flag personal injury/recovery experience, dosing questions, or stack protocols unless they explicitly discuss legal/regulatory enforcement.
 
 Respond with JSON only:
 {"posts":[{"id":"...","hasRegulatory":false,"auContext":false,"reason":null,"confidence":0.85}]}`;

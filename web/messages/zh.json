@@ -409,7 +409,8 @@
       "regulatoryOnly": "仅监管相关",
       "loading": "加载中…",
       "empty": "暂无原始帖。配置 Reddit 凭证后触发每日扫描即可入库。",
-      "showing": "显示 {shown} / 库内 {total} 条"
+      "showing": "显示 {shown} / 库内 {total} 条",
+      "highlightedFromIntel": "从舆论情报跳转至此，已高亮对应代表帖。"
     },
     "productMonitor": {
       "title": "产品分析",
@@ -449,6 +450,7 @@
     "trend": "趋势",
     "allSources": "全部来源",
     "heat": "热度",
+    "heatTooltip": "综合热度分（0–80）：由 24h 提及量相对七日日均的涨幅 + 互动量（score+评论）加权计算，80 为上限",
     "regulatory": "监管",
     "skuRanking": "SKU 机会排行",
     "layerHint": "",
@@ -479,12 +481,17 @@
     "topOpportunity": "最高机会 SKU",
     "avgOpportunity": "平均机会分",
     "signalCount": "情报信号数",
+    "loading": "加载情报中…",
+    "dateLabel": "情报日期",
+    "dateLatest": "最新",
+    "noSignalsOnDate": "该日期暂无情报信号",
     "sources": {
       "news_legal": "新闻 / 法律 / 官员言论",
       "insider": "业务内幕消息",
       "social": "社交媒体",
       "platform_2c": "下游 2C 平台"
     },
+    "viewSourcePost": "查看代表帖 →",
     "sourceOutputs": {
       "news_legal": "→ 多肽产品热度、监管强度",
       "insider": "→ 多肽发展监管趋势",
@@ -761,12 +768,13 @@
     "noPending": "暂无待确认项",
     "reviewRestricted": "仅审核权限用户可确认或拒绝更新。",
     "chatTitle": "AI Agent",
-    "chatSubtitle": "Hermes + Qwen — 对话提交报价、询盘与监管更新",
-    "chatWelcome": "你好，我是 Peptide Monitor AI Agent（Hermes + Qwen）。可直接对话，或使用下方快捷按钮填入模板后添加附件发送。",
+    "chatSubtitle": "Hermes + Qwen — 可问平台功能与评分规则，也可提交报价、询盘与监管更新",
+    "chatWelcome": "你好，我是 Peptide Monitor AI Agent（Hermes + Qwen）。可询问综合评判、平台覆盖深度、运营可行、合规空间等规则；也可使用快捷按钮提交报价/询盘/监管更新。",
     "chatPlaceholder": "输入消息，或选择快捷按钮后补充细节…",
     "chatError": "暂时无法连接 Agent，请检查 Hermes/Qwen 配置后重试。",
     "attachFile": "添加附件",
     "inboxQueued": "已生成待确认的结构化更新，请左侧审核。",
+    "knowledgeSources": "参考源码：{paths}",
     "promptQuoteLabel": "发送报价",
     "promptInquiryLabel": "发送询盘",
     "promptRegulatoryLabel": "监管更新",

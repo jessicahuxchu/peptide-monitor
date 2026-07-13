@@ -216,14 +216,14 @@ export const intelligenceSignals: IntelSignal[] = [
 
 export function getSignalsBySource(
   source: IntelSignal["source"],
-  signals: IntelSignal[] = intelligenceSignals,
+  signals: IntelSignal[] = [],
 ) {
   return signals.filter((s) => s.source === source);
 }
 
 export function getSignalsByDimension(
   dimension: SignalDimension,
-  signals: IntelSignal[] = intelligenceSignals,
+  signals: IntelSignal[] = [],
 ) {
   return signals.filter((s) => s.dimension === dimension);
 }
@@ -239,6 +239,6 @@ export function calcAggregateImpact(signals: IntelSignal[]) {
   return { heat, regulatory };
 }
 
-export function countPendingMatrixUpdates(signals: IntelSignal[] = intelligenceSignals) {
+export function countPendingMatrixUpdates(signals: IntelSignal[] = []) {
   return signals.filter((s) => s.pendingMatrixUpdate).length;
 }

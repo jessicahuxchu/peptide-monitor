@@ -1,16 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { CommandCard } from "@/components/ui/CommandCard";
 import { useDbResource } from "@/hooks/useDbResource";
 import {
-  intelligenceSignals as fallbackSignals,
   getSignalsBySource,
   getSignalsByDimension,
   countPendingMatrixUpdates,
 } from "@/lib/intelligence/seed-data";
 import type { IntelSignal, SignalDimension } from "@/lib/intelligence/seed-data";
+import { socialPostsHref } from "@/lib/social/post-deep-link";
 import { Link } from "@/i18n/navigation";
 import {
   Newspaper,
@@ -41,7 +41,7 @@ const dimensionStyles: Record<
 };
 
 const intelligenceFallback = {
-  signals: fallbackSignals,
+  signals: [] as IntelSignal[],
   skuOpportunities: [],
 };
 
@@ -61,44 +61,71 @@ function buildDimensionSummary(
   return `${dimSignals.length} 条信号 — ${highlights}`;
 }
 
+function formatSignalDate(date: string): string {
+  const [, month, day] = date.split("-");
+  return `${Number(month)}.${Number(day)}`;
+}
+
 export default function IntelligencePage() {
   const t = useTranslations();
-  const { data } = useDbResource("/api/intelligence", intelligenceFallback);
-  const { signals: intelligenceSignals } = data;
+  const { data, loading, usingDb } = useDbResource("/api/intelligence", intelligenceFallback);
+  const intelligenceSignals = usingDb ? data.signals : [];
 
   const [activeFilter, setActiveFilter] = useState<
     SignalDimension | "all" | "pending"
   >("all");
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+
+  const availableDates = useMemo(() => {
+    const dates = [...new Set(intelligenceSignals.map((s) => s.date))];
+    dates.sort((a, b) => b.localeCompare(a));
+    return dates;
+  }, [intelligenceSignals]);
+
+  useEffect(() => {
+    if (availableDates.length === 0) {
+      setSelectedDate(null);
+      return;
+    }
+    if (!selectedDate || !availableDates.includes(selectedDate)) {
+      setSelectedDate(availableDates[0]);
+    }
+  }, [availableDates, selectedDate]);
+
+  const dateSignals = useMemo(() => {
+    if (!selectedDate) return intelligenceSignals;
+    return intelligenceSignals.filter((s) => s.date === selectedDate);
+  }, [intelligenceSignals, selectedDate]);
 
   const filteredSignals =
     activeFilter === "all"
-      ? intelligenceSignals
+      ? dateSignals
       : activeFilter === "pending"
-        ? intelligenceSignals.filter((s) => s.pendingMatrixUpdate)
-        : getSignalsByDimension(activeFilter, intelligenceSignals);
+        ? dateSignals.filter((s) => s.pendingMatrixUpdate)
+        : getSignalsByDimension(activeFilter, dateSignals);
 
-  const pendingCount = countPendingMatrixUpdates(intelligenceSignals);
+  const pendingCount = countPendingMatrixUpdates(dateSignals);
   const sources = ["news_legal", "insider", "social", "platform_2c"] as const;
 
   const summaries = useMemo(
     () => ({
       demand: buildDimensionSummary(
         "demand",
-        intelligenceSignals,
+        dateSignals,
         t("intelligencePage.summaryEmpty"),
       ),
       regulatory: buildDimensionSummary(
         "regulatory",
-        intelligenceSignals,
+        dateSignals,
         t("intelligencePage.summaryEmpty"),
       ),
       competitive: buildDimensionSummary(
         "competitive",
-        intelligenceSignals,
+        dateSignals,
         t("intelligencePage.summaryEmpty"),
       ),
     }),
-    [intelligenceSignals, t],
+    [dateSignals, t],
   );
 
   return (
@@ -106,9 +133,41 @@ export default function IntelligencePage() {
       <div className="space-y-6">
         <CommandCard>
           <div className="mb-5 space-y-3">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-command-text-muted">
-              {t("intelligencePage.dimensionSummariesTitle")}
-            </h3>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-command-text-muted">
+                {t("intelligencePage.dimensionSummariesTitle")}
+              </h3>
+              {availableDates.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
+                    {t("intelligencePage.dateLabel")}
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {availableDates.map((date) => (
+                      <button
+                        key={date}
+                        type="button"
+                        onClick={() => setSelectedDate(date)}
+                        className={cn(
+                          "rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
+                          selectedDate === date
+                            ? "border-command-teal/40 bg-command-teal/10 text-command-teal-bright"
+                            : "border-command-border text-command-text-muted hover:text-command-text-secondary",
+                        )}
+                      >
+                        {formatSignalDate(date)}
+                        {date === availableDates[0] && (
+                          <span className="ml-1 text-[9px] opacity-70">
+                            ({t("intelligencePage.dateLatest")})
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="grid gap-3 md:grid-cols-3">
               <SummaryCard
                 label={t("intelligencePage.summaryDemand")}
@@ -126,18 +185,39 @@ export default function IntelligencePage() {
                 border="border-purple-500/30"
               />
             </div>
+
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {sources.map((src) => {
+                const signals = getSignalsBySource(src, dateSignals);
+                const cfg = sourceConfig[src];
+                const Icon = cfg.icon;
+                return (
+                  <div key={src} className={cn("rounded-xl border p-3", cfg.border)}>
+                    <div className="mb-1 flex items-center gap-1.5">
+                      <Icon className={cn("h-3.5 w-3.5", cfg.color)} />
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
+                        {t(`intelligencePage.sources.${src}`)}
+                      </span>
+                    </div>
+                    <p className="text-lg font-bold tabular-nums text-command-text">
+                      {signals.length}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <BriefKpi label={t("intelligencePage.signalCount")} value={String(intelligenceSignals.length)} />
+            <BriefKpi label={t("intelligencePage.signalCount")} value={String(dateSignals.length)} />
             <BriefKpi label={t("intelligencePage.pendingMatrix")} value={String(pendingCount)} accent={pendingCount > 0} />
             <BriefKpi
               label={t("intelligencePage.dimensions.regulatory")}
-              value={String(getSignalsByDimension("regulatory", intelligenceSignals).length)}
+              value={String(getSignalsByDimension("regulatory", dateSignals).length)}
             />
             <BriefKpi
               label={t("intelligencePage.dimensions.demand")}
-              value={String(getSignalsByDimension("demand", intelligenceSignals).length)}
+              value={String(getSignalsByDimension("demand", dateSignals).length)}
             />
           </div>
 
@@ -161,11 +241,29 @@ export default function IntelligencePage() {
           </div>
 
           <div className="space-y-2">
-            {filteredSignals.map((signal) => {
+            {loading && (
+              <p className="py-8 text-center text-sm text-command-text-muted">
+                {t("intelligencePage.loading")}
+              </p>
+            )}
+            {!loading &&
+              filteredSignals.length === 0 && (
+                <p className="py-8 text-center text-sm text-command-text-muted">
+                  {selectedDate && dateSignals.length === 0
+                    ? t("intelligencePage.noSignalsOnDate")
+                    : t("intelligencePage.summaryEmpty")}
+                </p>
+              )}
+            {!loading &&
+              filteredSignals.map((signal) => {
               const cfg = sourceConfig[signal.source];
               const Icon = cfg.icon;
               const dim = dimensionStyles[signal.dimension];
               const TrendIcon = signal.trend ? trendIcon[signal.trend] : Minus;
+              const sourcePostHref =
+                signal.source === "social"
+                  ? socialPostsHref({ postUrl: signal.url })
+                  : null;
 
               return (
                 <article
@@ -221,10 +319,24 @@ export default function IntelligencePage() {
                         </span>
                       )}
                       {signal.dimension === "demand" && signal.heatImpact !== undefined && (
-                        <span className={cn(signal.heatImpact >= 0 ? "text-command-green" : "text-command-red")}>
+                        <span
+                          title={t("intelligencePage.heatTooltip")}
+                          className={cn(
+                            "cursor-help",
+                            signal.heatImpact >= 0 ? "text-command-green" : "text-command-red",
+                          )}
+                        >
                           {t("intelligencePage.heat")} {signal.heatImpact > 0 ? "+" : ""}
                           {signal.heatImpact}
                         </span>
+                      )}
+                      {sourcePostHref && (
+                        <Link
+                          href={sourcePostHref}
+                          className="rounded border border-command-teal/40 bg-command-teal/10 px-2 py-1 text-[10px] font-medium text-command-teal-bright transition-colors hover:bg-command-teal/20"
+                        >
+                          {t("intelligencePage.viewSourcePost")}
+                        </Link>
                       )}
                       {signal.pendingMatrixUpdate && (
                         <Link
@@ -237,29 +349,6 @@ export default function IntelligencePage() {
                     </div>
                   </div>
                 </article>
-              );
-            })}
-          </div>
-        </CommandCard>
-
-        <CommandCard title={t("intelligencePage.sourceBreakdown")}>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {sources.map((src) => {
-              const signals = getSignalsBySource(src, intelligenceSignals);
-              const cfg = sourceConfig[src];
-              const Icon = cfg.icon;
-              return (
-                <div key={src} className={cn("rounded-xl border p-3", cfg.border)}>
-                  <div className="mb-1 flex items-center gap-1.5">
-                    <Icon className={cn("h-3.5 w-3.5", cfg.color)} />
-                    <span className="text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
-                      {t(`intelligencePage.sources.${src}`)}
-                    </span>
-                  </div>
-                  <p className="text-lg font-bold tabular-nums text-command-text">
-                    {signals.length}
-                  </p>
-                </div>
               );
             })}
           </div>

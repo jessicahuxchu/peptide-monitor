@@ -3,7 +3,6 @@
 import { createContext, useContext, type ReactNode } from "react";
 import { useDbResource } from "@/hooks/useDbResource";
 import { salesRecords } from "@/lib/finance/seed-data";
-import { intelligenceSignals } from "@/lib/intelligence/seed-data";
 import {
   activeDemand,
   agentInsights,
@@ -45,7 +44,7 @@ const dashboardFallback: DashboardData = {
   alerts,
   regulatory: regulatoryEntries,
   riskSignals,
-  intelligence: { signals: intelligenceSignals, skuOpportunities },
+  intelligence: { signals: [] as IntelSignal[], skuOpportunities },
   finance: { records: salesRecords },
   config: {
     risk_index: riskIndex,

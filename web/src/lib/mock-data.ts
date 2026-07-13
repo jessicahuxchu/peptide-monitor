@@ -69,9 +69,9 @@ export const navItems = [
   { key: "strategic" as const, href: "/" },
   { key: "finance" as const, href: "/finance" },
   { key: "supplyChain" as const, href: "/supply-chain" },
+  { key: "productMonitor" as const, href: "/product-monitor" },
   { key: "intelligence" as const, href: "/intelligence" },
   { key: "regulatory" as const, href: "/regulatory" },
-  { key: "productMonitor" as const, href: "/product-monitor" },
   { key: "relations" as const, href: "/relations" },
   { key: "risk" as const, href: "/risk" },
 ] as const;

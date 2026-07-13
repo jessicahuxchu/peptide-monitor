@@ -199,7 +199,7 @@ function normalizeApifyItem(item: ApifyRedditItem): NormalizedSocialPost | null 
   const title = item.title ?? "";
   const body = truncate(item.body ?? "", BODY_MAX_CHARS);
   const text = `${title}\n${body}`;
-  const products = matchProducts(text);
+  const products = matchProducts(text, parseSubreddit(item));
   if (products.length === 0) return null;
 
   const externalId = item.id || (item.parsedId ? `t3_${item.parsedId}` : "");

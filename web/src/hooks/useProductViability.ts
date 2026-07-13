@@ -5,7 +5,6 @@ import { useProductMonitor } from "@/components/providers/ProductMonitorProvider
 import { useDbResource } from "@/hooks/useDbResource";
 import { regulatoryEntries as fallbackRegulatory } from "@/lib/supply-chain/seed-data";
 import { skuOpportunities as fallbackSku } from "@/lib/supply-chain/seed-data";
-import { intelligenceSignals as fallbackSignals } from "@/lib/intelligence/seed-data";
 import {
   buildViabilityIndex,
   summarizeByActionTier,
@@ -13,7 +12,7 @@ import {
 } from "@/lib/product-monitor/viability";
 
 const intelligenceFallback = {
-  signals: fallbackSignals,
+  signals: [],
   skuOpportunities: fallbackSku,
 };
 

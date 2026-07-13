@@ -406,7 +406,8 @@
       "regulatoryOnly": "Regulatory only",
       "loading": "Loading…",
       "empty": "No posts yet. Configure Reddit credentials and run the daily heat scan.",
-      "showing": "Showing {shown} of {total} stored"
+      "showing": "Showing {shown} of {total} stored",
+      "highlightedFromIntel": "Jumped here from Market Intelligence — representative post highlighted below."
     },
     "productMonitor": {
       "title": "Product Analysis",
@@ -446,6 +447,7 @@
     "trend": "Trend",
     "allSources": "All Sources",
     "heat": "Heat",
+    "heatTooltip": "Composite heat score (0–80): mention lift vs 7-day daily avg + engagement (score + comments), capped at 80",
     "regulatory": "Regulatory",
     "skuRanking": "SKU Opportunity Ranking",
     "layerHint": "Signal layer: see variable shifts before regulatory and finance turn them into facts. Regulatory +N is a pending matrix delta, not current compliance status.",
@@ -471,12 +473,17 @@
     "topOpportunity": "Top Opportunity",
     "avgOpportunity": "Avg Opportunity",
     "signalCount": "Signal Count",
+    "loading": "Loading intelligence…",
+    "dateLabel": "Intel date",
+    "dateLatest": "Latest",
+    "noSignalsOnDate": "No signals for this date",
     "sources": {
       "news_legal": "News / Legal / Officials",
       "insider": "Insider Intel",
       "social": "Social Media",
       "platform_2c": "Downstream 2C Platforms"
     },
+    "viewSourcePost": "View source post →",
     "sourceOutputs": {
       "news_legal": "→ Product heat & regulatory intensity",
       "insider": "→ Regulatory development trends",
@@ -753,12 +760,13 @@
     "noPending": "No pending items",
     "reviewRestricted": "Only users with review permission can confirm or reject.",
     "chatTitle": "AI Agent",
-    "chatSubtitle": "Hermes + Qwen — chat to submit quotes, inquiries, and regulatory updates",
-    "chatWelcome": "Hello, I'm Peptide Monitor AI Agent (Hermes + Qwen). Chat freely or use quick-action buttons, add attachments, then send.",
+    "chatSubtitle": "Hermes + Qwen — ask platform rules & scoring, or submit quotes, inquiries, and regulatory updates",
+    "chatWelcome": "Hello, I'm Peptide Monitor AI Agent (Hermes + Qwen). Ask about viability scoring, platform depth, operational fit, regulatory allowance, or use quick actions for quotes and updates.",
     "chatPlaceholder": "Type a message, or pick a quick action and fill in details…",
     "chatError": "Unable to reach Agent. Check Hermes/Qwen configuration.",
     "attachFile": "Attach file",
     "inboxQueued": "Structured update queued for review on the left.",
+    "knowledgeSources": "Sources: {paths}",
     "promptQuoteLabel": "Send quote",
     "promptInquiryLabel": "Send inquiry",
     "promptRegulatoryLabel": "Regulatory update",
