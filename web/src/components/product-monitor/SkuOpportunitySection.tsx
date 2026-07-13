@@ -6,6 +6,7 @@ import { CommandCard } from "@/components/ui/CommandCard";
 import { Sparkline } from "@/components/ui/Sparkline";
 import { useDbResource } from "@/hooks/useDbResource";
 import { skuOpportunities as fallbackSku } from "@/lib/supply-chain/seed-data";
+import { calcPriceGap, formatPriceGap } from "@/lib/supply-chain/price-gap";
 import { TrendingDown, TrendingUp, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -49,7 +50,7 @@ export function SkuOpportunitySection() {
           <tbody>
             {sorted.map((sku, index) => {
               const TrendIcon = trendIcon[sku.trend];
-              const gap = sku.localPrice - sku.competitivePrice;
+              const gap = calcPriceGap(sku);
               return (
                 <tr
                   key={sku.id}
@@ -75,8 +76,7 @@ export function SkuOpportunitySection() {
                   </td>
                   <td className="py-3 pr-4 tabular-nums">{sku.demandScore}</td>
                   <td className="py-3 pr-4 tabular-nums text-command-text-secondary">
-                    ${gap > 0 ? "+" : ""}
-                    {gap}
+                    {formatPriceGap(gap)}
                   </td>
                   <td className="py-3">
                     <div className="flex items-center gap-2">

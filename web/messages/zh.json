@@ -604,6 +604,12 @@
       "platformValidation": "平台验证",
       "operationalFit": "运营可行",
       "regulatoryAllowance": "合规空间",
+      "weights": {
+        "marketSignal": "35%",
+        "platformValidation": "30%",
+        "operationalFit": "20%",
+        "regulatoryAllowance": "15%"
+      },
       "opportunityRef": "参考机会分",
       "action": {
         "core": "建议核心布局 — 深备母库存，支持单品与组合分装",
@@ -623,6 +629,8 @@
       "score": "机会分（商业）",
       "demand": "需求动量",
       "priceGap": "价差",
+      "priceGapLegendTitle": "价差说明",
+      "priceGapLegendIntro": "价差 = 我方报价 − 市场对标价（同规格、同单位）。正数表示我方高于市场，负数表示有价格优势。需同时具备两边真实报价才会显示，否则为 —。",
       "trend": "趋势",
       "regulatoryRef": "监管风险见",
       "regulatoryLink": "合规矩阵 →"

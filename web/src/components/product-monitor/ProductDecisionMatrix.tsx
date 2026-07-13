@@ -6,6 +6,8 @@ import { Link } from "@/i18n/navigation";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Sparkline } from "@/components/ui/Sparkline";
 import { CoverageLegendHelp } from "@/components/product-monitor/CoverageLegendHelp";
+import { PriceGapLegendHelp } from "@/components/product-monitor/PriceGapLegendHelp";
+import { calcPriceGap, formatPriceGap } from "@/lib/supply-chain/price-gap";
 import { useProductMonitor } from "@/components/providers/ProductMonitorProvider";
 import { useProductViability } from "@/hooks/useProductViability";
 import { getProductRegulatoryRisk } from "@/lib/regulatory/matrix";
@@ -87,13 +89,11 @@ export function ProductDecisionMatrix({
       </div>
 
       <div className="w-full max-w-full overflow-x-auto">
-        <table className="w-full min-w-[960px] table-fixed text-left text-sm">
+        <table className="w-full min-w-[800px] table-fixed text-left text-sm">
           <colgroup>
             <col className="w-[6.5rem]" />
             <col className="w-[9rem]" />
             <col className="w-[8.5rem]" />
-            <col className="w-[3.5rem]" />
-            <col className="w-[3.5rem]" />
             <col className="w-[3.5rem]" />
             <col className="w-[4rem]" />
             <col className="w-[6.5rem]" />
@@ -106,9 +106,12 @@ export function ProductDecisionMatrix({
               <th className="pb-3 pr-3">{t("table.productIntro")}</th>
               <th className="pb-3 pr-3">{t("table.conclusion")}</th>
               <th className="pb-3 pr-3">{tVia("score")}</th>
-              <th className="pb-3 pr-3">{tOpp("score")}</th>
-              <th className="pb-3 pr-3">{tOpp("demand")}</th>
-              <th className="pb-3 pr-3">{tOpp("priceGap")}</th>
+              <th className="pb-3 pr-3">
+                <span className="inline-flex items-center gap-1">
+                  {tOpp("priceGap")}
+                  <PriceGapLegendHelp />
+                </span>
+              </th>
               <th className="pb-3 pr-3">
                 <span className="inline-flex items-center gap-1">
                   {t("table.coverage")}
@@ -123,8 +126,7 @@ export function ProductDecisionMatrix({
             {filtered.map((record) => {
               const assessment = index.get(record.id);
               const sku = skuByProduct.get(record.product.toLowerCase());
-              const gap =
-                sku != null ? sku.localPrice - sku.competitivePrice : null;
+              const gap = calcPriceGap(sku);
               const TrendIcon = sku ? trendIcon[sku.trend] : null;
               const intro = introBriefForLocale(record.productIntro, locale);
               const introFull = record.productIntro
@@ -181,36 +183,8 @@ export function ProductDecisionMatrix({
                       {viabilityScore}
                     </span>
                   </td>
-                  <td className="py-3 pr-3">
-                    {sku ? (
-                      <span
-                        className={cn(
-                          "text-lg font-bold tabular-nums",
-                          sku.opportunityScore >= 60
-                            ? "text-command-green"
-                            : sku.opportunityScore >= 40
-                              ? "text-command-orange"
-                              : "text-command-text-secondary",
-                        )}
-                      >
-                        {sku.opportunityScore}
-                      </span>
-                    ) : (
-                      <span className="text-command-text-muted">—</span>
-                    )}
-                  </td>
-                  <td className="py-3 pr-3 tabular-nums">
-                    {sku ? sku.demandScore : "—"}
-                  </td>
                   <td className="py-3 pr-3 tabular-nums text-command-text-secondary">
-                    {gap != null ? (
-                      <>
-                        ${gap > 0 ? "+" : ""}
-                        {gap}
-                      </>
-                    ) : (
-                      "—"
-                    )}
+                    {formatPriceGap(gap)}
                   </td>
                   <td className="py-3 pr-3">
                     <CoverageMiniBar record={record} />

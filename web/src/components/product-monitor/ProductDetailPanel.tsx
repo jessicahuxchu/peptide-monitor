@@ -34,9 +34,8 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
   const tVia = useTranslations("productMonitor.viability");
   const locale = useLocale();
   const { data } = useProductMonitor();
-  const { index, skuByProduct, regulatoryEntries } = useProductViability();
+  const { index, regulatoryEntries } = useProductViability();
   const assessment = index.get(record.id);
-  const sku = skuByProduct.get(record.product.toLowerCase());
   const matrixRisk = getProductRegulatoryRisk(record.product, regulatoryEntries);
   const blends = getBlendsForProductFromData(data, record.id);
   const [showPlatforms, setShowPlatforms] = useState(false);
@@ -57,9 +56,20 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
                 {t(`risk.${matrixRisk}`)}
               </StatusBadge>
             </Link>
-            <span className="text-lg font-bold tabular-nums text-command-teal-bright">
+            <span
+              className={cn(
+                "text-lg font-bold tabular-nums",
+                viabilityScore >= 65
+                  ? "text-command-green"
+                  : viabilityScore >= 42
+                    ? "text-command-orange"
+                    : "text-command-text-secondary",
+              )}
+              title={tVia("score")}
+            >
               {viabilityScore}
             </span>
+            <span className="text-[10px] text-command-text-muted">{tVia("score")}</span>
           </div>
           <h3 className="text-sm font-semibold text-command-text">{record.product}</h3>
           <p className="text-[11px] text-command-text-muted">{record.primarySpec}</p>
@@ -77,27 +87,35 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
 
       <div className="flex-1 space-y-4 overflow-y-auto p-3">
         {breakdown && (
-          <section>
-            <h4 className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
-              {tVia("breakdownTitle")}
-            </h4>
-            <dl className="space-y-1.5">
-              <BreakdownRow label={tVia("marketSignal")} value={breakdown.marketSignal} />
+          <section className="rounded-lg border border-command-border/60 bg-command-card-elevated/30 p-3">
+            <div className="mb-2.5 flex items-baseline justify-between gap-2">
+              <h4 className="text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
+                {tVia("breakdownTitle")}
+              </h4>
+              <span className="text-[10px] text-command-text-muted">{tVia("formulaShort")}</span>
+            </div>
+            <dl className="space-y-2">
+              <BreakdownRow
+                label={tVia("marketSignal")}
+                weight={tVia("weights.marketSignal")}
+                value={breakdown.marketSignal}
+              />
               <BreakdownRow
                 label={tVia("platformValidation")}
+                weight={tVia("weights.platformValidation")}
                 value={breakdown.platformValidation}
               />
-              <BreakdownRow label={tVia("operationalFit")} value={breakdown.operationalFit} />
+              <BreakdownRow
+                label={tVia("operationalFit")}
+                weight={tVia("weights.operationalFit")}
+                value={breakdown.operationalFit}
+              />
               <BreakdownRow
                 label={tVia("regulatoryAllowance")}
+                weight={tVia("weights.regulatoryAllowance")}
                 value={breakdown.regulatoryAllowance}
               />
             </dl>
-            {sku && (
-              <p className="mt-2 text-[10px] text-command-text-muted">
-                {tVia("opportunityRef")}: {sku.opportunityScore}
-              </p>
-            )}
           </section>
         )}
 
@@ -175,10 +193,21 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
   );
 }
 
-function BreakdownRow({ label, value }: { label: string; value: number }) {
+function BreakdownRow({
+  label,
+  weight,
+  value,
+}: {
+  label: string;
+  weight: string;
+  value: number;
+}) {
   return (
     <div className="flex items-center gap-2 text-[11px]">
-      <span className="w-24 shrink-0 text-command-text-muted">{label}</span>
+      <span className="w-[5.5rem] shrink-0 text-command-text-muted">
+        {label}
+        <span className="ml-1 text-[9px] text-command-text-muted/70">{weight}</span>
+      </span>
       <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-command-border/60">
         <div
           className={cn(

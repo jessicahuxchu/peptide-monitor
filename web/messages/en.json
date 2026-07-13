@@ -596,6 +596,12 @@
       "platformValidation": "Platform Validation",
       "operationalFit": "Operational Fit",
       "regulatoryAllowance": "Regulatory Room",
+      "weights": {
+        "marketSignal": "35%",
+        "platformValidation": "30%",
+        "operationalFit": "20%",
+        "regulatoryAllowance": "15%"
+      },
       "opportunityRef": "Opportunity ref.",
       "action": {
         "core": "Core focus — deep raw-material stock, support singles and blends",
@@ -615,6 +621,8 @@
       "score": "Opportunity",
       "demand": "Opp. Demand",
       "priceGap": "Price gap",
+      "priceGapLegendTitle": "Price gap",
+      "priceGapLegendIntro": "Price gap = our quote minus market benchmark (same spec and unit). Positive means we price above market; negative means a price advantage. Shown only when both sides have real quotes; otherwise —.",
       "trend": "Trend",
       "regulatoryRef": "Regulatory risk:",
       "regulatoryLink": "Compliance matrix →"

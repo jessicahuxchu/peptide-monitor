@@ -249,60 +249,18 @@ export interface SkuOpportunity {
   id: string;
   product: string;
   demandScore: number;
-  localPrice: number;
-  competitivePrice: number;
+  /** Our quote — null until sourced from CRM or manual entry */
+  localPrice: number | null;
+  /** Market benchmark — null until sourced from intel / scraper */
+  competitivePrice: number | null;
   regulatorySensitivity: number;
   opportunityScore: number;
   trend: "up" | "down" | "stable";
   sparkline: number[];
 }
 
-export const skuOpportunities: SkuOpportunity[] = [
-  {
-    id: "sku1",
-    product: "BPC-157",
-    demandScore: 85,
-    localPrice: 842,
-    competitivePrice: 790,
-    regulatorySensitivity: 0.35,
-    opportunityScore: 72,
-    trend: "up",
-    sparkline: [42, 48, 45, 52, 58, 55, 62, 68, 65, 72, 78, 75],
-  },
-  {
-    id: "sku2",
-    product: "TB-500",
-    demandScore: 62,
-    localPrice: 1200,
-    competitivePrice: 1150,
-    regulatorySensitivity: 0.55,
-    opportunityScore: 48,
-    trend: "stable",
-    sparkline: [30, 32, 31, 33, 34, 33, 35, 36, 34, 35, 36, 35],
-  },
-  {
-    id: "sku3",
-    product: "GHK-Cu",
-    demandScore: 71,
-    localPrice: 650,
-    competitivePrice: 620,
-    regulatorySensitivity: 0.25,
-    opportunityScore: 68,
-    trend: "up",
-    sparkline: [20, 22, 25, 28, 30, 32, 35, 38, 40, 42, 45, 48],
-  },
-  {
-    id: "sku4",
-    product: "Semaglutide",
-    demandScore: 90,
-    localPrice: 450,
-    competitivePrice: 380,
-    regulatorySensitivity: 0.85,
-    opportunityScore: 35,
-    trend: "down",
-    sparkline: [80, 78, 75, 72, 70, 68, 65, 60, 58, 55, 52, 50],
-  },
-];
+/** Populated when pricing intelligence exists; not auto-derived from platform matrix. */
+export const skuOpportunities: SkuOpportunity[] = [];
 
 export interface RiskSignal {
   id: string;
