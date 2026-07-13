@@ -164,7 +164,7 @@ export default function InboxPage() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl p-4 md:p-6">
+    <div className="mx-auto flex min-h-[calc(100dvh-7rem)] max-w-6xl flex-col p-4 md:min-h-[calc(100dvh-3.5rem)] md:p-6">
       {!usingDb && (
         <p className="mb-4 rounded-lg border border-command-orange/30 bg-command-orange/5 px-4 py-2 text-xs text-command-orange">
           {t("inboxPage.offlineMode")}
@@ -172,8 +172,12 @@ export default function InboxPage() {
       )}
       {error && <p className="mb-4 text-xs text-command-red">{error}</p>}
 
-      <div className="grid gap-4 lg:grid-cols-[300px_1fr]">
-        <CommandCard title={t("inboxPage.pendingTitle")} subtitle={t("inboxPage.pendingSubtitle")}>
+      <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-[minmax(240px,300px)_minmax(0,1fr)] lg:items-stretch">
+        <CommandCard
+          title={t("inboxPage.pendingTitle")}
+          subtitle={t("inboxPage.pendingSubtitle")}
+          className="flex max-h-[36vh] flex-col lg:max-h-none lg:min-h-0"
+        >
           {!canReview && (
             <p className="mb-3 rounded-lg border border-command-border bg-command-card-elevated px-3 py-2 text-[10px] text-command-text-muted">
               {t("inboxPage.reviewRestricted")}
@@ -188,7 +192,7 @@ export default function InboxPage() {
               {t("inboxPage.noPending")}
             </p>
           ) : (
-            <ul className="max-h-[520px] space-y-2 overflow-y-auto">
+            <ul className="min-h-0 flex-1 space-y-2 overflow-y-auto">
               {pendingSubmissions.map((msg) => (
                 <li
                   key={msg.id}
@@ -235,7 +239,11 @@ export default function InboxPage() {
           )}
         </CommandCard>
 
-        <CommandCard title={t("inboxPage.chatTitle")} subtitle={t("inboxPage.chatSubtitle")}>
+        <CommandCard
+          title={t("inboxPage.chatTitle")}
+          subtitle={t("inboxPage.chatSubtitle")}
+          className="flex min-h-[min(60vh,480px)] flex-1 flex-col lg:min-h-0"
+        >
           <div className="mb-3 flex flex-wrap gap-2">
             {PROMPT_INTENTS.map(({ intent, key }) => (
               <button
@@ -254,8 +262,8 @@ export default function InboxPage() {
             ))}
           </div>
 
-          <div className="flex h-[440px] flex-col">
-            <div className="flex-1 space-y-3 overflow-y-auto rounded-lg border border-command-border bg-[#050505] p-4">
+          <div className="flex min-h-0 flex-1 flex-col">
+            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto rounded-lg border border-command-border bg-[#050505] p-4">
               {chatMessages.map((msg, i) => (
                 <div
                   key={`${msg.role}-${i}`}

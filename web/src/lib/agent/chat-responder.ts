@@ -3,10 +3,21 @@ import {
   isPlatformKnowledgeQuery,
   retrievePlatformKnowledge,
 } from "./platform-knowledge";
+import {
+  inferDataDomains,
+  isPlatformDataQuery,
+  queryAgentPlatformData,
+} from "./agent-data";
+import { webSearch } from "./web-search";
 
 export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
+}
+
+export interface ChatResponderOptions {
+  author?: string;
+  intent?: "chat" | "quote" | "inquiry" | "regulatory";
 }
 
 const TOPICS: { pattern: RegExp; reply: string }[] = [
@@ -76,11 +87,47 @@ function buildKnowledgeFallbackReply(
   ].join("\n");
 }
 
-export function generateChatResponse(
+async function buildDataFallbackReply(
+  query: string,
+  locale: "en" | "zh",
+): Promise<string | null> {
+  if (!isPlatformDataQuery(query)) return null;
+
+  const domains = inferDataDomains(query);
+  const sections: string[] = [];
+
+  for (const domain of domains.slice(0, 2)) {
+    const { source, data } = await queryAgentPlatformData({ domain, limit: 8 });
+    sections.push(`### ${domain} (${source})\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``);
+  }
+
+  if (sections.length === 0) return null;
+
+  if (locale === "zh") {
+    return [
+      "当前未连接 LLM，以下为从平台数据库/seed 直接查询的结果（离线模式）：",
+      "",
+      ...sections,
+      "",
+      "配置 `DASHSCOPE_API_KEY` 后可获得自然语言解读。",
+    ].join("\n");
+  }
+
+  return [
+    "LLM not configured — raw platform database query results (offline mode):",
+    "",
+    ...sections,
+    "",
+    "Set `DASHSCOPE_API_KEY` for natural-language answers.",
+  ].join("\n");
+}
+
+export async function generateChatResponse(
   messages: ChatMessage[],
   locale: "en" | "zh" = "zh",
   latestUserText?: string,
-): string {
+  _options: ChatResponderOptions = {},
+): Promise<string> {
   const lastUser = [...messages].reverse().find((m) => m.role === "user");
   if (!lastUser) {
     return locale === "zh"
@@ -89,6 +136,9 @@ export function generateChatResponse(
   }
 
   const text = latestUserText ?? lastUser.content;
+
+  const dataReply = await buildDataFallbackReply(text, locale);
+  if (dataReply) return dataReply;
 
   const knowledgeReply = buildKnowledgeFallbackReply(text, locale);
   if (knowledgeReply) return knowledgeReply;
@@ -99,9 +149,21 @@ export function generateChatResponse(
     }
   }
 
-  if (locale === "zh") {
-    return `关于「${text.slice(0, 40)}${text.length > 40 ? "…" : ""}」，我建议：\n\n1. 在「情报」页查看相关 SKU 机会分\n2. 在「供应链」页检查对应节点文件要求\n3. 如需录入新信息，可在左侧收件箱提交，我会帮你解析为结构化更新。\n\n也可直接问「综合评判怎么算」「平台覆盖深度评分标准」等平台规则问题。`;
+  if (/最新|新闻|news|today|2026/i.test(text)) {
+    const search = await webSearch(text, 3);
+    if (search.results.length > 0) {
+      const lines = search.results.map(
+        (r, i) => `${i + 1}. **${r.title}** — ${r.snippet.slice(0, 120)} (${r.url})`,
+      );
+      return locale === "zh"
+        ? `平台库中未命中，已尝试联网检索（${search.provider}）：\n\n${lines.join("\n")}`
+        : `No platform match — web search (${search.provider}):\n\n${lines.join("\n")}`;
+    }
   }
 
-  return `Regarding "${text.slice(0, 40)}${text.length > 40 ? "…" : ""}", I suggest:\n\n1. Check SKU opportunity scores on Intelligence\n2. Review node document requirements on Supply Chain\n3. Submit updates via the inbox on the left for structured parsing.\n\nYou can also ask platform rule questions, e.g. how viability scoring works.`;
+  if (locale === "zh") {
+    return `关于「${text.slice(0, 40)}${text.length > 40 ? "…" : ""}」，我建议：\n\n1. 在「舆论情报」页查看相关 SKU 热度与信号\n2. 在「供应链」页检查对应节点文件要求\n3. 如需录入新信息，可在此提交，我会帮你解析为结构化更新。\n\n也可直接问「哪个产品热度最高」「综合评判怎么算」等问题。`;
+  }
+
+  return `Regarding "${text.slice(0, 40)}${text.length > 40 ? "…" : ""}", I suggest:\n\n1. Check social heat and signals on Intelligence\n2. Review node document requirements on Supply Chain\n3. Submit updates here for structured parsing.\n\nYou can also ask e.g. "which product has the highest heat?" or how viability scoring works.`;
 }

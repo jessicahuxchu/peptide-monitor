@@ -47,25 +47,6 @@ const intelligenceFallback = {
 
 const trendIcon = { up: TrendingUp, down: TrendingDown, stable: Minus };
 
-function buildDimensionSummary(
-  dimension: SignalDimension,
-  signals: IntelSignal[],
-  emptyLabel: string,
-): string {
-  const dimSignals = getSignalsByDimension(dimension, signals);
-  if (dimSignals.length === 0) return emptyLabel;
-  const highlights = dimSignals
-    .slice(0, 2)
-    .map((s) => s.directionLabel)
-    .join("；");
-  return `${dimSignals.length} 条信号 — ${highlights}`;
-}
-
-function formatSignalDate(date: string): string {
-  const [, month, day] = date.split("-");
-  return `${Number(month)}.${Number(day)}`;
-}
-
 export default function IntelligencePage() {
   const t = useTranslations();
   const { data, loading, usingDb } = useDbResource("/api/intelligence", intelligenceFallback);
@@ -107,84 +88,45 @@ export default function IntelligencePage() {
   const pendingCount = countPendingMatrixUpdates(dateSignals);
   const sources = ["news_legal", "insider", "social", "platform_2c"] as const;
 
-  const summaries = useMemo(
-    () => ({
-      demand: buildDimensionSummary(
-        "demand",
-        dateSignals,
-        t("intelligencePage.summaryEmpty"),
-      ),
-      regulatory: buildDimensionSummary(
-        "regulatory",
-        dateSignals,
-        t("intelligencePage.summaryEmpty"),
-      ),
-      competitive: buildDimensionSummary(
-        "competitive",
-        dateSignals,
-        t("intelligencePage.summaryEmpty"),
-      ),
-    }),
-    [dateSignals, t],
-  );
+  const dateBounds = useMemo(() => {
+    if (availableDates.length === 0) return { min: "", max: "" };
+    return {
+      min: availableDates[availableDates.length - 1],
+      max: availableDates[0],
+    };
+  }, [availableDates]);
 
   return (
     <div className="w-full max-w-full overflow-x-hidden p-4 md:p-6">
       <div className="space-y-6">
         <CommandCard>
           <div className="mb-5 space-y-3">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-command-text-muted">
-                {t("intelligencePage.dimensionSummariesTitle")}
-              </h3>
-              {availableDates.length > 0 && (
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
-                    {t("intelligencePage.dateLabel")}
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {availableDates.map((date) => (
-                      <button
-                        key={date}
-                        type="button"
-                        onClick={() => setSelectedDate(date)}
-                        className={cn(
-                          "rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all",
-                          selectedDate === date
-                            ? "border-command-teal/40 bg-command-teal/10 text-command-teal-bright"
-                            : "border-command-border text-command-text-muted hover:text-command-text-secondary",
-                        )}
-                      >
-                        {formatSignalDate(date)}
-                        {date === availableDates[0] && (
-                          <span className="ml-1 text-[9px] opacity-70">
-                            ({t("intelligencePage.dateLatest")})
-                          </span>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-3">
-              <SummaryCard
-                label={t("intelligencePage.summaryDemand")}
-                body={summaries.demand}
-                border="border-command-teal/30"
-              />
-              <SummaryCard
-                label={t("intelligencePage.summaryRegulatory")}
-                body={summaries.regulatory}
-                border="border-command-orange/30"
-              />
-              <SummaryCard
-                label={t("intelligencePage.summaryCompetitive")}
-                body={summaries.competitive}
-                border="border-purple-500/30"
-              />
-            </div>
+            {availableDates.length > 0 && (
+              <div className="flex flex-wrap items-center justify-end gap-2">
+                <label
+                  htmlFor="intel-date"
+                  className="text-[10px] font-medium uppercase tracking-wider text-command-text-muted"
+                >
+                  {t("intelligencePage.dateLabel")}
+                </label>
+                <input
+                  id="intel-date"
+                  type="date"
+                  value={selectedDate ?? ""}
+                  min={dateBounds.min}
+                  max={dateBounds.max}
+                  onChange={(e) => {
+                    if (e.target.value) setSelectedDate(e.target.value);
+                  }}
+                  className={cn(
+                    "rounded-lg border border-command-border bg-command-card-elevated px-3 py-1.5",
+                    "text-sm text-command-text",
+                    "[color-scheme:dark]",
+                    "focus:border-command-teal/40 focus:outline-none focus:ring-1 focus:ring-command-teal/30",
+                  )}
+                />
+              </div>
+            )}
 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {sources.map((src) => {
@@ -354,25 +296,6 @@ export default function IntelligencePage() {
           </div>
         </CommandCard>
       </div>
-    </div>
-  );
-}
-
-function SummaryCard({
-  label,
-  body,
-  border,
-}: {
-  label: string;
-  body: string;
-  border: string;
-}) {
-  return (
-    <div className={cn("rounded-xl border bg-command-card-elevated/40 p-3", border)}>
-      <p className="text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
-        {label}
-      </p>
-      <p className="mt-1.5 text-xs leading-relaxed text-command-text-secondary">{body}</p>
     </div>
   );
 }

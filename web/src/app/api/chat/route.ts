@@ -29,6 +29,7 @@ export async function POST(request: Request) {
       locale,
       intent,
       attachmentText: body.attachmentText,
+      author,
     });
 
     let inboxQueued = false;
@@ -46,6 +47,7 @@ export async function POST(request: Request) {
       provider: result.provider,
       inboxQueued,
       knowledgeSources: result.knowledgeSources,
+      toolCalls: result.toolCalls,
     });
   } catch {
     return NextResponse.json({ error: "Chat failed" }, { status: 500 });
