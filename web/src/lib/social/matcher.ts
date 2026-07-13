@@ -31,7 +31,13 @@ export function matchProducts(text: string): string[] {
 
 export function hasRegulatoryKeyword(text: string): boolean {
   const lower = text.toLowerCase();
-  return REGULATORY_KEYWORDS.some((kw) => lower.includes(kw));
+  return REGULATORY_KEYWORDS.some((kw) => {
+    if (kw.includes(" ")) {
+      return lower.includes(kw);
+    }
+    const pattern = new RegExp(`(^|[^a-z0-9])${escapeRegex(kw)}([^a-z0-9]|$)`, "i");
+    return pattern.test(lower);
+  });
 }
 
 export function hasAuContext(text: string): boolean {

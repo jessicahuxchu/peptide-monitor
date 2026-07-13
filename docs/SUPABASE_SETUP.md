@@ -142,7 +142,7 @@ Apify 抓取通常需要 **5–20 分钟**，超过 Vercel 单次函数时限，
 | 02:00 | 10:00 | `?phase=start` | 启动 Apify，立即返回 |
 | 03:00 | 11:00 | `?phase=complete` | 检查结果并写入数据库 |
 
-配置见 `web/vercel.json`。还需在 Supabase 运行 `005_social_scan_jobs.sql`。
+配置见 `web/vercel.json`。还需在 Supabase 运行 `005_social_scan_jobs.sql` 与 `006_social_post_classification.sql`（AI 分类字段）。
 
 在 Vercel → **Settings → Environment Variables** 确保已配置：
 

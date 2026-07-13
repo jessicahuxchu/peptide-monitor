@@ -594,6 +594,8 @@
     },
     "viability": {
       "score": "综合评判",
+      "scoreLegendTitle": "综合评判说明",
+      "scoreLegendIntro": "综合评判即品类可行性（Viability）——回答「该不该做、怎么做」。整合市场信号、平台覆盖深度、运营可行与合规空间；不同于商业机会分或需求热度。点击产品可在右侧查看四维拆解。",
       "topSku": "最高可行",
       "topScore": "综合评判",
       "formula": "评判维度",
@@ -601,7 +603,7 @@
       "layerHint": "综合评判回答「该不该做、怎么做」——整合情报机会分、社媒热度、平台覆盖深度与监管约束；机会分为独立商业视角，不参与本列计算。",
       "breakdownTitle": "评判拆解",
       "marketSignal": "市场信号",
-      "platformValidation": "平台验证",
+      "platformValidation": "平台覆盖深度",
       "operationalFit": "运营可行",
       "regulatoryAllowance": "合规空间",
       "weights": {
@@ -632,6 +634,8 @@
       "priceGapLegendTitle": "价差说明",
       "priceGapLegendIntro": "价差 = 我方报价 − 市场对标价（同规格、同单位）。正数表示我方高于市场，负数表示有价格优势。需同时具备两边真实报价才会显示，否则为 —。",
       "trend": "趋势",
+      "trendLegendTitle": "趋势说明",
+      "trendLegendIntro": "趋势来自 Reddit 社媒扫描：每日 Cron 抓取 r/Peptides 等社区帖子，按产品聚合 7 日提及量。箭头为涨跌方向，曲线为每日提及次数。仅覆盖词典内产品（如 BPC-157、GHK-Cu 等）；无讨论时为 —。",
       "regulatoryRef": "监管风险见",
       "regulatoryLink": "合规矩阵 →"
     }

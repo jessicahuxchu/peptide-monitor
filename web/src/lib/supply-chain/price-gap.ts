@@ -7,6 +7,7 @@ export function calcPriceGap(sku: PriceInputs | null | undefined): number | null
   if (!sku) return null;
   const { localPrice, competitivePrice } = sku;
   if (localPrice == null || competitivePrice == null) return null;
+  if (localPrice <= 0 || competitivePrice <= 0) return null;
   if (!Number.isFinite(localPrice) || !Number.isFinite(competitivePrice)) return null;
   return localPrice - competitivePrice;
 }

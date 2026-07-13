@@ -318,6 +318,9 @@ export interface Database {
           engagement: number;
           fetched_at: string;
           created_at: string;
+          regulatory_reason: string | null;
+          classified_by: string | null;
+          au_context: boolean;
         };
         Insert: Omit<
           Database["public"]["Tables"]["social_posts"]["Row"],
@@ -352,8 +355,8 @@ export interface Database {
           id: string;
           product: string;
           demand_score: number;
-          local_price: number;
-          competitive_price: number;
+          local_price: number | null;
+          competitive_price: number | null;
           regulatory_sensitivity: number;
           opportunity_score: number;
           trend: string;

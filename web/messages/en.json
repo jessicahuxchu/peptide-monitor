@@ -586,14 +586,16 @@
     },
     "viability": {
       "score": "Viability",
+      "scoreLegendTitle": "Viability score",
+      "scoreLegendIntro": "Viability = how feasible it is to pursue this SKU in AU — whether you should do it and how (core stock, trial, or order-only). It combines market signals, platform coverage depth, operations, and compliance — not the same as opportunity score or raw demand. Click a row for the four-dimension breakdown.",
       "topSku": "Top Viable",
       "topScore": "Viability",
       "formula": "Dimensions",
       "formulaShort": "Intel × Coverage × Reg × Ops",
-      "layerHint": "Viability answers whether and how to pursue a SKU — combining intel opportunity, social heat, platform depth, and regulatory constraints. Opportunity is a separate commercial lens and is not double-counted here.",
+      "layerHint": "Viability answers whether and how to pursue a SKU — combining intel opportunity, social heat, platform coverage depth, and regulatory constraints. Opportunity is a separate commercial lens and is not double-counted here.",
       "breakdownTitle": "Viability Breakdown",
       "marketSignal": "Market Signal",
-      "platformValidation": "Platform Validation",
+      "platformValidation": "Platform Coverage Depth",
       "operationalFit": "Operational Fit",
       "regulatoryAllowance": "Regulatory Room",
       "weights": {
@@ -624,6 +626,8 @@
       "priceGapLegendTitle": "Price gap",
       "priceGapLegendIntro": "Price gap = our quote minus market benchmark (same spec and unit). Positive means we price above market; negative means a price advantage. Shown only when both sides have real quotes; otherwise —.",
       "trend": "Trend",
+      "trendLegendTitle": "Trend",
+      "trendLegendIntro": "Trend is driven by the daily Reddit scan: posts from r/Peptides and related subs are matched to products and aggregated over 7 days. Arrow = direction; sparkline = daily mention counts. Only tracked dictionary products (e.g. BPC-157, GHK-Cu); — when no discussion.",
       "regulatoryRef": "Regulatory risk:",
       "regulatoryLink": "Compliance matrix →"
     }

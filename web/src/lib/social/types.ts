@@ -15,6 +15,9 @@ export interface SocialPost {
   hasRegulatory: boolean;
   engagement: number;
   fetchedAt: string;
+  regulatoryReason?: string | null;
+  classifiedBy?: "agent" | "rules" | null;
+  auContext?: boolean;
 }
 
 export interface NormalizedSocialPost {
@@ -34,6 +37,8 @@ export interface NormalizedSocialPost {
   hasRegulatory: boolean;
   engagement: number;
   auContext: boolean;
+  regulatoryReason?: string | null;
+  classifiedBy?: "agent" | "rules" | null;
 }
 
 export interface SocialFetchResult {

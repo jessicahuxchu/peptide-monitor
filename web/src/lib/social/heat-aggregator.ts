@@ -1,5 +1,6 @@
 import { createServiceClient } from "@/lib/supabase/client";
 import type { Database } from "@/lib/supabase/database.types";
+import { classifySocialPosts } from "@/lib/agent/social-classifier";
 import { HEAT_THRESHOLDS, PRODUCT_ALIASES } from "./config";
 import {
   fetchApifyDatasetPosts,
@@ -8,6 +9,7 @@ import {
   startApifyRedditRun,
 } from "./apify-client";
 import { fetchSocialPeptidePosts } from "./social-fetcher";
+import { upsertSkuOpportunitiesFromHeat } from "./sku-from-heat";
 import type { NormalizedSocialPost } from "./types";
 
 type SocialPostInsert = Database["public"]["Tables"]["social_posts"]["Insert"];
@@ -170,7 +172,12 @@ function buildSignal(stats: ProductHeatStats): SignalInsert | null {
     `代表帖：r/${top.subreddit}「${top.title}」（score ${top.score}，评论 ${top.numComments}）。`,
   ];
   if (stats.hasRegulatory) {
-    summaryParts.push("讨论中出现监管/执法相关关键词，建议对照合规矩阵复核。");
+    const reason = stats.topPost?.regulatoryReason;
+    summaryParts.push(
+      reason
+        ? `监管相关：${reason}`
+        : "讨论中出现监管/执法相关关键词，建议对照合规矩阵复核。",
+    );
   }
   if (stats.promoteReasons.length) {
     summaryParts.push(`触发规则：${stats.promoteReasons.join(", ")}。`);
@@ -208,7 +215,28 @@ function toRow(post: NormalizedSocialPost): SocialPostInsert {
     products: post.products,
     has_regulatory: post.hasRegulatory,
     engagement: post.engagement,
+    au_context: post.auContext,
+    regulatory_reason: post.regulatoryReason ?? null,
+    classified_by: post.classifiedBy ?? null,
     fetched_at: new Date().toISOString(),
+  };
+}
+
+function applyClassification(
+  post: NormalizedSocialPost,
+  classification: {
+    hasRegulatory: boolean;
+    auContext: boolean;
+    reason: string | null;
+    classifiedBy: "agent" | "rules";
+  },
+): NormalizedSocialPost {
+  return {
+    ...post,
+    hasRegulatory: classification.hasRegulatory,
+    auContext: classification.auContext,
+    regulatoryReason: classification.reason,
+    classifiedBy: classification.classifiedBy,
   };
 }
 
@@ -223,6 +251,7 @@ export interface RedditHeatScanResult {
   fetched: number;
   upsertedPosts: number;
   signalsUpserted: number;
+  skuOpportunitiesUpserted: number;
   productStats: Array<{
     product: string;
     mentions24h: number;
@@ -235,6 +264,8 @@ export interface RedditHeatScanResult {
   sources: { subredditPulls: number; searchPulls: number };
   errors?: string[];
   error?: string;
+  classificationProvider?: "agent" | "rules";
+  classifiedPosts?: number;
 }
 
 async function ingestFetchedPosts(
@@ -244,8 +275,19 @@ async function ingestFetchedPosts(
 ): Promise<RedditHeatScanResult> {
   const supabase = createServiceClient();
 
+  const { classifications, provider: classificationProvider } =
+    await classifySocialPosts(posts);
+
+  const classifiedById = new Map(
+    classifications.map((c) => [c.postId, c]),
+  );
+  const classifiedPosts = posts.map((post) => {
+    const hit = classifiedById.get(post.id);
+    return hit ? applyClassification(post, hit) : post;
+  });
+
   let upsertedPosts = 0;
-  const rows = posts.map(toRow);
+  const rows = classifiedPosts.map(toRow);
 
   for (let i = 0; i < rows.length; i += 50) {
     const chunk = rows.slice(i, i + 50);
@@ -280,7 +322,9 @@ async function ingestFetchedPosts(
     products: (row.products as string[]) ?? [],
     hasRegulatory: row.has_regulatory,
     engagement: row.engagement,
-    auContext: hasAuFromRow(row),
+    auContext: row.au_context ?? hasAuFromRow(row),
+    regulatoryReason: row.regulatory_reason,
+    classifiedBy: row.classified_by as NormalizedSocialPost["classifiedBy"],
   }));
 
   const stats = computeProductHeat(normalized);
@@ -297,6 +341,12 @@ async function ingestFetchedPosts(
     signalsUpserted = signals.length;
   }
 
+  const skuOpportunitiesUpserted = await upsertSkuOpportunitiesFromHeat(
+    supabase,
+    stats,
+    normalized,
+  );
+
   return {
     ok: true,
     configured: true,
@@ -304,6 +354,9 @@ async function ingestFetchedPosts(
     fetched: posts.length,
     upsertedPosts,
     signalsUpserted,
+    skuOpportunitiesUpserted,
+    classificationProvider,
+    classifiedPosts: classifications.length,
     productStats: stats.map((s) => ({
       product: s.product,
       mentions24h: s.mentions24h,
@@ -330,6 +383,8 @@ export async function runRedditHeatScanStart(): Promise<RedditHeatScanResult> {
       fetched: 0,
       upsertedPosts: 0,
       signalsUpserted: 0,
+    skuOpportunitiesUpserted: 0,
+      skuOpportunitiesUpserted: 0,
       productStats: [],
       sources: { subredditPulls: 0, searchPulls: 0 },
       error: "APIFY_API_TOKEN not set",
@@ -359,6 +414,8 @@ export async function runRedditHeatScanStart(): Promise<RedditHeatScanResult> {
       fetched: 0,
       upsertedPosts: 0,
       signalsUpserted: 0,
+    skuOpportunitiesUpserted: 0,
+      skuOpportunitiesUpserted: 0,
       productStats: [],
       sources: { subredditPulls: 2, searchPulls: 2 },
       error: "Apify run already in progress",
@@ -386,6 +443,7 @@ export async function runRedditHeatScanStart(): Promise<RedditHeatScanResult> {
     fetched: 0,
     upsertedPosts: 0,
     signalsUpserted: 0,
+    skuOpportunitiesUpserted: 0,
     productStats: [],
     sources: { subredditPulls: 2, searchPulls: 2 },
   };
@@ -404,6 +462,8 @@ export async function runRedditHeatScanComplete(): Promise<RedditHeatScanResult>
       fetched: 0,
       upsertedPosts: 0,
       signalsUpserted: 0,
+    skuOpportunitiesUpserted: 0,
+      skuOpportunitiesUpserted: 0,
       productStats: [],
       sources: { subredditPulls: 0, searchPulls: 0 },
       error: "APIFY_API_TOKEN not set",
@@ -431,6 +491,8 @@ export async function runRedditHeatScanComplete(): Promise<RedditHeatScanResult>
       fetched: 0,
       upsertedPosts: 0,
       signalsUpserted: 0,
+    skuOpportunitiesUpserted: 0,
+      skuOpportunitiesUpserted: 0,
       productStats: [],
       sources: { subredditPulls: 2, searchPulls: 2 },
       error: "No running Apify job to complete",
@@ -451,6 +513,8 @@ export async function runRedditHeatScanComplete(): Promise<RedditHeatScanResult>
       fetched: 0,
       upsertedPosts: 0,
       signalsUpserted: 0,
+    skuOpportunitiesUpserted: 0,
+      skuOpportunitiesUpserted: 0,
       productStats: [],
       sources: { subredditPulls: 2, searchPulls: 2 },
       error: "Apify run still in progress — retry later",
@@ -478,6 +542,8 @@ export async function runRedditHeatScanComplete(): Promise<RedditHeatScanResult>
       fetched: 0,
       upsertedPosts: 0,
       signalsUpserted: 0,
+    skuOpportunitiesUpserted: 0,
+      skuOpportunitiesUpserted: 0,
       productStats: [],
       sources: { subredditPulls: 2, searchPulls: 2 },
       error: `Apify run ${status}: ${statusMessage ?? "failed"}`,
@@ -506,6 +572,8 @@ export async function runRedditHeatScanComplete(): Promise<RedditHeatScanResult>
       fetched: 0,
       upsertedPosts: 0,
       signalsUpserted: 0,
+    skuOpportunitiesUpserted: 0,
+      skuOpportunitiesUpserted: 0,
       productStats: [],
       sources: fetchResult.sources,
       errors: fetchResult.errors,
@@ -556,6 +624,8 @@ export async function runRedditHeatScan(
       fetched: 0,
       upsertedPosts: 0,
       signalsUpserted: 0,
+    skuOpportunitiesUpserted: 0,
+      skuOpportunitiesUpserted: 0,
       productStats: [],
       sources,
       errors,
@@ -573,6 +643,8 @@ export async function runRedditHeatScan(
       fetched: 0,
       upsertedPosts: 0,
       signalsUpserted: 0,
+    skuOpportunitiesUpserted: 0,
+      skuOpportunitiesUpserted: 0,
       productStats: [],
       sources,
       errors,

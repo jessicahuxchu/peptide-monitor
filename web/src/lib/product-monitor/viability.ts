@@ -88,18 +88,20 @@ function calcMarketSignal(
   intelHeatScore?: number,
 ): { score: number; sources: ViabilityBreakdown["marketSignalSources"] } {
   const sources: ViabilityBreakdown["marketSignalSources"] = {};
+  const opp =
+    opportunityScore != null && opportunityScore > 0 ? opportunityScore : undefined;
 
-  if (opportunityScore != null) sources.opportunityScore = opportunityScore;
+  if (opp != null) sources.opportunityScore = opp;
   if (intelHeatScore != null) sources.intelHeatScore = intelHeatScore;
 
-  if (opportunityScore != null && intelHeatScore != null) {
+  if (opp != null && intelHeatScore != null) {
     return {
-      score: clamp(opportunityScore * 0.6 + intelHeatScore * 0.4),
+      score: clamp(opp * 0.6 + intelHeatScore * 0.4),
       sources,
     };
   }
-  if (opportunityScore != null) {
-    return { score: opportunityScore, sources };
+  if (opp != null) {
+    return { score: opp, sources };
   }
   if (intelHeatScore != null) {
     return { score: intelHeatScore, sources };

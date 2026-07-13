@@ -106,6 +106,11 @@ export default function SocialPostsPage() {
                   <span className="inline-flex items-center gap-1 text-command-orange">
                     <ShieldAlert className="h-3 w-3" />
                     regulatory
+                    {post.classifiedBy === "agent" && (
+                      <span className="normal-case text-[9px] text-command-text-muted">
+                        · AI
+                      </span>
+                    )}
                   </span>
                 )}
               </div>
@@ -116,6 +121,11 @@ export default function SocialPostsPage() {
               {post.body && (
                 <p className="mt-1 line-clamp-3 text-sm text-command-text-secondary">
                   {post.body}
+                </p>
+              )}
+              {post.hasRegulatory && post.regulatoryReason && (
+                <p className="mt-2 text-[11px] text-command-orange/90">
+                  {post.regulatoryReason}
                 </p>
               )}
 

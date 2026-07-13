@@ -7,6 +7,8 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Sparkline } from "@/components/ui/Sparkline";
 import { CoverageLegendHelp } from "@/components/product-monitor/CoverageLegendHelp";
 import { PriceGapLegendHelp } from "@/components/product-monitor/PriceGapLegendHelp";
+import { TrendLegendHelp } from "@/components/product-monitor/TrendLegendHelp";
+import { ViabilityLegendHelp } from "@/components/product-monitor/ViabilityLegendHelp";
 import { calcPriceGap, formatPriceGap } from "@/lib/supply-chain/price-gap";
 import { useProductMonitor } from "@/components/providers/ProductMonitorProvider";
 import { useProductViability } from "@/hooks/useProductViability";
@@ -105,7 +107,12 @@ export function ProductDecisionMatrix({
               <th className="pb-3 pr-2">{t("table.product")}</th>
               <th className="pb-3 pr-3">{t("table.productIntro")}</th>
               <th className="pb-3 pr-3">{t("table.conclusion")}</th>
-              <th className="pb-3 pr-3">{tVia("score")}</th>
+              <th className="pb-3 pr-3">
+                <span className="inline-flex items-center gap-1">
+                  {tVia("score")}
+                  <ViabilityLegendHelp />
+                </span>
+              </th>
               <th className="pb-3 pr-3">
                 <span className="inline-flex items-center gap-1">
                   {tOpp("priceGap")}
@@ -118,7 +125,12 @@ export function ProductDecisionMatrix({
                   <CoverageLegendHelp />
                 </span>
               </th>
-              <th className="pb-3 pr-3">{tOpp("trend")}</th>
+              <th className="pb-3 pr-3">
+                <span className="inline-flex items-center gap-1">
+                  {tOpp("trend")}
+                  <TrendLegendHelp />
+                </span>
+              </th>
               <th className="pb-3">{t("table.auRisk")}</th>
             </tr>
           </thead>

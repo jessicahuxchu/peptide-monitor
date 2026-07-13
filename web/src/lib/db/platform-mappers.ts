@@ -209,6 +209,9 @@ export function mapSocialPost(row: SocialPostRow): SocialPost {
     hasRegulatory: row.has_regulatory,
     engagement: row.engagement,
     fetchedAt: row.fetched_at,
+    regulatoryReason: row.regulatory_reason,
+    classifiedBy: row.classified_by as SocialPost["classifiedBy"],
+    auContext: row.au_context,
   };
 }
 
@@ -217,8 +220,9 @@ export function mapSkuOpportunity(row: SkuRow): SkuOpportunity {
     id: row.id,
     product: row.product,
     demandScore: row.demand_score,
-    localPrice: Number(row.local_price),
-    competitivePrice: Number(row.competitive_price),
+    localPrice: row.local_price != null ? Number(row.local_price) : null,
+    competitivePrice:
+      row.competitive_price != null ? Number(row.competitive_price) : null,
     regulatorySensitivity: Number(row.regulatory_sensitivity),
     opportunityScore: row.opportunity_score,
     trend: row.trend as SkuOpportunity["trend"],
