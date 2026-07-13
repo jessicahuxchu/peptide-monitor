@@ -637,7 +637,7 @@
       "priceGap": "价差",
       "priceGapLegendTitle": "价差说明",
       "priceGapLegendIntro": "价差 = 我方报价 − 市场对标价（同规格、同单位）。正数表示我方高于市场，负数表示有价格优势。需同时具备两边真实报价才会显示，否则为 —。",
-      "trend": "趋势",
+      "trend": "社媒趋势",
       "trendLegendTitle": "趋势说明",
       "trendLegendIntro": "趋势来自 Reddit 社媒扫描：每日 Cron 抓取 r/Peptides 等社区帖子，按产品聚合 7 日提及量。箭头为涨跌方向，曲线为每日提及次数。仅覆盖词典内产品（如 BPC-157、GHK-Cu 等）；无讨论时为 —。",
       "regulatoryRef": "监管风险见",

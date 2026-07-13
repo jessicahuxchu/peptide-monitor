@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ChevronDown, ChevronRight, X } from "lucide-react";
@@ -39,7 +39,9 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
   const assessment = index.get(record.id);
   const matrixRisk = getProductRegulatoryRisk(record.product, regulatoryEntries);
   const blends = getBlendsForProductFromData(data, record.id);
-  const [showPlatforms, setShowPlatforms] = useState(false);
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    intro: true,
+  });
   const intro = introFullForLocale(record.productIntro, locale);
 
   const actionTier = ready ? (assessment?.actionTier ?? record.tier) : record.tier;
@@ -50,6 +52,10 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
     record.stockingLogic,
     record.specProfile.notes,
   );
+
+  const toggleSection = (key: string) => {
+    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   return (
     <aside className="flex max-h-[70vh] flex-col rounded-xl border border-command-border bg-command-card lg:max-h-none lg:h-full">
@@ -91,35 +97,36 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
         </button>
       </header>
 
-      <div className="flex-1 space-y-4 overflow-y-auto p-3">
-        <section>
-          <h4 className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
-            {t("detail.productIntro")}
-          </h4>
+      <div className="flex-1 space-y-1 overflow-y-auto p-3">
+        <DetailCollapse
+          title={t("detail.productIntro")}
+          open={!!openSections.intro}
+          onToggle={() => toggleSection("intro")}
+        >
           <p className="text-xs leading-relaxed text-command-text-secondary">
             {intro ?? t("detail.productIntroEmpty")}
           </p>
-        </section>
+        </DetailCollapse>
 
         {strategicSummary && (
-          <section>
-            <h4 className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
-              {t("detail.strategicSummary")}
-            </h4>
+          <DetailCollapse
+            title={t("detail.strategicSummary")}
+            open={!!openSections.strategy}
+            onToggle={() => toggleSection("strategy")}
+          >
             <p className="text-xs leading-relaxed text-command-text-secondary">
               {strategicSummary}
             </p>
-          </section>
+          </DetailCollapse>
         )}
 
         {breakdown && (
-          <section className="rounded-lg border border-command-border/60 bg-command-card-elevated/30 p-3">
-            <div className="mb-2.5 flex items-baseline justify-between gap-2">
-              <h4 className="text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
-                {tVia("breakdownTitle")}
-              </h4>
-              <span className="text-[10px] text-command-text-muted">{tVia("formulaShort")}</span>
-            </div>
+          <DetailCollapse
+            title={tVia("breakdownTitle")}
+            open={!!openSections.breakdown}
+            onToggle={() => toggleSection("breakdown")}
+          >
+            <p className="mb-2 text-[10px] text-command-text-muted">{tVia("formulaShort")}</p>
             <dl className="space-y-2">
               <BreakdownRow
                 label={tVia("marketSignal")}
@@ -142,59 +149,107 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
                 value={breakdown.regulatoryAllowance}
               />
             </dl>
-          </section>
+          </DetailCollapse>
         )}
 
-        <dl className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px]">
-          <DetailRow label={t("detail.stockWeeks")} value={record.supplyMetrics.stockWeeks} />
-          <DetailRow
-            label={t("detail.leadTime")}
-            value={`${record.supplyMetrics.leadTimeDays}${t("detail.days")}`}
-          />
-        </dl>
+        <DetailCollapse
+          title={t("detail.supplyChain")}
+          open={!!openSections.supply}
+          onToggle={() => toggleSection("supply")}
+        >
+          <dl className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px]">
+            <DetailRow label={t("detail.stockWeeks")} value={record.supplyMetrics.stockWeeks} />
+            <DetailRow
+              label={t("detail.leadTime")}
+              value={`${record.supplyMetrics.leadTimeDays}${t("detail.days")}`}
+            />
+          </dl>
+        </DetailCollapse>
 
-        <SpecConsensusPanel
-          consensusSpec={record.specProfile.consensusSpec}
-          primarySpecs={record.specProfile.primarySpecs}
-          forms={record.specProfile.forms}
-        />
+        <DetailCollapse
+          title={t("specs.title")}
+          open={!!openSections.specs}
+          onToggle={() => toggleSection("specs")}
+        >
+          <SpecConsensusPanel
+            consensusSpec={record.specProfile.consensusSpec}
+            primarySpecs={record.specProfile.primarySpecs}
+            forms={record.specProfile.forms}
+          />
+        </DetailCollapse>
 
         {blends.length > 0 && (
-          <div className="space-y-1.5">
-            {blends.map((b) => (
-              <p key={b.id} className="text-[11px] text-command-text-muted">
-                <span className="font-medium text-command-teal-bright">{b.name}</span>
-                {" · "}
-                {b.components.map((c) => `${c.product} ${c.amount}`).join(" + ")}
-              </p>
-            ))}
-          </div>
+          <DetailCollapse
+            title={t("blends.title")}
+            open={!!openSections.blends}
+            onToggle={() => toggleSection("blends")}
+          >
+            <div className="space-y-1.5">
+              {blends.map((b) => (
+                <p key={b.id} className="text-[11px] text-command-text-muted">
+                  <span className="font-medium text-command-teal-bright">{b.name}</span>
+                  {" · "}
+                  {b.components.map((c) => `${c.product} ${c.amount}`).join(" + ")}
+                </p>
+              ))}
+            </div>
+          </DetailCollapse>
         )}
 
-        <button
-          type="button"
-          onClick={() => setShowPlatforms((v) => !v)}
-          className="flex w-full items-center gap-1.5 text-[11px] font-medium text-command-teal-bright"
+        <DetailCollapse
+          title={`${t("coverage.title")} (${record.platformCoverage}/${record.platformTotal})`}
+          open={!!openSections.coverage}
+          onToggle={() => toggleSection("coverage")}
         >
-          {showPlatforms ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
-          {t("coverage.title")} ({record.platformCoverage}/{record.platformTotal})
-        </button>
-        {showPlatforms && <PlatformCoverageMap record={record} />}
+          <PlatformCoverageMap record={record} />
+        </DetailCollapse>
 
         {record.regulatoryNotes.length > 0 && (
-          <ul className="space-y-1">
-            {record.regulatoryNotes.map((note) => (
-              <li
-                key={note}
-                className="rounded-md border border-command-orange/20 bg-command-orange/5 px-2.5 py-1.5 text-[11px] text-command-text-secondary"
-              >
-                {note}
-              </li>
-            ))}
-          </ul>
+          <DetailCollapse
+            title={t("detail.regulatory")}
+            open={!!openSections.regulatory}
+            onToggle={() => toggleSection("regulatory")}
+          >
+            <ul className="space-y-1">
+              {record.regulatoryNotes.map((note) => (
+                <li
+                  key={note}
+                  className="rounded-md border border-command-orange/20 bg-command-orange/5 px-2.5 py-1.5 text-[11px] text-command-text-secondary"
+                >
+                  {note}
+                </li>
+              ))}
+            </ul>
+          </DetailCollapse>
         )}
       </div>
     </aside>
+  );
+}
+
+function DetailCollapse({
+  title,
+  open,
+  onToggle,
+  children,
+}: {
+  title: string;
+  open: boolean;
+  onToggle: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <div className="border-b border-command-border/40 pb-2 last:border-b-0">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="flex w-full items-center gap-1.5 py-1.5 text-[11px] font-medium text-command-teal-bright"
+      >
+        {open ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
+        {title}
+      </button>
+      {open && <div className="pb-2 pt-0.5">{children}</div>}
+    </div>
   );
 }
 

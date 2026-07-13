@@ -27,7 +27,7 @@ export function ProductMonitorView() {
       <ProductMonitorKpiBar records={productMonitorRecords} />
 
       <div className="space-y-4 p-4 md:p-6">
-        <CommandCard title={t("title")}>
+        <CommandCard>
           <div id="decision-matrix" className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_400px]">
             <ProductDecisionMatrix
               records={productMonitorRecords}

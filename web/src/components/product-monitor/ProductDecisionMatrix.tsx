@@ -169,9 +169,6 @@ export function ProductDecisionMatrix({
                     <p className="truncate text-xs font-semibold text-command-teal-bright">
                       {record.product}
                     </p>
-                    <p className="truncate text-[10px] text-command-text-muted">
-                      {record.primarySpec}
-                    </p>
                   </td>
                   <td className="py-3 pr-3">
                     {intro ? (

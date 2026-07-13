@@ -21,56 +21,91 @@ export function buildStrategicSummary(
   return parts.join(" ");
 }
 
-/** Resolve a market spec variant to its full form description (e.g. 50mg → 50mg 冻干粉). */
-export function resolveSpecVariantLabel(
+export interface MarketSpecItem {
+  form: string;
+  dosage?: string;
+  isConsensus: boolean;
+}
+
+const FORM_KEYWORDS: [RegExp, string][] = [
+  [/capsules?|胶囊/i, "胶囊"],
+  [/spray|喷雾/i, "喷雾"],
+  [/biostrip/i, "BioStrips"],
+  [/strip/i, "BioStrips"],
+  [/cream|面霜/i, "面霜"],
+  [/serum|精华/i, "精华"],
+  [/tablet/i, "片剂"],
+  [/预混冻干/i, "预混冻干粉"],
+  [/冻干|lyoph/i, "冻干粉"],
+];
+
+function isConsensusSpec(spec: string, consensusSpec: string): boolean {
+  if (consensusSpec.includes(spec)) return true;
+  const firstSegment = consensusSpec.split("、")[0]?.trim() ?? "";
+  return spec === firstSegment || firstSegment.startsWith(`${spec} `);
+}
+
+function inferFormFromSpec(
   spec: string,
   consensusSpec: string,
-  forms: string[] = [],
-): string {
+  forms: string[],
+): { form: string; dosage?: string } {
+  for (const [pattern, form] of FORM_KEYWORDS) {
+    if (pattern.test(spec)) {
+      const dosage = spec.replace(pattern, "").replace(/\s+/g, " ").trim() || undefined;
+      return { form, dosage };
+    }
+  }
+
   const segments = consensusSpec
     .split(/[、,;]/)
     .map((s) => s.trim())
     .filter(Boolean);
-
-  const exact = segments.find(
-    (seg) => seg === spec || seg.startsWith(`${spec} `) || seg.startsWith(`${spec}\u00A0`),
+  const match = segments.find(
+    (seg) => seg === spec || seg.startsWith(`${spec} `) || seg.includes(spec),
   );
-  if (exact) return exact;
-
-  const partial = segments.find((seg) => seg.includes(spec));
-  if (partial) return partial;
-
-  if (/capsule|tablet|喷雾|精华|面霜|cream|serum|spray|strip|胶囊/i.test(spec)) {
-    return spec;
+  if (match) {
+    const formPart = match.replace(spec, "").trim();
+    const form =
+      formPart ||
+      forms.find((f) => /冻干|lyoph/i.test(f)) ||
+      forms[0] ||
+      spec;
+    return { form, dosage: /mg|mcg|µg|ug/i.test(spec) ? spec : undefined };
   }
 
-  if (forms.length === 1) {
-    return `${spec} ${forms[0]}`;
+  if (/mg|mcg|µg|ug/i.test(spec)) {
+    const lyoph = forms.find((f) => /冻干|lyoph/i.test(f)) || "冻干粉";
+    return { form: lyoph, dosage: spec };
   }
 
-  const lyophilized = forms.find((f) => /冻干|lyoph/i.test(f));
-  if (lyophilized && /mg|mcg|µg|ug/i.test(spec)) {
-    return `${spec} ${lyophilized}`;
-  }
-
-  return spec;
+  return { form: spec };
 }
 
-export function specVariantFormLabel(
-  spec: string,
-  resolvedLabel: string,
+/** Build per-form market spec rows; unmatched forms appear as standalone entries. */
+export function buildMarketSpecItems(
+  primarySpecs: string[],
+  consensusSpec: string,
   forms: string[] = [],
-): string {
-  if (resolvedLabel !== spec) {
-    const suffix = resolvedLabel.startsWith(spec)
-      ? resolvedLabel.slice(spec.length).trim()
-      : resolvedLabel;
-    if (suffix) return suffix;
+): MarketSpecItem[] {
+  const items: MarketSpecItem[] = [];
+  const usedForms = new Set<string>();
+
+  for (const spec of primarySpecs) {
+    const { form, dosage } = inferFormFromSpec(spec, consensusSpec, forms);
+    items.push({
+      form,
+      dosage,
+      isConsensus: isConsensusSpec(spec, consensusSpec),
+    });
+    usedForms.add(form);
   }
 
-  if (forms.length > 0) {
-    return forms.join("、");
+  for (const form of forms) {
+    if (!usedForms.has(form)) {
+      items.push({ form, isConsensus: false });
+    }
   }
 
-  return "—";
+  return items;
 }

@@ -3,10 +3,7 @@
 import { useTranslations } from "next-intl";
 import { TierBadge } from "@/components/product-monitor/TierBadge";
 import { useProductMonitor } from "@/components/providers/ProductMonitorProvider";
-import {
-  resolveSpecVariantLabel,
-  specVariantFormLabel,
-} from "@/lib/product-monitor/product-detail-utils";
+import { buildMarketSpecItems } from "@/lib/product-monitor/product-detail-utils";
 import { cn } from "@/lib/utils";
 
 export function BlendCompositionView() {
@@ -54,11 +51,6 @@ export function BlendCompositionView() {
   );
 }
 
-function isConsensusVariant(variant: string, consensusSpec: string): boolean {
-  if (consensusSpec.includes(variant)) return true;
-  const firstSegment = consensusSpec.split("、")[0]?.trim() ?? "";
-  return variant === firstSegment || firstSegment.startsWith(`${variant} `);
-}
 
 export function SpecConsensusPanel({
   consensusSpec,
@@ -70,6 +62,7 @@ export function SpecConsensusPanel({
   forms?: string[];
 }) {
   const t = useTranslations("productMonitor.specs");
+  const items = buildMarketSpecItems(primarySpecs, consensusSpec, forms);
 
   return (
     <div className="space-y-3 text-sm">
@@ -79,33 +72,31 @@ export function SpecConsensusPanel({
           {t("variants")}
         </p>
         <ul className="space-y-1.5">
-          {primarySpecs.map((spec) => {
-            const resolved = resolveSpecVariantLabel(spec, consensusSpec, forms);
-            const formLabel = specVariantFormLabel(spec, resolved, forms);
-            const isConsensus = isConsensusVariant(spec, consensusSpec);
-
-            return (
-              <li
-                key={spec}
+          {items.map((item, i) => (
+            <li
+              key={`${item.form}-${item.dosage ?? i}`}
+              className={cn(
+                "flex items-baseline justify-between gap-3 rounded-md border px-2.5 py-1.5 text-xs",
+                item.isConsensus
+                  ? "border-command-teal/40 bg-command-teal/10"
+                  : "border-command-border/60 bg-command-card-elevated/20",
+              )}
+            >
+              <span
                 className={cn(
-                  "flex items-baseline justify-between gap-3 rounded-md border px-2.5 py-1.5 text-xs",
-                  isConsensus
-                    ? "border-command-teal/40 bg-command-teal/10"
-                    : "border-command-border/60 bg-command-card-elevated/20",
+                  "font-medium",
+                  item.isConsensus ? "text-command-teal-bright" : "text-command-text",
                 )}
               >
-                <span
-                  className={cn(
-                    "shrink-0 font-medium tabular-nums",
-                    isConsensus ? "text-command-teal-bright" : "text-command-text",
-                  )}
-                >
-                  {spec}
+                {item.form}
+              </span>
+              {item.dosage && (
+                <span className="shrink-0 tabular-nums text-command-text-muted">
+                  {item.dosage}
                 </span>
-                <span className="text-right text-command-text-secondary">{formLabel}</span>
-              </li>
-            );
-          })}
+              )}
+            </li>
+          ))}
         </ul>
       </div>
     </div>
