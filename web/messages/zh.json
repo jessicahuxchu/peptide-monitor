@@ -780,6 +780,13 @@
     "promptRegulatoryLabel": "监管更新",
     "promptQuote": "【供应商报价】\n供应商：\n产品：\n规格/纯度：\n单价：\nMOQ：\n有效期：\n\n请解析为结构化报价并生成待确认更新。",
     "promptInquiry": "【客户询盘】\n客户：\n需求产品：\n数量/周期：\n目标价格：\n要求文件：\n\n请解析需求并匹配可行供应商。",
-    "promptRegulatory": "【监管更新】\n辖区：\n来源：\n变化摘要：\n影响产品/SKU：\n建议矩阵动作：\n\n请评估是否生成监管警报或矩阵 delta。"
+    "promptRegulatory": "【监管更新】\n辖区：\n来源：\n变化摘要：\n影响产品/SKU：\n建议矩阵动作：\n\n请评估是否生成监管警报或矩阵 delta。",
+    "historyTitle": "聊天记录",
+    "historySubtitle": "按账号保存，重新登录仍可查看",
+    "historyEmpty": "暂无对话",
+    "historySignIn": "登录后保存聊天记录",
+    "historyLocalOnly": "当前为浏览器本地保存；配置 Supabase 后可跨设备同步。",
+    "newChat": "新对话",
+    "deleteChat": "删除对话"
   }
 }

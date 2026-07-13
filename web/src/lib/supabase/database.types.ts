@@ -169,6 +169,24 @@ export interface Database {
         };
         Update: Partial<Database["public"]["Tables"]["agent_submissions"]["Insert"]>;
       };
+      agent_chat_sessions: {
+        Row: {
+          id: string;
+          user_id: string;
+          title: string;
+          messages: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          title?: string;
+          messages?: Json;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["agent_chat_sessions"]["Insert"]>;
+      };
       activity_log: {
         Row: {
           id: string;
