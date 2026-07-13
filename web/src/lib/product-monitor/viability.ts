@@ -2,7 +2,7 @@ import { getProductRegulatoryRisk } from "@/lib/regulatory/matrix";
 import type { IntelSignal } from "@/lib/intelligence/seed-data";
 import type { SkuOpportunity } from "@/lib/supply-chain/seed-data";
 import type { RegulatoryEntry } from "@/lib/supply-chain/types";
-import { coverageToScore, riskToScore } from "./scoring";
+import { coverageToScore, resolveSupplyScores, riskToScore } from "./scoring";
 import type {
   InventoryTier,
   PlatformPresenceLevel,
@@ -112,9 +112,11 @@ function calcMarketSignal(
 }
 
 function calcOperationalFit(record: ProductMonitorRecord): number {
-  const supply = record.scores?.supplyFeasibility ?? 70;
-  const turnover = record.scores?.turnover ?? 60;
-  return clamp(supply * 0.5 + turnover * 0.5);
+  const { supplyFeasibility, turnover } = resolveSupplyScores(
+    record.supplyMetrics,
+    record.scores,
+  );
+  return clamp(supplyFeasibility * 0.5 + turnover * 0.5);
 }
 
 function calcRegulatoryAllowance(

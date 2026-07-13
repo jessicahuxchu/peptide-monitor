@@ -30,6 +30,12 @@ const tierVariant: Record<InventoryTier, "optimal" | "delayed" | "critical"> = {
   avoid: "critical",
 };
 
+const strategyTitleKey: Record<InventoryTier, "coreTitle" | "trialTitle" | "avoidTitle"> = {
+  core: "coreTitle",
+  trial: "trialTitle",
+  avoid: "avoidTitle",
+};
+
 const strategyShortKey: Record<InventoryTier, "tier1Short" | "tier2Short" | "tier3Short"> = {
   core: "tier1Short",
   trial: "tier2Short",
@@ -86,29 +92,29 @@ export function ProductDecisionMatrix({
                 : "border-command-border text-command-text-muted hover:text-command-text-secondary",
             )}
           >
-            {tier === "all" ? t("filters.allTiers") : t(`strategy.${strategyShortKey[tier]}`)}
+            {tier === "all" ? t("filters.allTiers") : t(`strategy.${strategyTitleKey[tier]}`)}
           </button>
         ))}
       </div>
 
       <div className="w-full max-w-full overflow-x-auto">
-        <table className="w-full min-w-[800px] table-fixed text-left text-sm">
+        <table className="w-full min-w-[700px] table-fixed text-left text-sm">
           <colgroup>
-            <col className="w-[6.5rem]" />
-            <col className="w-[9rem]" />
-            <col className="w-[8.5rem]" />
-            <col className="w-[3.5rem]" />
-            <col className="w-[4rem]" />
-            <col className="w-[6.5rem]" />
             <col className="w-[5.5rem]" />
-            <col className="w-[3.5rem]" />
+            <col className="w-[7.5rem]" />
+            <col className="w-[4rem]" />
+            <col className="w-[3.25rem]" />
+            <col className="w-[3.25rem]" />
+            <col className="w-[5.75rem]" />
+            <col className="w-[5rem]" />
+            <col className="w-[2.75rem]" />
           </colgroup>
           <thead>
             <tr className="border-b border-command-border text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
               <th className="pb-3 pr-2">{t("table.product")}</th>
               <th className="pb-3 pr-3">{t("table.productIntro")}</th>
-              <th className="pb-3 pr-3">{t("table.conclusion")}</th>
-              <th className="pb-3 pr-3">
+              <th className="pb-3 pr-2">{t("table.conclusion")}</th>
+              <th className="pb-3 pr-2">
                 <span className="inline-flex items-center gap-1">
                   {tVia("score")}
                   <ViabilityLegendHelp />
@@ -120,13 +126,13 @@ export function ProductDecisionMatrix({
                   <PriceGapLegendHelp />
                 </span>
               </th>
-              <th className="pb-3 pr-3">
+              <th className="pb-3 pr-4">
                 <span className="inline-flex items-center gap-1">
                   {t("table.coverage")}
                   <CoverageLegendHelp />
                 </span>
               </th>
-              <th className="pb-3 pr-3">
+              <th className="pb-3 pl-3 pr-2">
                 <span className="inline-flex items-center gap-1">
                   {tOpp("trend")}
                   <TrendLegendHelp />
@@ -179,14 +185,14 @@ export function ProductDecisionMatrix({
                       <span className="text-[11px] text-command-text-muted">—</span>
                     )}
                   </td>
-                  <td className="py-3 pr-3">
+                  <td className="py-3 pr-2">
                     {actionTier ? (
                       <StrategyTierBadge tier={actionTier} />
                     ) : (
                       <span className="text-[10px] text-command-text-muted">—</span>
                     )}
                   </td>
-                  <td className="py-3 pr-3">
+                  <td className="py-3 pr-2">
                     {viabilityScore != null ? (
                       <span
                         className={cn(
@@ -207,10 +213,10 @@ export function ProductDecisionMatrix({
                   <td className="py-3 pr-3 tabular-nums text-command-text-secondary">
                     {formatPriceGap(gap)}
                   </td>
-                  <td className="py-3 pr-3">
+                  <td className="py-3 pr-4">
                     <CoverageMiniBar record={record} />
                   </td>
-                  <td className="py-3 pr-3">
+                  <td className="py-3 pl-3 pr-2">
                     {ready && sku && TrendIcon ? (
                       <div className="flex items-center gap-2">
                         <TrendIcon
@@ -223,8 +229,8 @@ export function ProductDecisionMatrix({
                         />
                         <Sparkline
                           data={sku.sparkline}
-                          width={64}
-                          height={20}
+                          width={56}
+                          height={18}
                           strokeWidth={1}
                         />
                       </div>
@@ -261,7 +267,7 @@ export function ProductDecisionMatrix({
 function StrategyTierBadge({ tier }: { tier: InventoryTier }) {
   const t = useTranslations("productMonitor.strategy");
   return (
-    <StatusBadge variant={tierVariant[tier]} className="whitespace-nowrap text-[10px]">
+    <StatusBadge variant={tierVariant[tier]} className="whitespace-nowrap px-1.5 text-[9px]">
       {t(strategyShortKey[tier])}
     </StatusBadge>
   );
@@ -273,7 +279,7 @@ function CoverageMiniBar({ record }: { record: ProductMonitorRecord }) {
   const pct = Math.round((record.platformCoverage / record.platformTotal) * 100);
 
   return (
-    <div className="min-w-[100px]">
+    <div className="min-w-[88px]">
       <div className="mb-1 flex gap-px">
         {platforms.map((p) => {
           const level = record.platformPresence[p.id];

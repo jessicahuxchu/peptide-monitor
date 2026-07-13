@@ -17,6 +17,7 @@ import {
 import { fetchSupplyChainState } from "@/lib/db/supply-chain";
 import type { SalesRecord } from "@/lib/finance/seed-data";
 import type { IntelSignal } from "@/lib/intelligence/seed-data";
+import { enrichRecordScores } from "@/lib/product-monitor/scoring";
 import type {
   MonitorMeta,
   PlatformDefinition,
@@ -166,10 +167,10 @@ export async function fetchProductMonitorData(): Promise<{
     platforms: (platRes.data ?? []).map(mapPlatform),
     records: (recRes.data ?? []).map((row) => {
       const record = mapProductMonitorRecord(row);
-      return {
+      return enrichRecordScores({
         ...record,
         productIntro: record.productIntro ?? productIntros[record.id],
-      };
+      });
     }),
     blends: (blendRes.data ?? []).map(mapProductBlend),
   };

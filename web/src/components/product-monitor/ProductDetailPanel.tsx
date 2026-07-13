@@ -14,6 +14,7 @@ import {
   useProductMonitor,
 } from "@/components/providers/ProductMonitorProvider";
 import { getProductRegulatoryRisk } from "@/lib/regulatory/matrix";
+import { buildStrategicSummary } from "@/lib/product-monitor/product-detail-utils";
 import { introFullForLocale } from "@/lib/product-monitor/product-intro-utils";
 import type { ProductMonitorRecord } from "@/lib/product-monitor/types";
 import { cn } from "@/lib/utils";
@@ -44,6 +45,11 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
   const actionTier = ready ? (assessment?.actionTier ?? record.tier) : record.tier;
   const viabilityScore = ready ? assessment?.viabilityScore : undefined;
   const breakdown = ready ? assessment?.breakdown : undefined;
+  const strategicSummary = buildStrategicSummary(
+    ready ? tVia(`action.${actionTier}`) : undefined,
+    record.stockingLogic,
+    record.specProfile.notes,
+  );
 
   return (
     <aside className="flex max-h-[70vh] flex-col rounded-xl border border-command-border bg-command-card lg:max-h-none lg:h-full">
@@ -74,8 +80,6 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
             <span className="text-[10px] text-command-text-muted">{tVia("score")}</span>
           </div>
           <h3 className="text-sm font-semibold text-command-text">{record.product}</h3>
-          <p className="text-[11px] text-command-text-muted">{record.primarySpec}</p>
-          <p className="mt-1 text-[10px] text-command-text-muted">{tVia(`action.${actionTier}`)}</p>
         </div>
         <button
           type="button"
@@ -88,6 +92,26 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
       </header>
 
       <div className="flex-1 space-y-4 overflow-y-auto p-3">
+        <section>
+          <h4 className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
+            {t("detail.productIntro")}
+          </h4>
+          <p className="text-xs leading-relaxed text-command-text-secondary">
+            {intro ?? t("detail.productIntroEmpty")}
+          </p>
+        </section>
+
+        {strategicSummary && (
+          <section>
+            <h4 className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
+              {t("detail.strategicSummary")}
+            </h4>
+            <p className="text-xs leading-relaxed text-command-text-secondary">
+              {strategicSummary}
+            </p>
+          </section>
+        )}
+
         {breakdown && (
           <section className="rounded-lg border border-command-border/60 bg-command-card-elevated/30 p-3">
             <div className="mb-2.5 flex items-baseline justify-between gap-2">
@@ -121,39 +145,18 @@ export function ProductDetailPanel({ record, onClose }: ProductDetailPanelProps)
           </section>
         )}
 
-        <section>
-          <h4 className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-command-text-muted">
-            {t("detail.productIntro")}
-          </h4>
-          <p className="text-xs leading-relaxed text-command-text-secondary">
-            {intro ?? t("detail.productIntroEmpty")}
-          </p>
-        </section>
-
-        <p className="text-xs leading-relaxed text-command-text-secondary">
-          {record.stockingLogic}
-        </p>
-
         <dl className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px]">
           <DetailRow label={t("detail.stockWeeks")} value={record.supplyMetrics.stockWeeks} />
           <DetailRow
-            label={t("detail.stockMode")}
-            value={t(`stockMode.${record.supplyMetrics.stockMode}`)}
-          />
-          <DetailRow
             label={t("detail.leadTime")}
             value={`${record.supplyMetrics.leadTimeDays}${t("detail.days")}`}
-          />
-          <DetailRow
-            label={t("detail.coverage")}
-            value={`${record.platformCoverage}/${record.platformTotal}`}
           />
         </dl>
 
         <SpecConsensusPanel
           consensusSpec={record.specProfile.consensusSpec}
           primarySpecs={record.specProfile.primarySpecs}
-          notes={record.specProfile.notes}
+          forms={record.specProfile.forms}
         />
 
         {blends.length > 0 && (

@@ -28,7 +28,7 @@ export function ProductMonitorView() {
 
       <div className="space-y-4 p-4 md:p-6">
         <CommandCard title={t("title")}>
-          <div id="decision-matrix" className="grid gap-4 lg:grid-cols-[1fr_320px]">
+          <div id="decision-matrix" className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_400px]">
             <ProductDecisionMatrix
               records={productMonitorRecords}
               selectedId={selectedId}
