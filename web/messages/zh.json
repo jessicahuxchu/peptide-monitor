@@ -101,7 +101,8 @@
       "us": "美国"
     },
     "usPlaceholderTitle": "美国矩阵待录入",
-    "usPlaceholderBody": "美国联邦与各州合规矩阵尚未录入，切换回澳大利亚可查看现有数据。",
+    "usPlaceholderBody": "表格结构已就绪，联邦与各州内容待录入。",
+    "pendingCell": "待录入",
     "type": "类型",
     "jurisdiction": "辖区",
     "legalBasis": "法律依据",
@@ -111,6 +112,7 @@
     "reviewStatus": "复核状态",
     "reviewPending": "待复核",
     "federalBaseline": "澳大利亚联邦",
+    "federalBaselineUs": "美国联邦",
     "stateDelta": "州级增量",
     "inheritsFederal": "同联邦",
     "sourceDocumentTitle": "法规文本",

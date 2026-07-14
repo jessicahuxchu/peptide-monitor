@@ -329,22 +329,74 @@ export function riskLevelLabel(
 }
 
 const JURISDICTION_ZH: Record<string, string> = {
-  NSW: "新南威尔士州（NSW）",
-  VIC: "维多利亚州（VIC）",
-  QLD: "昆士兰州（QLD）",
-  WA: "西澳大利亚州（WA）",
-  SA: "南澳大利亚州（SA）",
-  TAS: "塔斯马尼亚州（TAS）",
+  NSW: "新南威尔士（NSW）",
+  VIC: "维多利亚（VIC）",
+  QLD: "昆士兰（QLD）",
+  WA: "西澳大利亚（WA）",
+  SA: "南澳大利亚（SA）",
+  TAS: "塔斯马尼亚（TAS）",
   ACT: "首都领地（ACT）",
   NT: "北领地（NT）",
+  AL: "阿拉巴马（AL）",
+  AK: "阿拉斯加（AK）",
+  AZ: "亚利桑那（AZ）",
+  AR: "阿肯色（AR）",
+  CA: "加利福尼亚（CA）",
+  CO: "科罗拉多（CO）",
+  CT: "康涅狄格（CT）",
+  DE: "特拉华（DE）",
+  FL: "佛罗里达（FL）",
+  GA: "佐治亚（GA）",
+  HI: "夏威夷（HI）",
+  ID: "爱达荷（ID）",
+  IL: "伊利诺伊（IL）",
+  IN: "印第安纳（IN）",
+  IA: "艾奥瓦（IA）",
+  KS: "堪萨斯（KS）",
+  KY: "肯塔基（KY）",
+  LA: "路易斯安那（LA）",
+  ME: "缅因（ME）",
+  MD: "马里兰（MD）",
+  MA: "马萨诸塞（MA）",
+  MI: "密歇根（MI）",
+  MN: "明尼苏达（MN）",
+  MS: "密西西比（MS）",
+  MO: "密苏里（MO）",
+  MT: "蒙大拿（MT）",
+  NE: "内布拉斯加（NE）",
+  NV: "内华达（NV）",
+  NH: "新罕布什尔（NH）",
+  NJ: "新泽西（NJ）",
+  NM: "新墨西哥（NM）",
+  NY: "纽约（NY）",
+  NC: "北卡罗来纳（NC）",
+  ND: "北达科他（ND）",
+  OH: "俄亥俄（OH）",
+  OK: "俄克拉何马（OK）",
+  OR: "俄勒冈（OR）",
+  PA: "宾夕法尼亚（PA）",
+  RI: "罗得岛（RI）",
+  SC: "南卡罗来纳（SC）",
+  SD: "南达科他（SD）",
+  TN: "田纳西（TN）",
+  TX: "得克萨斯（TX）",
+  UT: "犹他（UT）",
+  VT: "佛蒙特（VT）",
+  VA: "弗吉尼亚（VA）",
+  WV: "西弗吉尼亚（WV）",
+  WI: "威斯康星（WI）",
+  WY: "怀俄明（WY）",
 };
 
 export function localizeJurisdiction(
   code: string,
   locale: MatrixLocale,
   federalLabel: string,
+  market: "au" | "us" = "au",
 ): string {
   if (code === "Federal") return federalLabel;
-  if (locale === "zh") return JURISDICTION_ZH[code] ?? code;
-  return code;
+  if (locale !== "zh") return code;
+  // WA is shared abbreviation: AU Western Australia vs US Washington
+  if (code === "WA" && market === "us") return "华盛顿（WA）";
+  return JURISDICTION_ZH[code] ?? code;
 }

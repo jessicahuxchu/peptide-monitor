@@ -101,7 +101,8 @@
       "us": "United States"
     },
     "usPlaceholderTitle": "US matrix pending",
-    "usPlaceholderBody": "Federal and state compliance data for the US has not been entered yet. Switch back to Australia for the current matrix.",
+    "usPlaceholderBody": "Table scaffold is ready; federal and state content has not been entered yet.",
+    "pendingCell": "Pending",
     "type": "Type",
     "jurisdiction": "Jurisdiction",
     "legalBasis": "Legal basis",
@@ -111,6 +112,7 @@
     "reviewStatus": "Review status",
     "reviewPending": "Pending review",
     "federalBaseline": "AU Federal",
+    "federalBaselineUs": "US Federal",
     "stateDelta": "State delta",
     "inheritsFederal": "Same as federal",
     "sourceDocumentTitle": "Legal Text",

@@ -19,7 +19,11 @@ import {
   riskLevelLabel,
   type MatrixLocale,
 } from "@/lib/regulatory/matrix-i18n";
-import { REGULATORY_COLUMNS, type RegulatoryColumn } from "@/lib/regulatory/matrix";
+import {
+  REGULATORY_COLUMNS,
+  US_REGULATORY_COLUMNS,
+  type RegulatoryColumn,
+} from "@/lib/regulatory/matrix";
 import type { RiskLevel } from "@/lib/supply-chain/types";
 import { cn } from "@/lib/utils";
 import { SourceDocumentPanel } from "./SourceDocumentPanel";
@@ -54,6 +58,10 @@ export function RegulatoryMatrixView() {
   const [selectedSource, setSelectedSource] = useState<SourceStatusRow | null>(null);
 
   const { matrixRows, stateFramework, sources } = COMPLIANCE_MATRIX_V6;
+  const federalLabel =
+    country === "us" ? t("federalBaselineUs") : t("federalBaseline");
+  const matrixColumns =
+    country === "us" ? US_REGULATORY_COLUMNS : REGULATORY_COLUMNS;
 
   const showSidebar =
     country === "au" &&
@@ -80,7 +88,10 @@ export function RegulatoryMatrixView() {
     <div
       className={cn(
         "grid w-full max-w-full gap-4 overflow-x-hidden p-4 md:gap-5 md:p-6",
-        showSidebar && "lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]",
+        showSidebar &&
+          (tab === "framework"
+            ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
+            : "lg:grid-cols-[minmax(0,1fr)_minmax(200px,240px)]"),
       )}
     >
       <div className="min-w-0 space-y-4">
@@ -103,90 +114,104 @@ export function RegulatoryMatrixView() {
             ))}
           </div>
 
-          {country === "us" ? (
-            <div className="rounded-lg border border-command-border bg-command-card-elevated/40 p-6">
-              <p className="text-sm font-medium text-command-teal-bright">
-                {t("usPlaceholderTitle")}
-              </p>
-              <p className="mt-2 text-xs text-command-text-muted">{t("usPlaceholderBody")}</p>
-            </div>
-          ) : (
-            <>
-              <div className="mb-4 flex flex-wrap gap-1 border-b border-command-border pb-2">
-                {TABS.map((id) => (
-                  <button
-                    key={id}
-                    type="button"
-                    onClick={() => selectTab(id)}
-                    className={cn(
-                      "rounded-md px-3 py-1.5 text-xs font-medium transition-colors",
-                      tab === id
-                        ? "bg-command-teal/15 text-command-teal-bright"
-                        : "text-command-text-muted hover:text-command-text-secondary",
-                    )}
-                  >
-                    {t(`tabs.${id}`)}
-                  </button>
-                ))}
-              </div>
+          <div className="mb-4 flex flex-wrap gap-1 border-b border-command-border pb-2">
+            {TABS.map((id) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => selectTab(id)}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-xs font-medium transition-colors",
+                  tab === id
+                    ? "bg-command-teal/15 text-command-teal-bright"
+                    : "text-command-text-muted hover:text-command-text-secondary",
+                )}
+              >
+                {t(`tabs.${id}`)}
+              </button>
+            ))}
+          </div>
 
-              {tab === "matrix" && (
-                <div className="overflow-x-auto">
-                  <table className="w-full min-w-[960px] table-fixed border-collapse text-left text-xs">
-                    <thead>
-                      <tr className="border-b border-command-border">
-                        <th className="sticky left-0 z-10 w-[132px] bg-command-bg pb-2 pr-2 font-medium text-command-text-muted">
-                          {t("product")}
-                        </th>
-                        {REGULATORY_COLUMNS.map((col) => (
-                          <th
-                            key={col}
-                            className="pb-2 pr-2 font-medium text-command-text-muted"
-                          >
-                            {localizeJurisdiction(col, locale, t("federalBaseline"))}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-b border-command-border/60 bg-command-card-elevated/25">
-                        <td className="sticky left-0 z-10 bg-command-bg py-2 pr-2 align-top font-medium text-command-text-muted">
-                          {t("operationalConsequence")}
-                        </td>
-                        {REGULATORY_COLUMNS.map((col) => (
-                          <td key={`handling-${col}`} className="py-2 pr-2 align-top">
-                            <p className="text-[10px] leading-snug text-command-text-secondary">
-                              {localizeRegionHandling(col, locale)}
-                            </p>
-                          </td>
-                        ))}
-                      </tr>
-                      {matrixRows.map((row) => (
-                        <tr key={row.product} className="border-b border-command-border/40">
-                          <td className="sticky left-0 z-10 bg-command-bg py-1.5 pr-2 align-middle">
-                            <p className="font-semibold leading-snug text-command-teal-bright">
-                              {row.product}
-                            </p>
-                          </td>
-                          {REGULATORY_COLUMNS.map((col) => (
-                            <MatrixCell
-                              key={`${row.product}-${col}`}
-                              row={row}
-                              column={col}
-                              cell={row.cells[col]}
-                              locale={locale}
-                              onSelect={setSelected}
-                              t={t}
-                            />
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+          {tab === "matrix" && (
+            <div className="space-y-2">
+              {country === "us" && (
+                <p className="text-[10px] text-command-text-muted">{t("usPlaceholderBody")}</p>
               )}
+              <div className="overflow-x-auto">
+                <table
+                  className={cn(
+                    "w-full border-collapse text-left text-xs",
+                    country === "us" ? "min-w-[2800px]" : "min-w-[960px] table-fixed",
+                  )}
+                >
+                  <thead>
+                    <tr className="border-b border-command-border">
+                      <th className="sticky left-0 z-10 w-[132px] bg-command-bg pb-2 pr-2 font-medium text-command-text-muted">
+                        {t("product")}
+                      </th>
+                      {matrixColumns.map((col) => (
+                        <th
+                          key={col}
+                          className="min-w-[88px] pb-2 pr-2 font-medium text-command-text-muted"
+                        >
+                          {localizeJurisdiction(col, locale, federalLabel, country)}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-command-border/60 bg-command-card-elevated/25">
+                      <td className="sticky left-0 z-10 bg-command-bg py-2 pr-2 align-top font-medium text-command-text-muted">
+                        {t("operationalConsequence")}
+                      </td>
+                      {matrixColumns.map((col) => (
+                        <td key={`handling-${col}`} className="py-2 pr-2 align-top">
+                          <p className="text-[10px] leading-snug text-command-text-secondary">
+                            {country === "au"
+                              ? localizeRegionHandling(col, locale)
+                              : "—"}
+                          </p>
+                        </td>
+                      ))}
+                    </tr>
+                    {matrixRows.map((row) => (
+                      <tr key={row.product} className="border-b border-command-border/40">
+                        <td className="sticky left-0 z-10 bg-command-bg py-1.5 pr-2 align-middle">
+                          <p className="font-semibold leading-snug text-command-teal-bright">
+                            {row.product}
+                          </p>
+                        </td>
+                        {country === "au"
+                          ? REGULATORY_COLUMNS.map((col) => (
+                              <MatrixCell
+                                key={`${row.product}-${col}`}
+                                row={row}
+                                column={col}
+                                cell={row.cells[col]}
+                                locale={locale}
+                                onSelect={setSelected}
+                                t={t}
+                              />
+                            ))
+                          : US_REGULATORY_COLUMNS.map((col) => (
+                              <td key={`${row.product}-${col}`} className="p-1.5 align-middle">
+                                <div
+                                  className={cn(
+                                    "w-full rounded-lg border border-dashed border-command-border/40 bg-command-card-elevated/20",
+                                    MATRIX_CELL_H,
+                                  )}
+                                />
+                              </td>
+                            ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
 
-              {tab === "framework" && (
+          {tab === "framework" && country === "au" && (
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[720px] border-collapse text-left text-xs">
                     <thead>
@@ -217,7 +242,8 @@ export function RegulatoryMatrixView() {
                               {localizeJurisdiction(
                                 raw.jurisdiction,
                                 locale,
-                                t("federalBaseline"),
+                                federalLabel,
+                                country,
                               )}
                             </td>
                             <td className="py-2 pr-2 text-command-text-secondary">
@@ -264,8 +290,38 @@ export function RegulatoryMatrixView() {
                     </tbody>
                   </table>
                 </div>
-              )}
-            </>
+          )}
+
+          {tab === "framework" && country === "us" && (
+            <div className="space-y-2">
+              <p className="text-[10px] text-command-text-muted">{t("usPlaceholderBody")}</p>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[720px] border-collapse text-left text-xs">
+                  <thead>
+                    <tr className="border-b border-command-border text-command-text-muted">
+                      <th className="pb-2 pr-2">{t("jurisdiction")}</th>
+                      <th className="pb-2 pr-2">{t("body")}</th>
+                      <th className="pb-2 pr-2">{t("legalBasis")}</th>
+                      <th className="pb-2 pr-2">{t("difference")}</th>
+                      <th className="pb-2 pr-2">{t("operationalConsequence")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {US_REGULATORY_COLUMNS.map((col) => (
+                      <tr key={col} className="border-b border-command-border/40">
+                        <td className="py-2 pr-2 font-medium text-command-teal-bright">
+                          {localizeJurisdiction(col, locale, federalLabel, "us")}
+                        </td>
+                        <td className="py-2 pr-2 text-command-text-muted">—</td>
+                        <td className="py-2 pr-2 text-command-text-muted">—</td>
+                        <td className="py-2 pr-2 text-command-text-muted">—</td>
+                        <td className="py-2 pr-2 text-command-text-muted">—</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           )}
         </CommandCard>
       </div>
@@ -290,7 +346,7 @@ export function RegulatoryMatrixView() {
             title={t("sourceExcerptTitle")}
             annotationLabel={t("sourceAnnotations")}
             openUrlLabel={t("openOfficialSource")}
-            federalLabel={t("federalBaseline")}
+            federalLabel={federalLabel}
           />
         </CommandCard>
       ) : selected ? (
@@ -305,7 +361,7 @@ export function RegulatoryMatrixView() {
                 <>
                   <p className="break-words text-xs text-command-teal-bright">
                     {selected.row.product} ·{" "}
-                    {localizeJurisdiction(selected.region, locale, t("federalBaseline"))}
+                    {localizeJurisdiction(selected.region, locale, federalLabel, country)}
                   </p>
                   <DetailRow label={t("body")} value={cell.regulator} />
                   <DetailRow label={t("classification")} value={cell.classification} />

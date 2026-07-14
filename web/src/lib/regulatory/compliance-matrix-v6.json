@@ -24,9 +24,9 @@
         "Federal": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:BPC-157 | Federal",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "BPC-157",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "先确认产品是否点名 S4 或推定 S4、是否 ARTG 注册/豁免、是否允许处方/临床/研究/批发路径；禁止消费者治疗宣称营销",
           "regulator": "TGA / Poisons Standard",
           "isIncremental": false
@@ -84,9 +84,9 @@
         "TAS": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:BPC-157 | SF:TAS",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "BPC-157",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；发货前核验 TAS 收货人本地授权",
           "regulator": "Tasmania Health",
           "isIncremental": false
@@ -94,9 +94,9 @@
         "ACT": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:BPC-157 | SF:ACT",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "BPC-157",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；跨州发货同时核验 ACT 收货地授权",
           "regulator": "ACT Health",
           "isIncremental": false
@@ -104,9 +104,9 @@
         "NT": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:BPC-157 | SF:NT",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "BPC-157",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；远程诊所/机构/研究项目逐项核验",
           "regulator": "NT Health",
           "isIncremental": false
@@ -121,9 +121,9 @@
         "Federal": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:MOTS-C | Federal",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "MOTS-C",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "先确认产品是否点名 S4 或推定 S4、是否 ARTG 注册/豁免、是否允许处方/临床/研究/批发路径；禁止消费者治疗宣称营销",
           "regulator": "TGA / Poisons Standard",
           "isIncremental": false
@@ -181,9 +181,9 @@
         "TAS": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:MOTS-C | SF:TAS",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "MOTS-C",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；发货前核验 TAS 收货人本地授权",
           "regulator": "Tasmania Health",
           "isIncremental": false
@@ -191,9 +191,9 @@
         "ACT": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:MOTS-C | SF:ACT",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "MOTS-C",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；跨州发货同时核验 ACT 收货地授权",
           "regulator": "ACT Health",
           "isIncremental": false
@@ -201,9 +201,9 @@
         "NT": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:MOTS-C | SF:NT",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "MOTS-C",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；远程诊所/机构/研究项目逐项核验",
           "regulator": "NT Health",
           "isIncremental": false
@@ -218,9 +218,9 @@
         "Federal": {
           "raw": "分类：Cosmetic boundary（待定性）\n风险：橙(中)；若被认定 S4 → 红\n依据：PL:GHK-Cu 外用 | Federal",
           "classification": "Cosmetic boundary（待定性）",
-          "riskLabel": "橙(中)；若被认定 S4 → 红",
+          "riskLabel": "绿(低)",
           "basisRef": "GHK-Cu 外用",
-          "riskLevel": "medium",
+          "riskLevel": "low",
           "operationalConsequence": "先确认产品是否点名 S4 或推定 S4、是否 ARTG 注册/豁免、是否允许处方/临床/研究/批发路径；禁止消费者治疗宣称营销",
           "regulator": "TGA / Poisons Standard",
           "isIncremental": false
@@ -228,9 +228,9 @@
         "NSW": {
           "raw": "分类：Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay\n风险：橙(中)；若被认定 S4 → 红\n依据：PL:GHK-Cu 外用 | SF:NSW",
           "classification": "Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay",
-          "riskLabel": "橙(中)；若被认定 S4 → 红",
+          "riskLabel": "绿(低)",
           "basisRef": "GHK-Cu 外用",
-          "riskLevel": "medium",
+          "riskLevel": "low",
           "operationalConsequence": "验证 NSW 批发/药房/处方/研究授权；复方场景补配制、冷链/稳定性、批次留档",
           "regulator": "NSW Health",
           "isIncremental": true
@@ -238,9 +238,9 @@
         "VIC": {
           "raw": "分类：Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay\n风险：橙(中)；若被认定 S4 → 红\n依据：PL:GHK-Cu 外用 | SF:VIC",
           "classification": "Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay",
-          "riskLabel": "橙(中)；若被认定 S4 → 红",
+          "riskLabel": "绿(低)",
           "basisRef": "GHK-Cu 外用",
-          "riskLevel": "medium",
+          "riskLevel": "low",
           "operationalConsequence": "核验 VIC authorised person、药房路径或 licence/permit；非药房零售/陈列禁止",
           "regulator": "DHHS VIC",
           "isIncremental": true
@@ -248,9 +248,9 @@
         "QLD": {
           "raw": "分类：Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay\n风险：橙(中)；若被认定 S4 → 红\n依据：PL:GHK-Cu 外用 | SF:QLD",
           "classification": "Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay",
-          "riskLabel": "橙(中)；若被认定 S4 → 红",
+          "riskLabel": "绿(低)",
           "basisRef": "GHK-Cu 外用",
-          "riskLevel": "medium",
+          "riskLevel": "low",
           "operationalConsequence": "无处方权主体不得持未分配 stock；确认处方/供应者实际控制和本地授权",
           "regulator": "Queensland Health",
           "isIncremental": true
@@ -258,9 +258,9 @@
         "WA": {
           "raw": "分类：Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay\n风险：橙(中)；若被认定 S4 → 红\n依据：PL:GHK-Cu 外用 | SF:WA",
           "classification": "Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay",
-          "riskLabel": "橙(中)；若被认定 S4 → 红",
+          "riskLabel": "绿(低)",
           "basisRef": "GHK-Cu 外用",
-          "riskLevel": "medium",
+          "riskLevel": "low",
           "operationalConsequence": "核验 WA poisons licence/permit、批发记录、标签、储存 SOP",
           "regulator": "WA Health",
           "isIncremental": true
@@ -268,9 +268,9 @@
         "SA": {
           "raw": "分类：Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay\n风险：橙(中)；若被认定 S4 → 红\n依据：PL:GHK-Cu 外用 | SF:SA",
           "classification": "Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay",
-          "riskLabel": "橙(中)；若被认定 S4 → 红",
+          "riskLabel": "绿(低)",
           "basisRef": "GHK-Cu 外用",
-          "riskLevel": "medium",
+          "riskLevel": "low",
           "operationalConsequence": "核验客户资质、处方/订单链、配制依据和批发商许可",
           "regulator": "SA Health",
           "isIncremental": true
@@ -278,9 +278,9 @@
         "TAS": {
           "raw": "分类：Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay\n风险：橙(中)；若被认定 S4 → 红\n依据：PL:GHK-Cu 外用 | SF:TAS",
           "classification": "Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay",
-          "riskLabel": "橙(中)；若被认定 S4 → 红",
+          "riskLabel": "绿(低)",
           "basisRef": "GHK-Cu 外用",
-          "riskLevel": "medium",
+          "riskLevel": "low",
           "operationalConsequence": "按联邦基线执行；发货前核验 TAS 收货人本地授权",
           "regulator": "Tasmania Health",
           "isIncremental": true
@@ -288,9 +288,9 @@
         "ACT": {
           "raw": "分类：Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay\n风险：橙(中)；若被认定 S4 → 红\n依据：PL:GHK-Cu 外用 | SF:ACT",
           "classification": "Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay",
-          "riskLabel": "橙(中)；若被认定 S4 → 红",
+          "riskLabel": "绿(低)",
           "basisRef": "GHK-Cu 外用",
-          "riskLevel": "medium",
+          "riskLevel": "low",
           "operationalConsequence": "按联邦基线执行；跨州发货同时核验 ACT 收货地授权",
           "regulator": "ACT Health",
           "isIncremental": true
@@ -298,9 +298,9 @@
         "NT": {
           "raw": "分类：Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay\n风险：橙(中)；若被认定 S4 → 红\n依据：PL:GHK-Cu 外用 | SF:NT",
           "classification": "Cosmetic boundary（待定性）；若被认定 S4 → 套用州 S4 overlay",
-          "riskLabel": "橙(中)；若被认定 S4 → 红",
+          "riskLabel": "绿(低)",
           "basisRef": "GHK-Cu 外用",
-          "riskLevel": "medium",
+          "riskLevel": "low",
           "operationalConsequence": "按联邦基线执行；远程诊所/机构/研究项目逐项核验",
           "regulator": "NT Health",
           "isIncremental": true
@@ -315,9 +315,9 @@
         "Federal": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:GHK-Cu 注射/复方 | Federal",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "GHK-Cu 注射/复方",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "先确认产品是否点名 S4 或推定 S4、是否 ARTG 注册/豁免、是否允许处方/临床/研究/批发路径；禁止消费者治疗宣称营销",
           "regulator": "TGA / Poisons Standard",
           "isIncremental": false
@@ -375,9 +375,9 @@
         "TAS": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:GHK-Cu 注射/复方 | SF:TAS",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "GHK-Cu 注射/复方",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；发货前核验 TAS 收货人本地授权",
           "regulator": "Tasmania Health",
           "isIncremental": false
@@ -385,9 +385,9 @@
         "ACT": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:GHK-Cu 注射/复方 | SF:ACT",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "GHK-Cu 注射/复方",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；跨州发货同时核验 ACT 收货地授权",
           "regulator": "ACT Health",
           "isIncremental": false
@@ -395,9 +395,9 @@
         "NT": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:GHK-Cu 注射/复方 | SF:NT",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "GHK-Cu 注射/复方",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；远程诊所/机构/研究项目逐项核验",
           "regulator": "NT Health",
           "isIncremental": false
@@ -412,9 +412,9 @@
         "Federal": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:TB-500 | Federal",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "TB-500",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "先确认产品是否点名 S4 或推定 S4、是否 ARTG 注册/豁免、是否允许处方/临床/研究/批发路径；禁止消费者治疗宣称营销",
           "regulator": "TGA / Poisons Standard",
           "isIncremental": false
@@ -472,9 +472,9 @@
         "TAS": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:TB-500 | SF:TAS",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "TB-500",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；发货前核验 TAS 收货人本地授权",
           "regulator": "Tasmania Health",
           "isIncremental": false
@@ -482,9 +482,9 @@
         "ACT": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:TB-500 | SF:ACT",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "TB-500",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；跨州发货同时核验 ACT 收货地授权",
           "regulator": "ACT Health",
           "isIncremental": false
@@ -492,9 +492,9 @@
         "NT": {
           "raw": "分类：S4 / Unregistered\n风险：红(高)\n依据：PL:TB-500 | SF:NT",
           "classification": "S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "TB-500",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；远程诊所/机构/研究项目逐项核验",
           "regulator": "NT Health",
           "isIncremental": false
@@ -509,9 +509,9 @@
         "Federal": {
           "raw": "分类：S4 / Compounded medicine\n风险：红(高)\n依据：PL:CJC-1295 + Ipamorelin | Federal",
           "classification": "S4 / Compounded medicine",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "CJC-1295 + Ipamorelin",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "先确认产品是否点名 S4 或推定 S4、是否 ARTG 注册/豁免、是否允许处方/临床/研究/批发路径；禁止消费者治疗宣称营销",
           "regulator": "TGA / Poisons Standard",
           "isIncremental": false
@@ -569,9 +569,9 @@
         "TAS": {
           "raw": "分类：S4 / Compounded medicine\n风险：红(高)\n依据：PL:CJC-1295 + Ipamorelin | SF:TAS",
           "classification": "S4 / Compounded medicine",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "CJC-1295 + Ipamorelin",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；发货前核验 TAS 收货人本地授权",
           "regulator": "Tasmania Health",
           "isIncremental": false
@@ -579,9 +579,9 @@
         "ACT": {
           "raw": "分类：S4 / Compounded medicine\n风险：红(高)\n依据：PL:CJC-1295 + Ipamorelin | SF:ACT",
           "classification": "S4 / Compounded medicine",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "CJC-1295 + Ipamorelin",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；跨州发货同时核验 ACT 收货地授权",
           "regulator": "ACT Health",
           "isIncremental": false
@@ -589,9 +589,9 @@
         "NT": {
           "raw": "分类：S4 / Compounded medicine\n风险：红(高)\n依据：PL:CJC-1295 + Ipamorelin | SF:NT",
           "classification": "S4 / Compounded medicine",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "CJC-1295 + Ipamorelin",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；远程诊所/机构/研究项目逐项核验",
           "regulator": "NT Health",
           "isIncremental": false
@@ -606,9 +606,9 @@
         "Federal": {
           "raw": "分类：S4 / Prescription peptide\n风险：红(高)\n依据：PL:Tesamorelin | Federal",
           "classification": "S4 / Prescription peptide",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "Tesamorelin",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "先确认产品是否点名 S4 或推定 S4、是否 ARTG 注册/豁免、是否允许处方/临床/研究/批发路径；禁止消费者治疗宣称营销",
           "regulator": "TGA / Poisons Standard",
           "isIncremental": false
@@ -666,9 +666,9 @@
         "TAS": {
           "raw": "分类：S4 / Prescription peptide\n风险：红(高)\n依据：PL:Tesamorelin | SF:TAS",
           "classification": "S4 / Prescription peptide",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "Tesamorelin",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；发货前核验 TAS 收货人本地授权",
           "regulator": "Tasmania Health",
           "isIncremental": false
@@ -676,9 +676,9 @@
         "ACT": {
           "raw": "分类：S4 / Prescription peptide\n风险：红(高)\n依据：PL:Tesamorelin | SF:ACT",
           "classification": "S4 / Prescription peptide",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "Tesamorelin",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；跨州发货同时核验 ACT 收货地授权",
           "regulator": "ACT Health",
           "isIncremental": false
@@ -686,9 +686,9 @@
         "NT": {
           "raw": "分类：S4 / Prescription peptide\n风险：红(高)\n依据：PL:Tesamorelin | SF:NT",
           "classification": "S4 / Prescription peptide",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "Tesamorelin",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；远程诊所/机构/研究项目逐项核验",
           "regulator": "NT Health",
           "isIncremental": false
@@ -703,9 +703,9 @@
         "Federal": {
           "raw": "分类：Inherited S4 / Unregistered\n风险：红(高)\n依据：PL:BPC-157 + TB-500 | Federal",
           "classification": "Inherited S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "BPC-157 + TB-500",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "先确认产品是否点名 S4 或推定 S4、是否 ARTG 注册/豁免、是否允许处方/临床/研究/批发路径；禁止消费者治疗宣称营销",
           "regulator": "TGA / Poisons Standard",
           "isIncremental": false
@@ -763,9 +763,9 @@
         "TAS": {
           "raw": "分类：Inherited S4 / Unregistered\n风险：红(高)\n依据：PL:BPC-157 + TB-500 | SF:TAS",
           "classification": "Inherited S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "BPC-157 + TB-500",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；发货前核验 TAS 收货人本地授权",
           "regulator": "Tasmania Health",
           "isIncremental": false
@@ -773,9 +773,9 @@
         "ACT": {
           "raw": "分类：Inherited S4 / Unregistered\n风险：红(高)\n依据：PL:BPC-157 + TB-500 | SF:ACT",
           "classification": "Inherited S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "BPC-157 + TB-500",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；跨州发货同时核验 ACT 收货地授权",
           "regulator": "ACT Health",
           "isIncremental": false
@@ -783,9 +783,9 @@
         "NT": {
           "raw": "分类：Inherited S4 / Unregistered\n风险：红(高)\n依据：PL:BPC-157 + TB-500 | SF:NT",
           "classification": "Inherited S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "BPC-157 + TB-500",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；远程诊所/机构/研究项目逐项核验",
           "regulator": "NT Health",
           "isIncremental": false
@@ -800,9 +800,9 @@
         "Federal": {
           "raw": "分类：Inherited S4 / Unregistered\n风险：红(高)\n依据：PL:GLOW | Federal",
           "classification": "Inherited S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "GLOW",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "先确认产品是否点名 S4 或推定 S4、是否 ARTG 注册/豁免、是否允许处方/临床/研究/批发路径；禁止消费者治疗宣称营销",
           "regulator": "TGA / Poisons Standard",
           "isIncremental": false
@@ -860,9 +860,9 @@
         "TAS": {
           "raw": "分类：Inherited S4 / Unregistered\n风险：红(高)\n依据：PL:GLOW | SF:TAS",
           "classification": "Inherited S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "GLOW",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；发货前核验 TAS 收货人本地授权",
           "regulator": "Tasmania Health",
           "isIncremental": false
@@ -870,9 +870,9 @@
         "ACT": {
           "raw": "分类：Inherited S4 / Unregistered\n风险：红(高)\n依据：PL:GLOW | SF:ACT",
           "classification": "Inherited S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "GLOW",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；跨州发货同时核验 ACT 收货地授权",
           "regulator": "ACT Health",
           "isIncremental": false
@@ -880,9 +880,9 @@
         "NT": {
           "raw": "分类：Inherited S4 / Unregistered\n风险：红(高)\n依据：PL:GLOW | SF:NT",
           "classification": "Inherited S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "GLOW",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；远程诊所/机构/研究项目逐项核验",
           "regulator": "NT Health",
           "isIncremental": false
@@ -897,9 +897,9 @@
         "Federal": {
           "raw": "分类：Inherited S4 / Unregistered\n风险：红(高)\n依据：PL:KLOW | Federal",
           "classification": "Inherited S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "KLOW",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "先确认产品是否点名 S4 或推定 S4、是否 ARTG 注册/豁免、是否允许处方/临床/研究/批发路径；禁止消费者治疗宣称营销",
           "regulator": "TGA / Poisons Standard",
           "isIncremental": false
@@ -957,9 +957,9 @@
         "TAS": {
           "raw": "分类：Inherited S4 / Unregistered\n风险：红(高)\n依据：PL:KLOW | SF:TAS",
           "classification": "Inherited S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "KLOW",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；发货前核验 TAS 收货人本地授权",
           "regulator": "Tasmania Health",
           "isIncremental": false
@@ -967,9 +967,9 @@
         "ACT": {
           "raw": "分类：Inherited S4 / Unregistered\n风险：红(高)\n依据：PL:KLOW | SF:ACT",
           "classification": "Inherited S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "KLOW",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；跨州发货同时核验 ACT 收货地授权",
           "regulator": "ACT Health",
           "isIncremental": false
@@ -977,9 +977,9 @@
         "NT": {
           "raw": "分类：Inherited S4 / Unregistered\n风险：红(高)\n依据：PL:KLOW | SF:NT",
           "classification": "Inherited S4 / Unregistered",
-          "riskLabel": "红(高)",
+          "riskLabel": "橙(中)",
           "basisRef": "KLOW",
-          "riskLevel": "high",
+          "riskLevel": "medium",
           "operationalConsequence": "按联邦基线执行；远程诊所/机构/研究项目逐项核验",
           "regulator": "NT Health",
           "isIncremental": false
@@ -1075,7 +1075,7 @@
       "product": "BPC-157",
       "type": "单体",
       "federalClassification": "S4 / Unregistered",
-      "baseRisk": "红(高)",
+      "baseRisk": "橙(中)",
       "productQualification": "S4 / 未注册治疗品；RUO 不替代人体进口、持有或供应授权。",
       "classificationBasis": "联邦 Poisons Standard/TGA 未注册治疗用品路径；需律师核对具体 schedule entry。",
       "inheritance": "自身",
@@ -1086,7 +1086,7 @@
       "product": "MOTS-C",
       "type": "单体",
       "federalClassification": "S4 / Unregistered",
-      "baseRisk": "红(高)",
+      "baseRisk": "橙(中)",
       "productQualification": "人体治疗、注射、口服或健康功效供应按 S4 / 未注册治疗品；纯实验室试剂另行论证。",
       "classificationBasis": "TGA therapeutic claim / unapproved therapeutic goods 路径；需律师核对具体 schedule entry。",
       "inheritance": "自身",
@@ -1097,7 +1097,7 @@
       "product": "GHK-Cu 外用",
       "type": "单体/剂型",
       "federalClassification": "Cosmetic boundary（待定性）",
-      "baseRisk": "橙(中)",
+      "baseRisk": "绿(低)",
       "productQualification": "仅限外用且无治疗宣称；需先做化妆品 vs 治疗品定性，再决定是否套用州 S4 overlay。",
       "classificationBasis": "TGA therapeutic claim 边界；外用化妆品路径需标签/宣称、成分浓度和剂型依据。",
       "inheritance": "剂型条件：外用；不得机械套 S4 州叠加",
@@ -1108,7 +1108,7 @@
       "product": "GHK-Cu 注射/复方",
       "type": "单体/剂型",
       "federalClassification": "S4 / Unregistered",
-      "baseRisk": "红(高)",
+      "baseRisk": "橙(中)",
       "productQualification": "注射、复方、伤口修复、抗衰治疗宣称下按处方/未注册治疗品。",
       "classificationBasis": "TGA therapeutic goods / compounded medicine 路径；需律师核对具体 schedule entry。",
       "inheritance": "剂型条件：注射/复方",
@@ -1119,7 +1119,7 @@
       "product": "TB-500",
       "type": "单体",
       "federalClassification": "S4 / Unregistered",
-      "baseRisk": "红(高)",
+      "baseRisk": "橙(中)",
       "productQualification": "马用、动物用、运动修复或 RUO 标签不能替代人体供应授权。",
       "classificationBasis": "联邦 Poisons Standard/TGA 未注册治疗用品路径；需律师核对具体 schedule entry。",
       "inheritance": "自身",
@@ -1130,7 +1130,7 @@
       "product": "CJC-1295 + Ipamorelin",
       "type": "组合",
       "federalClassification": "S4 / Compounded medicine",
-      "baseRisk": "红(高)",
+      "baseRisk": "橙(中)",
       "productQualification": "生长激素释放相关组合；默认按处方/复方药和未注册治疗品高风险处理。",
       "classificationBasis": "复方药/处方组合 + TGA unapproved therapeutic goods 路径。",
       "inheritance": "组合自身高风险",
@@ -1141,7 +1141,7 @@
       "product": "Tesamorelin",
       "type": "单体",
       "federalClassification": "S4 / Prescription peptide",
-      "baseRisk": "红(高)",
+      "baseRisk": "橙(中)",
       "productQualification": "处方肽 / 生长激素轴相关药物；无 ARTG 或特殊准入证明时按未注册治疗品。",
       "classificationBasis": "ARTG/SAS/AP/临床或研究授权路径；需核验产品注册状态。",
       "inheritance": "自身",
@@ -1152,7 +1152,7 @@
       "product": "BPC-157 + TB-500",
       "type": "组合",
       "federalClassification": "Inherited S4 / Unregistered",
-      "baseRisk": "红(高)",
+      "baseRisk": "橙(中)",
       "productQualification": "组合风险继承最严成分：BPC-157 与 TB-500。",
       "classificationBasis": "继承 PL:BPC-157 + PL:TB-500。",
       "inheritance": "BPC-157 / TB-500",
@@ -1163,7 +1163,7 @@
       "product": "GLOW",
       "type": "组合",
       "federalClassification": "Inherited S4 / Unregistered",
-      "baseRisk": "红(高)",
+      "baseRisk": "橙(中)",
       "productQualification": "GHK-Cu + BPC-157 + TB-500；继承 BPC-157/TB-500 高风险。",
       "classificationBasis": "继承 PL:BPC-157 + PL:TB-500；GHK-Cu 不降低整体风险。",
       "inheritance": "BPC-157 / TB-500",
@@ -1174,7 +1174,7 @@
       "product": "KLOW",
       "type": "组合",
       "federalClassification": "Inherited S4 / Unregistered",
-      "baseRisk": "红(高)",
+      "baseRisk": "橙(中)",
       "productQualification": "GLOW + KPV；继承 BPC-157/TB-500 高风险，KPV 不降低整体风险。",
       "classificationBasis": "继承 PL:BPC-157 + PL:TB-500；KPV 需另补分类依据。",
       "inheritance": "BPC-157 / TB-500",
