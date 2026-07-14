@@ -11,7 +11,6 @@ import {
   riskIndex,
 } from "@/lib/mock-data";
 import {
-  alerts,
   regulatoryEntries,
   riskSignals,
   skuOpportunities,
@@ -41,7 +40,7 @@ export interface DashboardData {
 
 const dashboardFallback: DashboardData = {
   supplyChain: supplyChainState,
-  alerts,
+  alerts: [],
   regulatory: regulatoryEntries,
   riskSignals,
   intelligence: { signals: [] as IntelSignal[], skuOpportunities },

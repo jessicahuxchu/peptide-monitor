@@ -1,7 +1,6 @@
 # Peptide Command — 功能设计文档 v0.2
 
 > **文档性质**：产品功能、系统设计与 UI 视觉规范  
-> **来源需求**：《AI Agent 平台功能期望 - Steven Lu 20260618.md》  
 > **整理日期**：2026-06-18  
 > **状态**：Draft — 视觉风格已确认（Command Center V4），可进入 P0 开发
 

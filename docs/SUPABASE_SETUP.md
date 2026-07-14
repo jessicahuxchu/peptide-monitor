@@ -23,16 +23,24 @@
 
 ## 2. Run migrations
 
-在 Supabase Dashboard → **SQL Editor**，**按顺序**运行：
+在 Supabase Dashboard → **SQL Editor**，**按顺序**运行 `supabase/migrations/` 下全部脚本（当前到 `012_remove_seed_alerts.sql`）：
 
 ```
-supabase/migrations/001_initial.sql
-supabase/migrations/002_extended_modules.sql
-supabase/migrations/003_social_posts.sql
+001_initial.sql
+002_extended_modules.sql
+003_social_posts.sql
+004_product_intro.sql
+005_social_scan_jobs.sql
+006_social_post_classification.sql
+007_sku_opportunities_nullable_prices.sql
+008_agent_chat_sessions.sql
+009_social_post_engagement_refresh.sql
+010_alert_assignment.sql
+011_platform_users_and_review_category.sql
+012_remove_seed_alerts.sql
 ```
 
-`002` 会新增：产品监控、市场情报、财务、供需匹配、Dashboard 配置等表。  
-`003` 会新增：`social_posts`（Reddit 原始帖，供热度聚合与内部核对）。
+早期脚本会建核心表；后续脚本覆盖产品介绍、社媒扫描、告警指派、平台用户等。`012` 会清理早期种子通知数据。
 
 ## 3. Configure environment
 

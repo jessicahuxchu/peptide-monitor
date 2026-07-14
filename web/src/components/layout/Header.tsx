@@ -1,17 +1,18 @@
 "use client";
 
 import { UserButton, useAuth, useUser } from "@clerk/nextjs";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Bell, Inbox, Shield } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { navItems } from "@/lib/mock-data";
-import { filterAlertsForViewer } from "@/lib/alerts/visibility";
-import { alerts as fallbackAlerts } from "@/lib/supply-chain/seed-data";
+import type { AlertItem } from "@/lib/supply-chain/seed-data";
 import { useDbResource } from "@/hooks/useDbResource";
 import { useViewerProfile } from "@/hooks/useViewerProfile";
 import { HexLogo } from "@/components/ui/HexLogo";
 import { cn } from "@/lib/utils";
+
+const EMPTY_ALERTS: AlertItem[] = [];
 
 export function Header() {
   const t = useTranslations();
@@ -24,11 +25,7 @@ export function Header() {
   const viewerEmail = user?.primaryEmailAddress?.emailAddress ?? null;
   const { isAdmin, reload: reloadProfile } = useViewerProfile();
 
-  const scopedFallback = useMemo(
-    () => filterAlertsForViewer(fallbackAlerts, viewerEmail, { isAdmin }),
-    [viewerEmail, isAdmin],
-  );
-  const { data: alertList, reload } = useDbResource("/api/alerts", scopedFallback);
+  const { data: alertList, reload } = useDbResource("/api/alerts", EMPTY_ALERTS);
   const unreadAlerts = alertList.filter((a) => a.status === "unread").length;
 
   useEffect(() => {

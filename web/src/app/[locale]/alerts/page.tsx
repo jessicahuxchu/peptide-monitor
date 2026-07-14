@@ -5,9 +5,7 @@ import { useUser } from "@clerk/nextjs";
 import { useLocale, useTranslations } from "next-intl";
 import { CommandCard } from "@/components/ui/CommandCard";
 import { useDbResource } from "@/hooks/useDbResource";
-import { useViewerProfile } from "@/hooks/useViewerProfile";
-import { filterAlertsForViewer } from "@/lib/alerts/visibility";
-import { alerts as fallbackAlerts, type AlertItem } from "@/lib/supply-chain/seed-data";
+import type { AlertItem } from "@/lib/supply-chain/seed-data";
 import { cn, formatDate } from "@/lib/utils";
 
 const priorityStyle = {
@@ -18,6 +16,8 @@ const priorityStyle = {
 
 type TeamMember = { name: string; email: string };
 type FilterTab = "all" | "assigned" | "created";
+
+const EMPTY_ALERTS: AlertItem[] = [];
 
 function alertTitle(alert: AlertItem, t: ReturnType<typeof useTranslations>) {
   if (alert.titleText?.trim()) return alert.titleText;
@@ -34,14 +34,8 @@ export default function AlertsPage() {
   const locale = useLocale() as "en" | "zh";
   const { user, isSignedIn } = useUser();
   const viewerEmail = user?.primaryEmailAddress?.emailAddress ?? null;
-  const { isAdmin } = useViewerProfile();
 
-  const scopedFallback = useMemo(
-    () => filterAlertsForViewer(fallbackAlerts, viewerEmail, { isAdmin }),
-    [viewerEmail, isAdmin],
-  );
-
-  const { data: alerts, usingDb, reload } = useDbResource("/api/alerts", scopedFallback);
+  const { data: alerts, usingDb, reload } = useDbResource("/api/alerts", EMPTY_ALERTS);
   const [members, setMembers] = useState<TeamMember[]>([]);
   const [filter, setFilter] = useState<FilterTab>("all");
   const [showForm, setShowForm] = useState(false);
@@ -145,7 +139,6 @@ export default function AlertsPage() {
     <div className="mx-auto max-w-[960px] space-y-4 p-4 md:p-6">
       <CommandCard
         title={t("pages.alerts.title")}
-        subtitle={t("pages.alerts.description")}
         action={
           <button
             type="button"

@@ -145,52 +145,8 @@ export interface AlertItem {
   assignedToName?: string | null;
 }
 
-export const alerts: AlertItem[] = [
-  {
-    id: "a1",
-    priority: "P0",
-    titleKey: "alertNswStorage",
-    summaryKey: "alertNswStorageSummary",
-    source: "scheduled_scout",
-    status: "unread",
-    createdAt: "2026-06-17T14:30:00Z",
-    suggestedActions: ["Review NSW storage protocol", "Update Document Tracker"],
-  },
-  {
-    id: "a2",
-    priority: "P1",
-    titleKey: "alertImportPermit",
-    summaryKey: "alertImportPermitSummary",
-    source: "agent",
-    status: "unread",
-    createdAt: "2026-06-16T09:00:00Z",
-    suggestedActions: ["Submit renewal application", "Notify AusPharm Import Holdings"],
-  },
-  {
-    id: "a3",
-    priority: "P1",
-    titleKey: "alertCompetitorPrice",
-    summaryKey: "alertCompetitorPriceSummary",
-    source: "agent",
-    status: "read",
-    createdAt: "2026-06-15T11:20:00Z",
-    suggestedActions: ["Review Melbourne pricing", "Adjust quote for Metro Clinic"],
-  },
-  {
-    id: "a4",
-    priority: "P2",
-    titleKey: "alertCompoundingReg",
-    summaryKey: "alertCompoundingRegSummary",
-    source: "manual",
-    status: "in_progress",
-    createdAt: "2026-06-14T08:00:00Z",
-    suggestedActions: ["Follow up with Precision Compounding VIC"],
-    createdByName: "Steven",
-    createdByEmail: null,
-    assignedToName: "Jessica",
-    assignedToEmail: "jessica.huxchu@gmail.com",
-  },
-];
+/** Alerts come from real events / manual create — no mock seed rows. */
+export const alerts: AlertItem[] = [];
 
 export interface EntityRecord {
   id: string;
