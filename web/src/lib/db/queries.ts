@@ -1,6 +1,5 @@
 import { createServiceClient } from "@/lib/supabase/client";
 import {
-  mapAlert,
   mapCustomerDemand,
   mapEntity,
   mapIntelSignal,
@@ -14,6 +13,7 @@ import {
   mapSocialPost,
   mapSupplier,
 } from "@/lib/db/platform-mappers";
+import { fetchAllAlerts, fetchAlertsForViewer } from "@/lib/db/alerts";
 import { fetchSupplyChainState } from "@/lib/db/supply-chain";
 import type { SalesRecord } from "@/lib/finance/seed-data";
 import type { IntelSignal } from "@/lib/intelligence/seed-data";
@@ -45,14 +45,14 @@ export async function fetchRegulatoryEntries(): Promise<RegulatoryEntry[]> {
   return matrixRowsToRegulatoryEntries();
 }
 
-export async function fetchAlerts(): Promise<AlertItem[]> {
-  const supabase = createServiceClient();
-  const { data, error } = await supabase
-    .from("alerts")
-    .select("*")
-    .order("created_at", { ascending: false });
-  if (error) throw error;
-  return (data ?? []).map(mapAlert);
+/** Prefer viewer-scoped fetch for Alert Center; use fetchAllAlerts for admin/agent. */
+export async function fetchAlerts(
+  viewerEmail?: string | null,
+): Promise<AlertItem[]> {
+  if (viewerEmail !== undefined) {
+    return fetchAlertsForViewer(viewerEmail);
+  }
+  return fetchAllAlerts();
 }
 
 export async function fetchRiskSignals(): Promise<RiskSignal[]> {
@@ -191,7 +191,7 @@ export async function fetchPlatformConfig<T>(key: string): Promise<T | null> {
   return (data?.value as T) ?? null;
 }
 
-export async function fetchDashboardBundle(): Promise<{
+export async function fetchDashboardBundle(viewerEmail?: string | null): Promise<{
   supplyChain: SupplyChainState;
   alerts: AlertItem[];
   regulatory: RegulatoryEntry[];
@@ -203,7 +203,7 @@ export async function fetchDashboardBundle(): Promise<{
   const [supplyChain, alerts, regulatory, riskSignals, intelligence, finance] =
     await Promise.all([
       fetchSupplyChainState(),
-      fetchAlerts(),
+      fetchAlerts(viewerEmail ?? null),
       fetchRegulatoryEntries(),
       fetchRiskSignals(),
       fetchIntelligenceData(),

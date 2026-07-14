@@ -116,15 +116,21 @@ export interface Database {
           priority: string;
           title_key: string;
           summary_key: string;
+          title_text: string | null;
+          summary_text: string | null;
           source: string;
           status: string;
           suggested_actions: Json;
           created_at: string;
+          created_by_email: string | null;
+          created_by_name: string | null;
+          assigned_to_email: string | null;
+          assigned_to_name: string | null;
         };
         Insert: Omit<
           Database["public"]["Tables"]["alerts"]["Row"],
           "created_at"
-        >;
+        > & { created_at?: string };
         Update: Partial<Database["public"]["Tables"]["alerts"]["Insert"]>;
       };
       entities: {
@@ -156,6 +162,7 @@ export interface Database {
           content: string;
           status: string;
           proposed_changes: Json;
+          review_category: string;
           created_at: string;
           committed_at: string | null;
         };
@@ -165,9 +172,31 @@ export interface Database {
           content: string;
           status?: string;
           proposed_changes?: Json;
+          review_category?: string;
           committed_at?: string | null;
         };
         Update: Partial<Database["public"]["Tables"]["agent_submissions"]["Insert"]>;
+      };
+      platform_users: {
+        Row: {
+          id: string;
+          email: string;
+          name: string;
+          roles: string[];
+          active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          email: string;
+          name: string;
+          roles?: string[];
+          active?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["platform_users"]["Insert"]>;
       };
       agent_chat_sessions: {
         Row: {

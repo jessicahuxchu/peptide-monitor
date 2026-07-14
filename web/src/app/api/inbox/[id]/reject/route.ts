@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { dbUnavailableResponse } from "@/lib/api/auth";
-import { requireInboxReviewer } from "@/lib/api/inbox-auth";
-import { rejectSubmission } from "@/lib/db/inbox";
+import { requireInboxConfirmPermission } from "@/lib/api/admin-auth";
+import {
+  fetchInboxSubmissionById,
+  rejectSubmission,
+} from "@/lib/db/inbox";
 
 export async function POST(
   _request: NextRequest,
@@ -10,11 +13,16 @@ export async function POST(
 ) {
   if (!isSupabaseConfigured()) return dbUnavailableResponse();
 
-  const auth = await requireInboxReviewer();
-  if (!auth.ok) return auth.response;
-
   try {
     const { id } = await params;
+    const submission = await fetchInboxSubmissionById(id);
+    if (!submission) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    const auth = await requireInboxConfirmPermission(submission.reviewCategory);
+    if (!auth.ok) return auth.response;
+
     await rejectSubmission(id, auth.actor);
     return NextResponse.json({ ok: true });
   } catch (err) {

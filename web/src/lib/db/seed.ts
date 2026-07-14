@@ -122,10 +122,16 @@ export async function seedDatabase() {
       priority: a.priority,
       title_key: a.titleKey,
       summary_key: a.summaryKey,
+      title_text: a.titleText ?? null,
+      summary_text: a.summaryText ?? null,
       source: a.source,
       status: a.status,
       suggested_actions: a.suggestedActions,
       created_at: a.createdAt,
+      created_by_email: a.createdByEmail ?? null,
+      created_by_name: a.createdByName ?? null,
+      assigned_to_email: a.assignedToEmail ?? null,
+      assigned_to_name: a.assignedToName ?? null,
     })),
   );
   if (alertsErr) throw alertsErr;

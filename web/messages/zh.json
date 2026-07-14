@@ -18,6 +18,7 @@
     "version": "V1.0",
     "agentInbox": "AI Agent",
     "alerts": "提醒",
+    "admin": "Admin",
     "deploymentMode": "澳洲市场",
     "signIn": "登录"
   },
@@ -426,7 +427,7 @@
     },
     "alerts": {
       "title": "提醒与行动中心",
-      "description": "优先级提醒与建议动作。"
+      "description": "优先级提醒、指派与建议动作。指派后仅创建人与被指派人可见；Admin 可见全部。"
     },
     "inbox": {
       "title": "AI Agent",
@@ -765,8 +766,36 @@
     "scheduled_scout": "监管侦察"
   },
   "alertsPage": {
-    "suggestedActions": "建议动作"
+    "suggestedActions": "建议动作",
+    "create": "新建提醒",
+    "cancel": "取消",
+    "createHint": "手动创建后，指派对象会在通知中心看到；创建人始终可见。未指派则为全员可见。",
+    "fieldTitle": "标题",
+    "fieldSummary": "摘要",
+    "fieldPriority": "优先级",
+    "fieldAssignee": "指派给",
+    "fieldActions": "建议动作（每行一条）",
+    "actionsPlaceholder": "例如：跟进 Precision Compounding VIC",
+    "assigneeEveryone": "全体可见（不指派）",
+    "assigneeHint": "指派后仅被指派人与创建人可见，并计入对方未读角标。",
+    "submit": "创建并通知",
+    "saving": "创建中…",
+    "signInRequired": "请先登录后再创建或指派。",
+    "filterAll": "对我可见",
+    "filterAssigned": "指派给我",
+    "filterCreated": "我创建的",
+    "empty": "当前没有对你可见的提醒。",
+    "offlineHint": "离线种子数据",
+    "assignedTo": "指派给 {name}",
+    "createdBy": "由 {name} 创建",
+    "teamWide": "全员可见",
+    "markRead": "标为已读",
+    "markInProgress": "进行中",
+    "markDone": "完成",
+    "reassign": "重新指派…"
   },
+  "alertManual": "手动提醒",
+  "alertManualSummary": "手动创建的提醒条目。",
   "inboxPage": {
     "send": "发送",
     "proposedUpdates": "提议更新",
@@ -781,6 +810,11 @@
     "pendingSubtitle": "AI 解析的结构化更新",
     "noPending": "暂无待确认项",
     "reviewRestricted": "仅审核权限用户可确认或拒绝更新。",
+    "reviewHint": "采购报价 → Procurement；客户询盘 → Sales；监管/其它 → Admin。Admin 可确认全部类型。",
+    "reviewRestrictedForCategory": "需 {role} 或 Admin 确认",
+    "categoryProcurement": "Procurement",
+    "categorySales": "Sales",
+    "categoryAdmin": "Admin",
     "chatTitle": "AI Agent",
     "chatSubtitle": "Hermes + Qwen — 可问平台功能与评分规则，也可提交报价、询盘与监管更新",
     "chatWelcome": "你好，我是 Peptide Monitor AI Agent（Hermes + Qwen）。可询问综合评判、平台覆盖深度、运营可行、合规空间等规则；也可使用快捷按钮提交报价/询盘/监管更新。",
@@ -802,5 +836,26 @@
     "historyLocalOnly": "当前为浏览器本地保存；配置 Supabase 后可跨设备同步。",
     "newChat": "新对话",
     "deleteChat": "删除对话"
+  },
+  "adminPage": {
+    "title": "Admin 用户与角色",
+    "subtitle": "管理平台帐号对应的业务角色。仅 Admin 可见。",
+    "hint": "Clerk 登录邮箱需与此处一致。Procurement 可确认采购报价；Sales 可确认客户询盘；Admin 可确认全部。",
+    "forbidden": "需要 Admin 权限",
+    "forbiddenHint": "请使用 Admin 帐号（jessica.huxchu@gmail.com）登录。",
+    "addUser": "添加用户",
+    "fieldName": "姓名",
+    "fieldEmail": "邮箱（Clerk）",
+    "create": "添加",
+    "saving": "保存中…",
+    "empty": "暂无用户记录",
+    "deactivate": "停用",
+    "activate": "启用",
+    "roles": {
+      "admin": "Admin",
+      "procurement": "Procurement 上游",
+      "sales": "Sales 下游",
+      "ops": "Ops 运营"
+    }
   }
 }

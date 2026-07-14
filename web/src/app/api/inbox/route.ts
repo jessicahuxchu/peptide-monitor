@@ -20,10 +20,13 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const author = (body.author as string) || "You";
     const content = body.content as string;
+    const intent = typeof body.intent === "string" ? body.intent : undefined;
     if (!content?.trim()) {
       return NextResponse.json({ error: "Content required" }, { status: 400 });
     }
-    const submission = await createInboxSubmission(author, content.trim());
+    const submission = await createInboxSubmission(author, content.trim(), {
+      intent,
+    });
     return NextResponse.json(submission, { status: 201 });
   } catch (err) {
     return NextResponse.json(

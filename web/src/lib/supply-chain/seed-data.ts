@@ -131,10 +131,18 @@ export interface AlertItem {
   priority: "P0" | "P1" | "P2";
   titleKey: string;
   summaryKey: string;
+  /** Free-text override for manual alerts (preferred over titleKey when set). */
+  titleText?: string | null;
+  summaryText?: string | null;
   source: "agent" | "manual" | "scheduled_scout";
   status: "unread" | "read" | "in_progress" | "done" | "dismissed";
   createdAt: string;
   suggestedActions: string[];
+  createdByEmail?: string | null;
+  createdByName?: string | null;
+  /** null / undefined = team-wide visibility */
+  assignedToEmail?: string | null;
+  assignedToName?: string | null;
 }
 
 export const alerts: AlertItem[] = [
@@ -177,6 +185,10 @@ export const alerts: AlertItem[] = [
     status: "in_progress",
     createdAt: "2026-06-14T08:00:00Z",
     suggestedActions: ["Follow up with Precision Compounding VIC"],
+    createdByName: "Steven",
+    createdByEmail: null,
+    assignedToName: "Jessica",
+    assignedToEmail: "jessica.huxchu@gmail.com",
   },
 ];
 

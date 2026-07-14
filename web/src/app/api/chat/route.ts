@@ -35,7 +35,9 @@ export async function POST(request: Request) {
     let inboxQueued = false;
     if (result.shouldQueueInbox && result.inboxContent && isSupabaseConfigured()) {
       try {
-        await createInboxSubmission(author, result.inboxContent);
+        await createInboxSubmission(author, result.inboxContent, {
+          intent,
+        });
         inboxQueued = true;
       } catch {
         inboxQueued = false;

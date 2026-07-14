@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { ProposedChange } from "@/lib/agent/inbox-parser";
+import type { ReviewCategory } from "@/lib/auth/roles";
 import { inboxMessages } from "@/lib/supply-chain/seed-data";
 
 export interface InboxSubmissionView {
@@ -10,6 +11,7 @@ export interface InboxSubmissionView {
   content: string;
   status: "pending" | "confirmed" | "rejected";
   proposedChanges: ProposedChange[];
+  reviewCategory: ReviewCategory;
   createdAt: string;
   committedAt?: string;
 }
@@ -25,6 +27,7 @@ function seedToView(): InboxSubmissionView[] {
       payload: {},
       summary,
     })),
+    reviewCategory: "admin" as ReviewCategory,
     createdAt: m.timestamp,
   }));
 }
@@ -47,7 +50,12 @@ export function useInboxStore() {
       }
       if (!res.ok) throw new Error("Failed to load inbox");
       const data = (await res.json()) as InboxSubmissionView[];
-      setSubmissions(data);
+      setSubmissions(
+        data.map((row) => ({
+          ...row,
+          reviewCategory: row.reviewCategory ?? "admin",
+        })),
+      );
       setUsingDb(true);
       setError(null);
     } catch (e) {
@@ -73,6 +81,7 @@ export function useInboxStore() {
             content,
             status: "pending",
             proposedChanges: [],
+            reviewCategory: "admin",
             createdAt: new Date().toISOString(),
           },
           ...prev,

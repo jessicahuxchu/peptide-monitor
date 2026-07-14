@@ -7,7 +7,8 @@ import { ChatMarkdown } from "@/components/chat/ChatMarkdown";
 import { CommandCard } from "@/components/ui/CommandCard";
 import { useChatSessions } from "@/hooks/useChatSessions";
 import { useInboxStore } from "@/hooks/useInboxStore";
-import { canReviewInbox } from "@/lib/auth/reviewers";
+import { useViewerProfile } from "@/hooks/useViewerProfile";
+import { canConfirmReviewCategory, type ReviewCategory } from "@/lib/auth/roles";
 import { formatDateTime } from "@/lib/utils";
 import type { ChatMessage } from "@/lib/agent/chat-responder";
 import type { ChatIntent } from "@/lib/agent/hermes-client";
@@ -31,15 +32,25 @@ const PROMPT_INTENTS: { intent: ChatIntent; key: string }[] = [
   { intent: "regulatory", key: "promptRegulatory" },
 ];
 
+function categoryLabelKey(category: ReviewCategory): string {
+  if (category === "procurement") return "categoryProcurement";
+  if (category === "sales") return "categorySales";
+  return "categoryAdmin";
+}
+
 export default function InboxPage() {
   const t = useTranslations();
   const locale = useLocale() as "en" | "zh";
   const { user, isLoaded } = useUser();
   const userEmail = user?.primaryEmailAddress?.emailAddress;
-  const canReview = canReviewInbox(userEmail);
+  const { profile } = useViewerProfile();
+  const roles = profile?.roles ?? [];
 
   const { submissions, loading, usingDb, error, confirm, reject, reload, submit } =
     useInboxStore();
+
+  const canConfirm = (category: ReviewCategory) =>
+    canConfirmReviewCategory(roles, category, userEmail);
 
   const welcomeMessage = t("inboxPage.chatWelcome");
   const newChatTitle = t("inboxPage.newChat");
@@ -225,11 +236,9 @@ export default function InboxPage() {
           subtitle={t("inboxPage.pendingSubtitle")}
           className="flex max-h-[36vh] flex-col xl:max-h-none xl:min-h-0"
         >
-          {!canReview && (
-            <p className="mb-3 rounded-lg border border-command-border bg-command-card-elevated px-3 py-2 text-[10px] text-command-text-muted">
-              {t("inboxPage.reviewRestricted")}
-            </p>
-          )}
+          <p className="mb-3 rounded-lg border border-command-border bg-command-card-elevated px-3 py-2 text-[10px] text-command-text-muted">
+            {t("inboxPage.reviewHint")}
+          </p>
           {loading ? (
             <div className="flex justify-center py-8">
               <Loader2 className="h-5 w-5 animate-spin text-command-teal" />
@@ -245,6 +254,11 @@ export default function InboxPage() {
                   key={msg.id}
                   className="rounded-lg border border-command-border bg-command-card-elevated p-3"
                 >
+                  <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
+                    <span className="rounded border border-command-teal/30 bg-command-teal/10 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-command-teal-bright">
+                      {t(`inboxPage.${categoryLabelKey(msg.reviewCategory)}`)}
+                    </span>
+                  </div>
                   <p className="line-clamp-3 text-xs text-command-text">{msg.content}</p>
                   <p className="mt-1 text-[10px] text-command-text-muted">
                     {formatDateTime(msg.createdAt, locale)}
@@ -258,7 +272,7 @@ export default function InboxPage() {
                       ))}
                     </div>
                   )}
-                  {canReview && (
+                  {canConfirm(msg.reviewCategory) ? (
                     <div className="mt-2 flex gap-1.5">
                       <button
                         type="button"
@@ -279,6 +293,12 @@ export default function InboxPage() {
                         {t("inboxPage.reject")}
                       </button>
                     </div>
+                  ) : (
+                    <p className="mt-2 text-[10px] text-command-text-muted">
+                      {t("inboxPage.reviewRestrictedForCategory", {
+                        role: t(`inboxPage.${categoryLabelKey(msg.reviewCategory)}`),
+                      })}
+                    </p>
                   )}
                 </li>
               ))}

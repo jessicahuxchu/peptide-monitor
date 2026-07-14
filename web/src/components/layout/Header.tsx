@@ -1,11 +1,15 @@
 "use client";
 
-import { UserButton, useAuth } from "@clerk/nextjs";
+import { UserButton, useAuth, useUser } from "@clerk/nextjs";
+import { useEffect, useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Bell, Inbox } from "lucide-react";
+import { Bell, Inbox, Shield } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { navItems } from "@/lib/mock-data";
-import { alerts } from "@/lib/supply-chain/seed-data";
+import { filterAlertsForViewer } from "@/lib/alerts/visibility";
+import { alerts as fallbackAlerts } from "@/lib/supply-chain/seed-data";
+import { useDbResource } from "@/hooks/useDbResource";
+import { useViewerProfile } from "@/hooks/useViewerProfile";
 import { HexLogo } from "@/components/ui/HexLogo";
 import { cn } from "@/lib/utils";
 
@@ -16,13 +20,26 @@ export function Header() {
   const router = useRouter();
 
   const { isLoaded, isSignedIn } = useAuth();
+  const { user } = useUser();
+  const viewerEmail = user?.primaryEmailAddress?.emailAddress ?? null;
+  const { isAdmin, reload: reloadProfile } = useViewerProfile();
+
+  const scopedFallback = useMemo(
+    () => filterAlertsForViewer(fallbackAlerts, viewerEmail, { isAdmin }),
+    [viewerEmail, isAdmin],
+  );
+  const { data: alertList, reload } = useDbResource("/api/alerts", scopedFallback);
+  const unreadAlerts = alertList.filter((a) => a.status === "unread").length;
+
+  useEffect(() => {
+    void reload();
+    void reloadProfile();
+  }, [viewerEmail, reload, reloadProfile]);
 
   const toggleLocale = () => {
     const next = locale === "en" ? "zh" : "en";
     router.replace(pathname, { locale: next });
   };
-
-  const unreadAlerts = alerts.filter((a) => a.status === "unread").length;
 
   return (
     <header className="sticky top-0 z-50 border-b border-command-border bg-command-bg/95 backdrop-blur-sm">
@@ -62,6 +79,21 @@ export function Header() {
 
         {/* Right controls */}
         <div className="flex shrink-0 items-center gap-2 md:gap-3">
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className={cn(
+                "relative flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition-colors",
+                pathname.startsWith("/admin")
+                  ? "border-command-teal/40 bg-command-teal/10 text-command-teal-bright"
+                  : "border-command-border text-command-text-secondary hover:border-command-teal/30 hover:text-command-text",
+              )}
+            >
+              <Shield className="h-3.5 w-3.5" />
+              <span className="hidden md:inline">{t("header.admin")}</span>
+            </Link>
+          )}
+
           <Link
             href="/inbox"
             className="relative flex items-center gap-1.5 rounded-full border border-command-border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-command-text-secondary transition-colors hover:border-command-teal/30 hover:text-command-text"

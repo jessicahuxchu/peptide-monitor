@@ -61,10 +61,16 @@ export function mapAlert(row: AlertRow): AlertItem {
     priority: row.priority as AlertItem["priority"],
     titleKey: row.title_key,
     summaryKey: row.summary_key,
+    titleText: row.title_text,
+    summaryText: row.summary_text,
     source: row.source as AlertItem["source"],
     status: row.status as AlertItem["status"],
     createdAt: row.created_at,
     suggestedActions: (row.suggested_actions as string[]) ?? [],
+    createdByEmail: row.created_by_email,
+    createdByName: row.created_by_name,
+    assignedToEmail: row.assigned_to_email,
+    assignedToName: row.assigned_to_name,
   };
 }
 

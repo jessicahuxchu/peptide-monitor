@@ -18,6 +18,7 @@
     "version": "V1.0",
     "agentInbox": "AI Agent",
     "alerts": "Alerts",
+    "admin": "Admin",
     "deploymentMode": "AU Market",
     "signIn": "Sign In"
   },
@@ -423,7 +424,7 @@
     },
     "alerts": {
       "title": "Alert & Action Center",
-      "description": "Priority alerts with suggested actions."
+      "description": "Priority alerts, assignment, and suggested actions. Assigned alerts are visible to creator and assignee; Admin sees all."
     },
     "inbox": {
       "title": "AI Agent",
@@ -757,8 +758,36 @@
     "scheduled_scout": "Regulatory Scout"
   },
   "alertsPage": {
-    "suggestedActions": "Suggested Actions"
+    "suggestedActions": "Suggested Actions",
+    "create": "New alert",
+    "cancel": "Cancel",
+    "createHint": "After create, the assignee sees it in Alert Center; the creator always retains visibility. Leave unassigned for team-wide.",
+    "fieldTitle": "Title",
+    "fieldSummary": "Summary",
+    "fieldPriority": "Priority",
+    "fieldAssignee": "Assign to",
+    "fieldActions": "Suggested actions (one per line)",
+    "actionsPlaceholder": "e.g. Follow up with Precision Compounding VIC",
+    "assigneeEveryone": "Everyone (unassigned)",
+    "assigneeHint": "Assigned alerts are visible only to the assignee and creator, and count toward the assignee unread badge.",
+    "submit": "Create & notify",
+    "saving": "Creating…",
+    "signInRequired": "Sign in to create or assign alerts.",
+    "filterAll": "Visible to me",
+    "filterAssigned": "Assigned to me",
+    "filterCreated": "Created by me",
+    "empty": "No alerts visible to you.",
+    "offlineHint": "Offline seed data",
+    "assignedTo": "Assigned to {name}",
+    "createdBy": "Created by {name}",
+    "teamWide": "Team-wide",
+    "markRead": "Mark read",
+    "markInProgress": "In progress",
+    "markDone": "Done",
+    "reassign": "Reassign…"
   },
+  "alertManual": "Manual alert",
+  "alertManualSummary": "Manually created alert.",
   "inboxPage": {
     "send": "Send",
     "proposedUpdates": "Proposed Updates",
@@ -773,6 +802,11 @@
     "pendingSubtitle": "AI-parsed structured updates",
     "noPending": "No pending items",
     "reviewRestricted": "Only users with review permission can confirm or reject.",
+    "reviewHint": "Supplier quotes → Procurement; customer inquiries → Sales; regulatory/other → Admin. Admin can confirm all.",
+    "reviewRestrictedForCategory": "Requires {role} or Admin to confirm",
+    "categoryProcurement": "Procurement",
+    "categorySales": "Sales",
+    "categoryAdmin": "Admin",
     "chatTitle": "AI Agent",
     "chatSubtitle": "Hermes + Qwen — ask platform rules & scoring, or submit quotes, inquiries, and regulatory updates",
     "chatWelcome": "Hello, I'm Peptide Monitor AI Agent (Hermes + Qwen). Ask about viability scoring, platform depth, operational fit, regulatory allowance, or use quick actions for quotes and updates.",
@@ -794,5 +828,26 @@
     "historyLocalOnly": "Saved in this browser only; configure Supabase for cross-device sync.",
     "newChat": "New chat",
     "deleteChat": "Delete chat"
+  },
+  "adminPage": {
+    "title": "Admin · Users & Roles",
+    "subtitle": "Map Clerk accounts to business roles. Admin only.",
+    "hint": "Emails must match Clerk sign-in. Procurement confirms supplier quotes; Sales confirms inquiries; Admin can confirm all.",
+    "forbidden": "Admin access required",
+    "forbiddenHint": "Sign in with an Admin account (jessica.huxchu@gmail.com).",
+    "addUser": "Add user",
+    "fieldName": "Name",
+    "fieldEmail": "Email (Clerk)",
+    "create": "Add",
+    "saving": "Saving…",
+    "empty": "No users yet",
+    "deactivate": "Deactivate",
+    "activate": "Activate",
+    "roles": {
+      "admin": "Admin",
+      "procurement": "Procurement",
+      "sales": "Sales",
+      "ops": "Ops"
+    }
   }
 }

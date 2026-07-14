@@ -1,6 +1,10 @@
 import { createServiceClient } from "@/lib/supabase/client";
 import { logActivity } from "@/lib/db/supply-chain";
 import type { ProposedChange } from "@/lib/agent/inbox-parser";
+import {
+  resolveReviewCategory,
+  type ReviewCategory,
+} from "@/lib/auth/roles";
 
 function newId(prefix: string) {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
@@ -57,9 +61,15 @@ export async function commitProposedChanges(
             priority: p.priority as string,
             title_key: p.titleKey as string,
             summary_key: p.summaryKey as string,
+            title_text: (p.titleText as string) ?? null,
+            summary_text: (p.summaryText as string) ?? null,
             source: p.source as string,
             status: p.status as string,
             suggested_actions: p.suggestedActions ?? [],
+            created_by_email: (p.createdByEmail as string) ?? null,
+            created_by_name: (p.createdByName as string) ?? null,
+            assigned_to_email: (p.assignedToEmail as string) ?? null,
+            assigned_to_name: (p.assignedToName as string) ?? null,
           });
           if (error) throw error;
           applied.push(change.summary);
@@ -118,8 +128,16 @@ export interface InboxSubmission {
   content: string;
   status: "pending" | "confirmed" | "rejected";
   proposedChanges: ProposedChange[];
+  reviewCategory: ReviewCategory;
   createdAt: string;
   committedAt?: string;
+}
+
+function mapReviewCategory(value: unknown): ReviewCategory {
+  if (value === "procurement" || value === "sales" || value === "admin") {
+    return value;
+  }
+  return "admin";
 }
 
 export async function fetchInboxSubmissions(): Promise<InboxSubmission[]> {
@@ -136,17 +154,49 @@ export async function fetchInboxSubmissions(): Promise<InboxSubmission[]> {
     content: row.content,
     status: row.status as InboxSubmission["status"],
     proposedChanges: (row.proposed_changes as ProposedChange[]) ?? [],
+    reviewCategory: mapReviewCategory(
+      (row as { review_category?: string }).review_category,
+    ),
     createdAt: row.created_at,
     committedAt: row.committed_at ?? undefined,
   }));
 }
 
+export async function fetchInboxSubmissionById(
+  id: string,
+): Promise<InboxSubmission | null> {
+  const supabase = createServiceClient();
+  const { data, error } = await supabase
+    .from("agent_submissions")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+  return {
+    id: data.id,
+    author: data.author,
+    content: data.content,
+    status: data.status as InboxSubmission["status"],
+    proposedChanges: (data.proposed_changes as ProposedChange[]) ?? [],
+    reviewCategory: mapReviewCategory(
+      (data as { review_category?: string }).review_category,
+    ),
+    createdAt: data.created_at,
+    committedAt: data.committed_at ?? undefined,
+  };
+}
+
 export async function createInboxSubmission(
   author: string,
   content: string,
+  opts?: { intent?: string | null; reviewCategory?: ReviewCategory },
 ): Promise<InboxSubmission> {
   const { parseInboxContent } = await import("@/lib/agent/inbox-parser");
   const proposedChanges = parseInboxContent(content, author);
+  const reviewCategory =
+    opts?.reviewCategory ??
+    resolveReviewCategory({ intent: opts?.intent, content });
   const supabase = createServiceClient();
 
   const { data, error } = await supabase
@@ -156,6 +206,7 @@ export async function createInboxSubmission(
       content,
       status: "pending",
       proposed_changes: proposedChanges,
+      review_category: reviewCategory,
     })
     .select()
     .single();
@@ -168,6 +219,9 @@ export async function createInboxSubmission(
     content: data.content,
     status: "pending",
     proposedChanges,
+    reviewCategory: mapReviewCategory(
+      (data as { review_category?: string }).review_category,
+    ),
     createdAt: data.created_at,
   };
 }
