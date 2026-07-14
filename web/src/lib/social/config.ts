@@ -135,3 +135,39 @@ export const REDDIT_SEARCH_TERMS = [
   "Tirzepatide",
   "Retatrutide",
 ] as const;
+
+/** Apify Google News — https://apify.com/crawlerbros/google-news-scraper */
+export const APIFY_GOOGLE_NEWS_ACTOR_DEFAULT = "crawlerbros/google-news-scraper";
+
+/** Max articles per Google News query (MVP cost control). */
+export const GOOGLE_NEWS_MAX_PER_QUERY = 12;
+
+/** 7d volume threshold to promote non-regulatory product news. */
+export const GOOGLE_NEWS_MIN_MENTIONS_7D = 3;
+
+/**
+ * Daily Google News search queries: category, products, AU/regs, manufacturing/R&D.
+ * Kept English; AU/TGA coverage via dedicated queries.
+ */
+export const GOOGLE_NEWS_QUERIES = [
+  // Category / industry
+  "peptides",
+  "peptide therapy",
+  "peptide research",
+  'peptide manufacturing OR "peptide synthesis" OR "peptide CDMO"',
+  '"peptide pharmaceutical" (FDA OR TGA OR EMA)',
+  // Products
+  "BPC-157",
+  "TB-500",
+  'GHK-Cu OR "copper peptide"',
+  "Semaglutide peptide",
+  "Tirzepatide",
+  "Retatrutide",
+  "CJC-1295",
+  "Ipamorelin",
+  'Melanotan OR "MT-2"',
+  // AU / regulatory focus
+  '"TGA" peptide',
+  "peptide Australia (ban OR regulation OR customs OR scheduling)",
+  "FDA peptide (ban OR seize OR compounding OR GLP-1)",
+] as const;

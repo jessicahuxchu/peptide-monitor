@@ -301,7 +301,7 @@ export async function getApifyRunStatus(runId: string): Promise<{
   };
 }
 
-async function waitForApifyRun(runId: string): Promise<string> {
+export async function waitForApifyRun(runId: string): Promise<string> {
   const deadline = Date.now() + APIFY_RUN_TIMEOUT_MS;
 
   while (Date.now() < deadline) {
@@ -316,7 +316,10 @@ async function waitForApifyRun(runId: string): Promise<string> {
   throw new Error("Apify run timed out waiting for completion");
 }
 
-async function fetchDatasetItems(datasetId: string): Promise<ApifyRedditItem[]> {
+/** Fetch raw dataset items (any Actor shape). */
+export async function fetchApifyDatasetItems<T = unknown>(
+  datasetId: string,
+): Promise<T[]> {
   const res = await apifyFetch(
     `/datasets/${datasetId}/items?clean=true&format=json`,
   );
@@ -324,7 +327,37 @@ async function fetchDatasetItems(datasetId: string): Promise<ApifyRedditItem[]> 
     const text = await res.text();
     throw new Error(`Apify dataset fetch failed (${res.status}): ${text.slice(0, 200)}`);
   }
-  return (await res.json()) as ApifyRedditItem[];
+  return (await res.json()) as T[];
+}
+
+async function fetchDatasetItems(datasetId: string): Promise<ApifyRedditItem[]> {
+  return fetchApifyDatasetItems<ApifyRedditItem>(datasetId);
+}
+
+/** Start an arbitrary Apify Actor run with JSON input. */
+export async function startApifyActorRun(
+  actorPath: string,
+  input: Record<string, unknown>,
+): Promise<{ runId: string; datasetId: string }> {
+  const actorId = actorPath.replace("/", "~");
+  const startRes = await apifyFetch(`/acts/${actorId}/runs`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+
+  if (!startRes.ok) {
+    const text = await startRes.text();
+    throw new Error(`Apify start failed (${startRes.status}): ${text.slice(0, 300)}`);
+  }
+
+  const startJson = (await startRes.json()) as {
+    data: { id: string; defaultDatasetId: string };
+  };
+
+  return {
+    runId: startJson.data.id,
+    datasetId: startJson.data.defaultDatasetId,
+  };
 }
 
 function parseSubreddit(item: ApifyRedditItem): string {

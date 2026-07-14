@@ -20,9 +20,11 @@ export interface SocialPost {
   auContext?: boolean;
 }
 
+export type SocialPlatform = "reddit" | "google_news";
+
 export interface NormalizedSocialPost {
   id: string;
-  platform: "reddit";
+  platform: SocialPlatform;
   externalId: string;
   subreddit: string;
   title: string;
@@ -47,6 +49,14 @@ export interface SocialFetchResult {
   configured: boolean;
   provider: "apify" | "reddit" | "none";
   sources: { subredditPulls: number; searchPulls: number };
+  errors: string[];
+}
+
+export interface GoogleNewsFetchResult {
+  posts: NormalizedSocialPost[];
+  configured: boolean;
+  provider: "apify" | "none";
+  queryCount: number;
   errors: string[];
 }
 
