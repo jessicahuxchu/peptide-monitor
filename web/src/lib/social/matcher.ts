@@ -74,9 +74,10 @@ function isBroadRoundupPost(products: string[]): boolean {
 
 /** Whether a post should count toward a product's heat / representative pool. */
 export function postCountsForProduct(
-  post: { title: string; products: string[] },
+  post: { title: string; products: string[]; removedAt?: string | null },
   product: string,
 ): boolean {
+  if (post.removedAt) return false;
   if (!post.products.includes(product)) return false;
   if (!isBroadRoundupPost(post.products)) return true;
   return productMentionedInTitle(post.title, product);
@@ -87,7 +88,12 @@ export function postCountsForProduct(
  * Skips broad roundup posts unless the product is in the title.
  */
 export function pickRepresentativePost<
-  T extends { title: string; engagement: number; products: string[] },
+  T extends {
+    title: string;
+    engagement: number;
+    products: string[];
+    removedAt?: string | null;
+  },
 >(pool: T[], product: string): T | null {
   const eligible = pool.filter((p) => postCountsForProduct(p, product));
   if (eligible.length === 0) return null;

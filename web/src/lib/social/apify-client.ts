@@ -133,6 +133,149 @@ export async function startApifyRedditRun(): Promise<{
   };
 }
 
+function buildEngagementRefreshInput(urls: string[]) {
+  return {
+    startUrls: urls.map((url) => ({ url })),
+    maxItems: urls.length,
+    maxPostCount: 1,
+    maxComments: 0,
+    includeMediaLinks: false,
+    skipComments: true,
+    skipUserPosts: true,
+    skipCommunity: true,
+    proxy: { useApifyProxy: true },
+  };
+}
+
+/** Start a small Apify run that revisits known post URLs only. */
+export async function startApifyEngagementRefreshRun(
+  urls: string[],
+): Promise<{ runId: string; datasetId: string }> {
+  if (urls.length === 0) {
+    throw new Error("startApifyEngagementRefreshRun requires at least one URL");
+  }
+
+  const actorId = apifyActorId();
+  const startRes = await apifyFetch(`/acts/${actorId}/runs`, {
+    method: "POST",
+    body: JSON.stringify(buildEngagementRefreshInput(urls)),
+  });
+
+  if (!startRes.ok) {
+    const text = await startRes.text();
+    throw new Error(
+      `Apify engagement refresh start failed (${startRes.status}): ${text.slice(0, 300)}`,
+    );
+  }
+
+  const startJson = (await startRes.json()) as {
+    data: { id: string; defaultDatasetId: string };
+  };
+
+  return {
+    runId: startJson.data.id,
+    datasetId: startJson.data.defaultDatasetId,
+  };
+}
+
+export interface ApifyEngagementSnapshot {
+  externalId: string;
+  url: string;
+  title: string;
+  body: string;
+  score: number;
+  numComments: number;
+  removed: boolean;
+}
+
+function isRemovedContent(title: string, body: string): boolean {
+  const t = title.trim().toLowerCase();
+  const b = body.trim().toLowerCase();
+  if (t === "[deleted]" || t === "[removed]") return true;
+  if (b === "[deleted]" || b === "[removed]") return true;
+  if (!t && (b === "[deleted]" || b === "[removed]")) return true;
+  return false;
+}
+
+/** Parse dataset items for engagement refresh (no product filter). */
+export function parseEngagementSnapshots(
+  items: ApifyRedditItem[],
+): ApifyEngagementSnapshot[] {
+  const byId = new Map<string, ApifyEngagementSnapshot>();
+
+  for (const item of items) {
+    if (item.dataType && item.dataType !== "post") continue;
+
+    const externalId = item.id || (item.parsedId ? `t3_${item.parsedId}` : "");
+    if (!externalId) continue;
+
+    const title = item.title ?? "";
+    const body = item.body ?? "";
+    const url =
+      item.url?.startsWith("http")
+        ? item.url
+        : item.parsedId
+          ? `https://www.reddit.com/comments/${item.parsedId}/`
+          : "";
+
+    byId.set(externalId, {
+      externalId,
+      url,
+      title,
+      body,
+      score: item.upVotes ?? 0,
+      numComments: item.numberOfComments ?? 0,
+      removed: isRemovedContent(title, body),
+    });
+  }
+
+  return [...byId.values()];
+}
+
+/** Local CLI: start engagement refresh and block until complete. */
+export async function fetchEngagementSnapshotsViaApify(
+  urls: string[],
+): Promise<{
+  snapshots: ApifyEngagementSnapshot[];
+  configured: boolean;
+  runId?: string;
+  errors: string[];
+}> {
+  if (!isApifyConfigured()) {
+    return {
+      snapshots: [],
+      configured: false,
+      errors: ["APIFY_API_TOKEN not set"],
+    };
+  }
+
+  if (urls.length === 0) {
+    return { snapshots: [], configured: true, errors: [] };
+  }
+
+  try {
+    const { runId } = await startApifyEngagementRefreshRun(urls);
+    console.log(`[apify-refresh] started run ${runId} urls=${urls.length}`);
+    const datasetId = await waitForApifyRun(runId);
+    console.log(`[apify-refresh] succeeded, dataset=${datasetId}`);
+    const items = await fetchDatasetItems(datasetId);
+    console.log(`[apify-refresh] raw items=${items.length}`);
+    return {
+      snapshots: parseEngagementSnapshots(items),
+      configured: true,
+      runId,
+      errors: [],
+    };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return {
+      snapshots: [],
+      configured: true,
+      errors: [msg],
+    };
+  }
+}
+
 export async function getApifyRunStatus(runId: string): Promise<{
   status: ApifyRunStatus;
   datasetId: string | null;

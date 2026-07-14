@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "reddit-heat-scan": "tsx scripts/run-reddit-heat-scan.ts",
-    "reclassify-social-posts": "tsx scripts/reclassify-social-posts.ts"
+    "reclassify-social-posts": "tsx scripts/reclassify-social-posts.ts",
+    "refresh-social-engagement": "tsx scripts/refresh-social-engagement.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.5.7",

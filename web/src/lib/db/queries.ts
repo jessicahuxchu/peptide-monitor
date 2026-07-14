@@ -100,6 +100,7 @@ export async function fetchSocialPosts(options?: {
   let query = supabase
     .from("social_posts")
     .select("*", { count: "exact" })
+    .is("removed_at", null)
     .order("posted_at", { ascending: false })
     .limit(limit);
 

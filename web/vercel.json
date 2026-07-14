@@ -7,6 +7,10 @@
     {
       "path": "/api/cron/reddit-heat-scan?phase=complete",
       "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/reddit-engagement-refresh",
+      "schedule": "0 9 * * *"
     }
   ]
 }

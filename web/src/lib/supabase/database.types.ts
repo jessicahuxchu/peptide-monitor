@@ -339,13 +339,23 @@ export interface Database {
           regulatory_reason: string | null;
           classified_by: string | null;
           au_context: boolean;
+          engagement_refreshed_at: string | null;
+          removed_at: string | null;
+          refresh_fail_count: number;
         };
         Insert: Omit<
           Database["public"]["Tables"]["social_posts"]["Row"],
-          "created_at" | "fetched_at"
+          | "created_at"
+          | "fetched_at"
+          | "engagement_refreshed_at"
+          | "removed_at"
+          | "refresh_fail_count"
         > & {
           fetched_at?: string;
           created_at?: string;
+          engagement_refreshed_at?: string | null;
+          removed_at?: string | null;
+          refresh_fail_count?: number;
         };
         Update: Partial<Database["public"]["Tables"]["social_posts"]["Insert"]>;
       };

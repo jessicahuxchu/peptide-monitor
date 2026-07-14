@@ -275,6 +275,8 @@ export default function IntelligencePage() {
                       {sourcePostHref && (
                         <Link
                           href={sourcePostHref}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="rounded border border-command-teal/40 bg-command-teal/10 px-2 py-1 text-[10px] font-medium text-command-teal-bright transition-colors hover:bg-command-teal/20"
                         >
                           {t("intelligencePage.viewSourcePost")}

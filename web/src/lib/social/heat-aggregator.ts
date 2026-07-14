@@ -56,6 +56,12 @@ function endOfUtcDay(date: string): Date {
   return new Date(`${date}T23:59:59.999Z`);
 }
 
+/** Use "now" for today so intraday backfill matches live aggregation. */
+function asOfForSignalDate(date: string): Date {
+  const today = utcDateString(new Date());
+  return date === today ? new Date() : endOfUtcDay(date);
+}
+
 /** Last N calendar days in UTC (today first). */
 export function listUtcDatesBack(days: number): string[] {
   const out: string[] = [];
@@ -103,6 +109,7 @@ export function computeProductHeat(
   return products.map((product) => {
     const related = posts.filter(
       (p) =>
+        !p.removedAt &&
         postCountsForProduct(p, product) &&
         new Date(p.postedAt).getTime() <= asOfMs,
     );
@@ -342,30 +349,16 @@ async function ingestFetchedPosts(
     .from("social_posts")
     .select("*")
     .eq("platform", "reddit")
+    .is("removed_at", null)
     .gte("posted_at", since);
   if (readErr) throw readErr;
 
   const normalized = (dbPosts ?? []).map(rowToNormalizedPost);
 
+  const { signalsUpserted, skuOpportunitiesUpserted } =
+    await persistHeatAggregation(supabase, normalized, { backfillDays: 7 });
+
   const stats = computeProductHeat(normalized);
-  const signals = stats
-    .map(buildSignal)
-    .filter((s): s is SignalInsert => s !== null);
-
-  let signalsUpserted = 0;
-  if (signals.length > 0) {
-    const { error: sigErr } = await supabase
-      .from("intelligence_signals")
-      .upsert(signals, { onConflict: "id" });
-    if (sigErr) throw sigErr;
-    signalsUpserted = signals.length;
-  }
-
-  const skuOpportunitiesUpserted = await upsertSkuOpportunitiesFromHeat(
-    supabase,
-    stats,
-    normalized,
-  );
 
   return {
     ok: true,
@@ -428,6 +421,7 @@ function rowToNormalizedPost(
     auContext: row.au_context ?? hasAuFromRow(row),
     regulatoryReason: row.regulatory_reason,
     classifiedBy: row.classified_by as NormalizedSocialPost["classifiedBy"],
+    removedAt: row.removed_at ?? null,
   };
 }
 
@@ -439,6 +433,7 @@ async function loadRecentRedditPosts(
     .from("social_posts")
     .select("*")
     .eq("platform", "reddit")
+    .is("removed_at", null)
     .gte("posted_at", since);
   if (error) throw error;
   return (dbPosts ?? []).map(rowToNormalizedPost);
@@ -451,7 +446,7 @@ async function backfillRedditHeatSignals(
 ): Promise<number> {
   const signals: SignalInsert[] = [];
   for (const date of listUtcDatesBack(days)) {
-    const stats = computeProductHeat(normalized, endOfUtcDay(date));
+    const stats = computeProductHeat(normalized, asOfForSignalDate(date));
     for (const s of stats) {
       const sig = buildSignalForDate(s, date);
       if (sig) signals.push(sig);
@@ -479,16 +474,17 @@ async function persistHeatAggregation(
   normalized: NormalizedSocialPost[],
   options?: { backfillDays?: number },
 ): Promise<{ signalsUpserted: number; skuOpportunitiesUpserted: number }> {
+  const active = normalized.filter((p) => !p.removedAt);
   let signalsUpserted = 0;
 
   if (options?.backfillDays && options.backfillDays > 0) {
     signalsUpserted = await backfillRedditHeatSignals(
       supabase,
-      normalized,
+      active,
       options.backfillDays,
     );
   } else {
-    const stats = computeProductHeat(normalized);
+    const stats = computeProductHeat(active);
     const signals = stats
       .map(buildSignal)
       .filter((s): s is SignalInsert => s !== null);
@@ -502,14 +498,25 @@ async function persistHeatAggregation(
     }
   }
 
-  const stats = computeProductHeat(normalized);
+  const stats = computeProductHeat(active);
   const skuOpportunitiesUpserted = await upsertSkuOpportunitiesFromHeat(
     supabase,
     stats,
-    normalized,
+    active,
   );
 
   return { signalsUpserted, skuOpportunitiesUpserted };
+}
+
+/** Reload recent non-removed Reddit posts and rebuild heat signals. */
+export async function rebuildRedditHeatFromDb(options?: {
+  backfillDays?: number;
+}): Promise<{ signalsUpserted: number; skuOpportunitiesUpserted: number }> {
+  const supabase = createServiceClient();
+  const recent = await loadRecentRedditPosts(supabase);
+  return persistHeatAggregation(supabase, recent, {
+    backfillDays: options?.backfillDays ?? 7,
+  });
 }
 
 export interface ProductSignalAudit {

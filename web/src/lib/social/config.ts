@@ -111,6 +111,21 @@ export const APIFY_MAX_ITEMS = 120;
 export const APIFY_MAX_POSTS_PER_URL = 25;
 export const APIFY_RUN_TIMEOUT_MS = 20 * 60 * 1000;
 
+/** Small-scope Apify revisit: refresh score/comments for known posts. */
+export const ENGAGEMENT_REFRESH_MAX_POSTS = 40;
+export const ENGAGEMENT_REFRESH_LOOKBACK_DAYS = 7;
+/** Mark removed after this many consecutive revisit misses/failures. */
+export const ENGAGEMENT_REFRESH_FAIL_LIMIT = 2;
+/** Approximate Trudax lite list price for cost logs ($/result). */
+export const ENGAGEMENT_REFRESH_COST_PER_RESULT_USD = 0.0034;
+
+/** Hours between engagement refreshes by post age. */
+export const ENGAGEMENT_REFRESH_INTERVAL_HOURS = {
+  under24h: 12,
+  day1to3: 24,
+  day4to7: 48,
+} as const;
+
 /** Product keyword searches (encoded into Reddit search URLs). */
 export const REDDIT_SEARCH_TERMS = [
   "BPC-157",

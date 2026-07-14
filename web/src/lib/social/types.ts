@@ -39,6 +39,7 @@ export interface NormalizedSocialPost {
   auContext: boolean;
   regulatoryReason?: string | null;
   classifiedBy?: "agent" | "rules" | null;
+  removedAt?: string | null;
 }
 
 export interface SocialFetchResult {
