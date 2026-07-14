@@ -165,11 +165,16 @@ export function mapIntelSignal(row: SignalRow): IntelSignal {
         : (regulatoryImpact ?? 0) > 0
           ? "regulatory"
           : "demand";
-  } else if (source === "news_legal" || (regulatoryImpact ?? 0) !== 0) {
+  } else if (source === "news_legal") {
+    // Volume spikes = demand heat; keyword hits = regulatory chatter (rumor), not enacted law.
+    dimension = (regulatoryImpact ?? 0) > 0 ? "regulatory" : "demand";
+  } else if ((regulatoryImpact ?? 0) > 0) {
     dimension = "regulatory";
   } else if (source === "insider" && (heatImpact ?? 0) === 0) {
     dimension = "competitive";
   }
+
+  const isRegulatoryRumor = dimension === "regulatory";
 
   return {
     id: row.id,
@@ -182,15 +187,24 @@ export function mapIntelSignal(row: SignalRow): IntelSignal {
     dimension,
     directionLabel:
       source === "social"
-        ? dimension === "regulatory"
+        ? isRegulatoryRumor
           ? "Social · regulatory chatter"
           : "Social · demand heat"
-        : dimension === "regulatory"
-          ? "Regulatory signal"
-          : "Market signal",
-    pendingMatrixUpdate: dimension === "regulatory" && (regulatoryImpact ?? 0) > 0,
+        : source === "news_legal"
+          ? isRegulatoryRumor
+            ? "News · regulatory rumor"
+            : "News · coverage heat"
+          : isRegulatoryRumor
+            ? "Regulatory chatter · unverified"
+            : "Market signal",
+    // Intelligence never auto-links to the compliance matrix (enacted law only).
+    pendingMatrixUpdate: false,
     credibility:
-      source === "news_legal" ? "high" : source === "social" ? "medium" : "medium",
+      source === "news_legal"
+        ? isRegulatoryRumor
+          ? "medium"
+          : "high"
+        : "medium",
     horizon: source === "social" ? "immediate" : "weeks",
     heatImpact,
     regulatoryImpact,

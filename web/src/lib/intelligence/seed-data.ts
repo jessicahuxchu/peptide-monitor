@@ -14,7 +14,7 @@ export interface IntelSignal {
   dimension: SignalDimension;
   /** Human-readable impact direction */
   directionLabel: string;
-  /** True when regulatory dimension — pending matrix confirmation */
+  /** Deprecated: matrix is enacted-law only; intelligence never queues matrix updates */
   pendingMatrixUpdate: boolean;
   credibility: SignalCredibility;
   horizon: SignalHorizon;
@@ -35,7 +35,7 @@ export const intelligenceSignals: IntelSignal[] = [
     products: ["BPC-157"],
     dimension: "regulatory",
     directionLabel: "监管利好 · 许可续期窗口",
-    pendingMatrixUpdate: true,
+    pendingMatrixUpdate: false,
     credibility: "high",
     horizon: "weeks",
     heatImpact: 15,
@@ -46,13 +46,13 @@ export const intelligenceSignals: IntelSignal[] = [
     id: "il2",
     source: "news_legal",
     title: "NSW Health 更新配制药房多肽存储协议",
-    summary: "新协议要求冷链存储文档升级，立即生效。确认后将更新 NSW × BPC-157 矩阵单元格。",
+    summary: "新协议要求冷链存储文档升级，立即生效。属舆论/监管传闻信号，不自动写入合规矩阵。",
     date: "2026-06-12",
     region: "NSW",
     products: ["BPC-157", "TB-500"],
     dimension: "regulatory",
     directionLabel: "监管收紧 · 文档门槛上升",
-    pendingMatrixUpdate: true,
+    pendingMatrixUpdate: false,
     credibility: "high",
     horizon: "immediate",
     heatImpact: -5,
@@ -86,7 +86,7 @@ export const intelligenceSignals: IntelSignal[] = [
     products: ["Semaglutide"],
     dimension: "regulatory",
     directionLabel: "监管利好 · 合法化预期",
-    pendingMatrixUpdate: true,
+    pendingMatrixUpdate: false,
     credibility: "medium",
     horizon: "months",
     heatImpact: 40,
@@ -103,7 +103,7 @@ export const intelligenceSignals: IntelSignal[] = [
     products: ["BPC-157", "GHK-Cu"],
     dimension: "regulatory",
     directionLabel: "渠道迁移 · 州际路径变化",
-    pendingMatrixUpdate: true,
+    pendingMatrixUpdate: false,
     credibility: "medium",
     horizon: "weeks",
     heatImpact: 10,
@@ -171,7 +171,7 @@ export const intelligenceSignals: IntelSignal[] = [
     products: ["BPC-157"],
     dimension: "regulatory",
     directionLabel: "执法传闻 · 灰色渠道风险",
-    pendingMatrixUpdate: true,
+    pendingMatrixUpdate: false,
     credibility: "low",
     horizon: "immediate",
     heatImpact: -15,
@@ -239,6 +239,7 @@ export function calcAggregateImpact(signals: IntelSignal[]) {
   return { heat, regulatory };
 }
 
+/** Count of regulatory-dimension signals (rumor / chatter). Matrix stays separate. */
 export function countPendingMatrixUpdates(signals: IntelSignal[] = []) {
-  return signals.filter((s) => s.pendingMatrixUpdate).length;
+  return signals.filter((s) => s.dimension === "regulatory").length;
 }

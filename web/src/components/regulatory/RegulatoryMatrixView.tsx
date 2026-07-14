@@ -52,7 +52,7 @@ export function RegulatoryMatrixView() {
   return (
     <div className="grid w-full max-w-full gap-4 overflow-x-hidden p-4 md:gap-5 md:p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,280px)]">
       <div className="min-w-0 space-y-4">
-        <CommandCard title={t("title")}>
+        <CommandCard className="border-0 bg-transparent p-0 shadow-none">
           <div className="mb-4 flex flex-wrap gap-1 border-b border-command-border pb-2">
             {TABS.map((id) => (
               <button
@@ -83,7 +83,7 @@ export function RegulatoryMatrixView() {
               <table className="w-full min-w-[900px] border-collapse text-left text-xs">
                 <thead>
                   <tr className="border-b border-command-border">
-                    <th className="sticky left-0 z-10 min-w-[140px] bg-command-card pb-2 pr-3 font-medium text-command-text-muted">
+                    <th className="sticky left-0 z-10 min-w-[140px] bg-command-bg pb-2 pr-3 font-medium text-command-text-muted">
                       {t("product")}
                     </th>
                     {REGULATORY_COLUMNS.map((col) => (
@@ -99,11 +99,8 @@ export function RegulatoryMatrixView() {
                 <tbody>
                   {matrixRows.map((row) => (
                     <tr key={row.product} className="border-b border-command-border/40">
-                      <td className="sticky left-0 z-10 bg-command-card py-2 pr-3 align-top">
+                      <td className="sticky left-0 z-10 bg-command-bg py-2 pr-3 align-top">
                         <p className="font-semibold text-command-teal-bright">{row.product}</p>
-                        <p className="mt-0.5 line-clamp-2 text-[10px] text-command-text-muted">
-                          {row.productLogic}
-                        </p>
                       </td>
                       {REGULATORY_COLUMNS.map((col) => (
                         <MatrixCell

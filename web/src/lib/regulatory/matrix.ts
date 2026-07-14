@@ -64,10 +64,9 @@ export function getProductRegulatoryRisk(
   );
 }
 
+/** Count intelligence regulatory-chatter signals (not matrix pending updates). */
 export function getPendingRegulatorySignals(
   signals: { products: string[]; dimension: string; regulatoryImpact?: number }[],
 ): number {
-  return signals.filter(
-    (s) => s.dimension === "regulatory" && (s.regulatoryImpact ?? 0) !== 0,
-  ).length;
+  return signals.filter((s) => s.dimension === "regulatory").length;
 }
