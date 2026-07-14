@@ -993,7 +993,7 @@
       "regulator": "TGA / Poisons Standard",
       "legalBasis": "Poisons Standard / SUSMP + Therapeutic Goods Act / TGA ARTG、SAS/AP、广告与未注册治疗用品监管路径",
       "incrementalClassification": "全国基线",
-      "difference": "全国共同底线；州/领地为叠加层",
+      "difference": "全国共同底线",
       "action": "先确认产品是否点名 S4 或推定 S4、是否 ARTG 注册/豁免、是否允许处方/临床/研究/批发路径；禁止消费者治疗宣称营销",
       "sourceType": "一手法条/监管动态"
     },
@@ -1002,7 +1002,7 @@
       "regulator": "NSW Health",
       "legalBasis": "Poisons and Therapeutic Goods Act 1966 s16/s17A（restricted substance 持有/取得）",
       "incrementalClassification": "S4 restricted substance overlay",
-      "difference": "比联邦更严：持有/取得限制",
+      "difference": "比联邦更严：持有/取得需 NSW 本地授权",
       "action": "验证 NSW 批发/药房/处方/研究授权；复方场景补配制、冷链/稳定性、批次留档",
       "sourceType": "一手法条"
     },
@@ -1011,7 +1011,7 @@
       "regulator": "DHHS VIC",
       "legalBasis": "Drugs, Poisons and Controlled Substances Act 1981 + Poisons Code（S4 poison 授权主体/许可）",
       "incrementalClassification": "S4 poison / permit overlay",
-      "difference": "中等增量：本地许可/授权主体",
+      "difference": "比联邦更严：须 VIC 授权人员或 licence/permit",
       "action": "核验 VIC authorised person、药房路径或 licence/permit；非药房零售/陈列禁止",
       "sourceType": "一手法条"
     },
@@ -1020,7 +1020,7 @@
       "regulator": "Queensland Health",
       "legalBasis": "Medicines and Poisons Act 2019 s34/s35（S4 买入/持有、供应、custody）",
       "incrementalClassification": "S4 regulated substance / custody overlay",
-      "difference": "比联邦更严：stock custody",
+      "difference": "比联邦更严：无处方权不得持有未分配库存",
       "action": "无处方权主体不得持未分配 stock；确认处方/供应者实际控制和本地授权",
       "sourceType": "一手法条"
     },
@@ -1029,7 +1029,7 @@
       "regulator": "WA Health",
       "legalBasis": "Medicines and Poisons Act 2014 / Regulations 2016（licence/permit、批发/储存）",
       "incrementalClassification": "Licence / permit overlay",
-      "difference": "中等增量：批发/储存许可",
+      "difference": "比联邦更严：批发/储存须 WA licence/permit",
       "action": "核验 WA poisons licence/permit、批发记录、标签、储存 SOP",
       "sourceType": "一手法条"
     },
@@ -1038,7 +1038,7 @@
       "regulator": "SA Health",
       "legalBasis": "Controlled Substances Act 1984 + Controlled Substances (Poisons) Regulations 2026（配制/批发授权）",
       "incrementalClassification": "Controlled substances overlay",
-      "difference": "中等增量：配制/批发授权",
+      "difference": "比联邦更严：配制/批发须 SA 授权",
       "action": "核验客户资质、处方/订单链、配制依据和批发商许可",
       "sourceType": "一手法条/法规更新"
     },
@@ -1047,7 +1047,7 @@
       "regulator": "Tasmania Health",
       "legalBasis": "Poisons Act 1971 / Poisons Regulations（possession/supply/use）",
       "incrementalClassification": "无分类增量（本地授权仍需核验）",
-      "difference": "未识别到额外 schedule 叠加；不等于无监管",
+      "difference": "同联邦",
       "action": "按联邦基线执行；发货前核验 TAS 收货人本地授权",
       "sourceType": "一手法条"
     },
@@ -1056,7 +1056,7 @@
       "regulator": "ACT Health",
       "legalBasis": "Medicines, Poisons and Therapeutic Goods Act 2008（supply/prescribe/administer/possess authority）",
       "incrementalClassification": "无分类增量（本地授权仍需核验）",
-      "difference": "未识别到额外 schedule 叠加；不等于无监管",
+      "difference": "同联邦",
       "action": "按联邦基线执行；跨州发货同时核验 ACT 收货地授权",
       "sourceType": "一手法条"
     },
@@ -1065,7 +1065,7 @@
       "regulator": "NT Health",
       "legalBasis": "Medicines, Poisons and Therapeutic Goods Act 2012（endorsed practitioner / remote area supply）",
       "incrementalClassification": "无分类增量（本地授权仍需核验）",
-      "difference": "未识别到额外 schedule 叠加；不等于无监管",
+      "difference": "同联邦",
       "action": "按联邦基线执行；远程诊所/机构/研究项目逐项核验",
       "sourceType": "一手法条"
     }

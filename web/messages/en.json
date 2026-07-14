@@ -94,37 +94,32 @@
     "lawyerReview": "Lawyer review items",
     "tabs": {
       "matrix": "Decision Matrix",
-      "framework": "State Framework",
-      "logic": "Product Logic",
-      "sources": "Sources & Status"
+      "framework": "State Law & Sources"
     },
+    "country": {
+      "au": "Australia",
+      "us": "United States"
+    },
+    "usPlaceholderTitle": "US matrix pending",
+    "usPlaceholderBody": "Federal and state compliance data for the US has not been entered yet. Switch back to Australia for the current matrix.",
     "type": "Type",
     "jurisdiction": "Jurisdiction",
     "legalBasis": "Legal basis",
     "stateOverlay": "State overlay",
     "difference": "Delta vs federal",
-    "federalClassification": "Federal classification",
-    "baseRisk": "Base risk",
-    "productQualification": "Product qualification",
-    "productLogic": "Product logic",
-    "s4BasisType": "S4 basis type",
-    "artgStatus": "ARTG status",
     "basisRef": "Basis reference",
     "reviewStatus": "Review status",
-    "lawyerPending": "Pending lawyer",
-    "lawyerPendingS4": "S4 basis type pending lawyer review",
-    "lawyerPendingArtg": "ARTG status pending lawyer review",
     "reviewPending": "Pending review",
-    "federalBaseline": "Federal (baseline)",
+    "federalBaseline": "AU Federal",
     "stateDelta": "State delta",
     "inheritsFederal": "Same as federal",
-    "selectCellHint": "Click a cell for classification, risk level, and operational consequence",
-    "selectSourceHint": "Click a source to view excerpt with highlights",
+    "sourcesForJurisdiction": "Sources for this jurisdiction",
     "sourceDocumentTitle": "Legal Text",
     "sourceExcerptTitle": "Excerpt",
     "sourceAnnotations": "Annotations",
     "openOfficialSource": "Open official source",
-    "operationalConsequence": "Operational consequence",
+    "purpose": "Purpose",
+    "operationalConsequence": "Handling requirement",
     "allMarkets": "All Markets",
     "market": "Market",
     "region": "Region",
@@ -424,7 +419,7 @@
     },
     "alerts": {
       "title": "Alert & Action Center",
-      "description": "Priority alerts, assignment, and suggested actions. Assigned alerts are visible to creator and assignee; Admin sees all."
+      "description": ""
     },
     "inbox": {
       "title": "AI Agent",

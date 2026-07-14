@@ -94,37 +94,32 @@
     "lawyerReview": "律师复核项",
     "tabs": {
       "matrix": "决策矩阵",
-      "framework": "州法框架",
-      "logic": "产品逻辑",
-      "sources": "来源与状态"
+      "framework": "州法与来源"
     },
+    "country": {
+      "au": "澳大利亚",
+      "us": "美国"
+    },
+    "usPlaceholderTitle": "美国矩阵待录入",
+    "usPlaceholderBody": "美国联邦与各州合规矩阵尚未录入，切换回澳大利亚可查看现有数据。",
     "type": "类型",
     "jurisdiction": "辖区",
     "legalBasis": "法律依据",
     "stateOverlay": "州级叠加分类",
     "difference": "与联邦差异",
-    "federalClassification": "联邦分类",
-    "baseRisk": "基础风险",
-    "productQualification": "产品定性",
-    "productLogic": "产品逻辑",
-    "s4BasisType": "S4 依据类型",
-    "artgStatus": "ARTG 状态",
     "basisRef": "依据引用",
     "reviewStatus": "复核状态",
-    "lawyerPending": "待律师填",
-    "lawyerPendingS4": "S4 依据类型待律师确认",
-    "lawyerPendingArtg": "ARTG 状态待律师确认",
     "reviewPending": "待复核",
-    "federalBaseline": "联邦 (基线)",
+    "federalBaseline": "澳大利亚联邦",
     "stateDelta": "州级增量",
     "inheritsFederal": "同联邦",
-    "selectCellHint": "点击矩阵单元格查看分类、风险等级与操作后果",
-    "selectSourceHint": "点击左侧来源查看法规摘录与高亮标注",
+    "sourcesForJurisdiction": "该辖区法源",
     "sourceDocumentTitle": "法规文本",
     "sourceExcerptTitle": "摘录正文",
     "sourceAnnotations": "标注解读",
     "openOfficialSource": "打开官方法源",
-    "operationalConsequence": "操作后果",
+    "purpose": "用途",
+    "operationalConsequence": "处置要求",
     "allMarkets": "全部市场",
     "market": "市场",
     "region": "地区",
@@ -427,7 +422,7 @@
     },
     "alerts": {
       "title": "提醒与行动中心",
-      "description": "优先级提醒、指派与建议动作。指派后仅创建人与被指派人可见；Admin 可见全部。"
+      "description": ""
     },
     "inbox": {
       "title": "AI Agent",
