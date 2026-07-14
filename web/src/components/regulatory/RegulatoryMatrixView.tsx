@@ -53,10 +53,6 @@ export function RegulatoryMatrixView() {
     <div className="grid w-full max-w-full gap-4 overflow-x-hidden p-4 md:gap-5 md:p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,280px)]">
       <div className="min-w-0 space-y-4">
         <CommandCard title={t("title")}>
-          <div className="mb-4 rounded-lg border border-command-orange/30 bg-command-orange/5 p-3 text-xs text-command-text-secondary">
-            {COMPLIANCE_MATRIX_V6.disclaimer}
-          </div>
-
           <div className="mb-4 flex flex-wrap gap-1 border-b border-command-border pb-2">
             {TABS.map((id) => (
               <button
@@ -90,7 +86,6 @@ export function RegulatoryMatrixView() {
                     <th className="sticky left-0 z-10 min-w-[140px] bg-command-card pb-2 pr-3 font-medium text-command-text-muted">
                       {t("product")}
                     </th>
-                    <th className="pb-2 pr-2 font-medium text-command-text-muted">{t("type")}</th>
                     {REGULATORY_COLUMNS.map((col) => (
                       <th
                         key={col}
@@ -109,9 +104,6 @@ export function RegulatoryMatrixView() {
                         <p className="mt-0.5 line-clamp-2 text-[10px] text-command-text-muted">
                           {row.productLogic}
                         </p>
-                      </td>
-                      <td className="py-2 pr-2 align-top text-[10px] text-command-text-muted">
-                        {row.type}
                       </td>
                       {REGULATORY_COLUMNS.map((col) => (
                         <MatrixCell
@@ -352,13 +344,11 @@ function MatrixCell({
         onClick={() => onSelect({ row, region: column, cell })}
         className={cn(
           "w-full rounded-lg border p-2 text-left transition-colors hover:border-command-teal/40",
+          // 联邦基线 / 按联邦基线执行：中性边框，不因风险等级套红框
+          // 仅州级增量差异保留橙色高亮
           cell.isIncremental
             ? "border-command-orange/30 bg-command-orange/5"
-            : cell.riskLabel.includes("红")
-              ? "border-command-red/40 bg-command-red/10"
-              : cell.riskLabel.includes("橙")
-                ? "border-command-orange/35 bg-command-orange/8"
-                : "border-command-border bg-command-card-elevated/40",
+            : "border-command-border bg-command-card-elevated/40",
         )}
       >
         <p className="line-clamp-2 text-[10px] text-command-text-secondary">
