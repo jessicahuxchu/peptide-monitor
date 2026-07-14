@@ -459,6 +459,8 @@
     "matrixDelta": "Attention",
     "confirmToMatrix": "View article →",
     "viewSourceArticle": "View article →",
+    "dayDrawerTitle": "Day’s intel",
+    "dayDrawerCount": "{count} signals",
     "previewPost": "Source post",
     "previewArticle": "Article",
     "previewClose": "Close preview",

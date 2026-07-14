@@ -85,6 +85,11 @@ export default function IntelligencePage() {
     }
   }, [availableDates, selectedDate]);
 
+  const dateSignals = useMemo(() => {
+    if (!selectedDate) return intelligenceSignals;
+    return intelligenceSignals.filter((s) => s.date === selectedDate);
+  }, [intelligenceSignals, selectedDate]);
+
   useEffect(() => {
     if (!previewSignal?.url || postCache) return;
 
@@ -110,15 +115,18 @@ export default function IntelligencePage() {
     };
   }, [previewSignal, postCache]);
 
+  // Keep drawer selection inside the currently selected day.
+  useEffect(() => {
+    if (!previewSignal || !selectedDate) return;
+    if (previewSignal.date === selectedDate) return;
+    const next = dateSignals[0] ?? null;
+    setPreviewSignal(next);
+  }, [selectedDate, dateSignals, previewSignal]);
+
   const previewPost = useMemo(() => {
     if (!previewSignal?.url || !postCache) return null;
     return matchPostByUrl(postCache, previewSignal.url);
   }, [previewSignal, postCache]);
-
-  const dateSignals = useMemo(() => {
-    if (!selectedDate) return intelligenceSignals;
-    return intelligenceSignals.filter((s) => s.date === selectedDate);
-  }, [intelligenceSignals, selectedDate]);
 
   const filteredSignals =
     activeFilter === "all"
@@ -377,9 +385,12 @@ export default function IntelligencePage() {
               )}
             >
               <SourcePreviewPanel
+                signals={dateSignals}
                 signal={previewSignal}
                 post={previewPost}
                 loading={postLoading && !postCache}
+                dateLabel={selectedDate}
+                onSelect={setPreviewSignal}
                 onClose={() => setPreviewSignal(null)}
               />
             </div>

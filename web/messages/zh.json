@@ -467,6 +467,8 @@
     "matrixDelta": "关注度",
     "confirmToMatrix": "查看原文 →",
     "viewSourceArticle": "查看原文 →",
+    "dayDrawerTitle": "当日舆论",
+    "dayDrawerCount": "{count} 条",
     "previewPost": "代表帖",
     "previewArticle": "新闻原文",
     "previewClose": "关闭预览",
