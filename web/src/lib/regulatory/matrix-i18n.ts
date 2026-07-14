@@ -78,55 +78,56 @@ const FRAMEWORK_ZH: Record<string, FrameworkZh> = {
     overlay: "全国基线",
     difference: "全国共同底线",
     action:
-      "先确认产品是否点名附表四或推定附表四、是否已列入治疗用品登记册或获得豁免、是否允许处方/临床/研究/批发路径；禁止面向消费者作治疗宣称营销",
+      "先弄清三点：是不是附表四、有没有登记或豁免、能走哪条合法途径（处方、临床、研究或批发）。不要对消费者做治疗功效宣传。",
   },
   NSW: {
     regulator: "新南威尔士州卫生厅",
     overlay: "附表四限制物质叠加",
     difference: "比联邦更严：持有与取得需新州本地授权",
-    action: "验证新州批发、药房、处方或研究授权；复方场景补配制、冷链稳定性与批次留档",
+    action:
+      "入新州前确认对方有合法资质（批发、药房、开方或研究）。若是复方，还要备齐配制记录、冷链证明和批次档案。",
   },
   VIC: {
     regulator: "维多利亚州卫生与公共服务部",
     overlay: "附表四毒物/许可叠加",
     difference: "比联邦更严：须维多利亚州授权人员或许可",
-    action: "核验维多利亚州授权人员、药房路径或许可；禁止非药房零售与陈列",
+    action: "须有维州认可人员或许可，并走药房渠道；不能摆到普通柜台零售或陈列。",
   },
   QLD: {
     regulator: "昆士兰州卫生厅",
     overlay: "附表四受管制物质/保管叠加",
     difference: "比联邦更严：无处方权不得持有未分配库存",
-    action: "无处方权主体不得持有未分配库存；确认处方或供应者实际控制与本地授权",
+    action: "没有开方权就不能囤未分配库存。要能说清谁开方、谁供货，以及有没有本地授权。",
   },
   WA: {
     regulator: "西澳大利亚州卫生厅",
     overlay: "许可叠加",
     difference: "比联邦更严：批发与储存须西澳许可",
-    action: "核验西澳毒物许可、批发记录、标签与储存作业规程",
+    action: "确认西澳毒物许可齐全，批发记录、标签和仓储要求一并跟上。",
   },
   SA: {
     regulator: "南澳大利亚州卫生厅",
     overlay: "受控物质叠加",
     difference: "比联邦更严：配制与批发须南澳授权",
-    action: "核验客户资质、处方或订单链、配制依据和批发商许可",
+    action: "核对客户资质、处方或订单链条、配制依据，以及批发商许可是否齐全。",
   },
   TAS: {
     regulator: "塔斯马尼亚州卫生厅",
     overlay: "无分类增量（本地授权仍需核验）",
     difference: "同联邦",
-    action: "按联邦基线执行；发货前核验塔州收货人本地授权",
+    action: "按联邦要求执行；发货前确认塔州收货人有本地授权。",
   },
   ACT: {
     regulator: "澳大利亚首都领地卫生厅",
     overlay: "无分类增量（本地授权仍需核验）",
     difference: "同联邦",
-    action: "按联邦基线执行；跨州发货同时核验首都领地收货地授权",
+    action: "按联邦要求执行；货发到首都领地时，收货地授权也要一并确认。",
   },
   NT: {
     regulator: "北领地卫生厅",
     overlay: "无分类增量（本地授权仍需核验）",
     difference: "同联邦",
-    action: "按联邦基线执行；远程诊所、机构或研究项目逐项核验",
+    action: "按联邦要求执行；偏远诊所、机构或研究项目建议一事一查。",
   },
 };
 
@@ -283,6 +284,12 @@ export function localizeFramework(
   };
 }
 
+/** Shared handling text for a jurisdiction (decision matrix first row + detail panel). */
+export function localizeRegionHandling(region: string, locale: MatrixLocale): string {
+  const mapped = (locale === "zh" ? FRAMEWORK_ZH : FRAMEWORK_EN)[region];
+  return mapped?.action ?? "";
+}
+
 export function localizeClassification(text: string, locale: MatrixLocale): string {
   if (locale !== "zh") return text;
   return applyReplacements(text, CLASSIFICATION_ZH);
@@ -322,14 +329,14 @@ export function riskLevelLabel(
 }
 
 const JURISDICTION_ZH: Record<string, string> = {
-  NSW: "新南威尔士州",
-  VIC: "维多利亚州",
-  QLD: "昆士兰州",
-  WA: "西澳大利亚州",
-  SA: "南澳大利亚州",
-  TAS: "塔斯马尼亚州",
-  ACT: "首都领地",
-  NT: "北领地",
+  NSW: "新南威尔士州（NSW）",
+  VIC: "维多利亚州（VIC）",
+  QLD: "昆士兰州（QLD）",
+  WA: "西澳大利亚州（WA）",
+  SA: "南澳大利亚州（SA）",
+  TAS: "塔斯马尼亚州（TAS）",
+  ACT: "首都领地（ACT）",
+  NT: "北领地（NT）",
 };
 
 export function localizeJurisdiction(
