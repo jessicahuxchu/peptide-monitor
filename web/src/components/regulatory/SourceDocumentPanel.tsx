@@ -1,6 +1,7 @@
 "use client";
 
 import type { SourceStatusRow } from "@/lib/regulatory/compliance-matrix-v6";
+import { getSourceDisplay, localizeJurisdiction, type MatrixLocale } from "@/lib/regulatory/matrix-i18n";
 import {
   getSourceExcerpt,
   renderHighlightedExcerpt,
@@ -8,26 +9,31 @@ import {
 
 interface SourceDocumentPanelProps {
   source: SourceStatusRow;
+  locale: MatrixLocale;
   title: string;
   annotationLabel: string;
   openUrlLabel: string;
+  federalLabel: string;
 }
 
 export function SourceDocumentPanel({
   source,
+  locale,
   title,
   annotationLabel,
   openUrlLabel,
+  federalLabel,
 }: SourceDocumentPanelProps) {
-  const excerpt = getSourceExcerpt(source);
+  const display = getSourceDisplay(source, locale);
+  const excerpt = getSourceExcerpt(source, locale);
   const { segments } = renderHighlightedExcerpt(excerpt);
 
   return (
     <div className="space-y-3 text-sm">
       <div>
-        <p className="text-xs font-semibold text-command-teal-bright">{source.source}</p>
+        <p className="text-xs font-semibold text-command-teal-bright">{display.name}</p>
         <p className="mt-0.5 text-[10px] text-command-text-muted">
-          {source.jurisdiction} · {source.asOf}
+          {localizeJurisdiction(source.jurisdiction, locale, federalLabel)} · {source.asOf}
         </p>
       </div>
 
@@ -62,7 +68,7 @@ export function SourceDocumentPanel({
               key={h.phrase}
               className="rounded-lg border border-yellow-500/25 bg-yellow-500/5 p-2.5"
             >
-              <p className="text-[10px] font-medium text-yellow-200/90 line-clamp-2">
+              <p className="line-clamp-2 text-[10px] font-medium text-yellow-200/90">
                 「{h.phrase}」
               </p>
               <p className="mt-1 text-xs text-command-text-secondary">{h.note}</p>
