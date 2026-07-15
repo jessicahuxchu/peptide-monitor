@@ -361,9 +361,13 @@ export default function IntelligencePage() {
               filteredSignals.map((signal) => {
               const cfg = sourceConfig[signal.source];
               const Icon = cfg.icon;
-              const kindStyle = kindStyles[signal.kind];
+              const kind: SignalKind =
+                signal.kind === "regulatory_alert"
+                  ? "regulatory_alert"
+                  : "product_heat";
+              const kindStyle = kindStyles[kind];
               const TrendIcon = signal.trend ? trendIcon[signal.trend] : Minus;
-              const isRegulatoryAlert = signal.kind === "regulatory_alert";
+              const isRegulatoryAlert = kind === "regulatory_alert";
               const isRegulatoryRumor =
                 isRegulatoryAlert && signal.source === "social";
               const isNewsDigest =
@@ -426,12 +430,6 @@ export default function IntelligencePage() {
                           </span>
                         ))}
                       </div>
-
-                      <div className="mt-2 flex flex-wrap gap-2 text-[10px] text-command-text-muted">
-                        <span>{signal.directionLabel}</span>
-                        <span>· {t(`intelligencePage.credibility.${signal.credibility}`)}</span>
-                        <span>· {t(`intelligencePage.horizon.${signal.horizon}`)}</span>
-                      </div>
                     </div>
 
                     <div className="flex shrink-0 flex-col items-end gap-1.5 text-[10px]">
@@ -445,7 +443,7 @@ export default function IntelligencePage() {
                           {signal.regulatoryImpact}
                         </span>
                       )}
-                      {signal.kind === "product_heat" && signal.heatImpact !== undefined && (
+                      {kind === "product_heat" && signal.heatImpact !== undefined && (
                         <span
                           title={t("intelligencePage.heatTooltip")}
                           className={cn(

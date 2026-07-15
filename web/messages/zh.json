@@ -451,10 +451,6 @@
     "regulatory": "监管",
     "skuRanking": "SKU 机会排行",
     "layerHint": "舆论信号层：捕捉热度与监管传闻，不代表已生效的合规结论。合规矩阵只记录实打实的法规。",
-    "dimensionSummariesTitle": "情报总结",
-    "summaryDemand": "需求侧",
-    "summaryRegulatory": "监管侧",
-    "summaryCompetitive": "竞争侧",
     "summaryEmpty": "暂无相关信号",
     "pendingMatrix": "监管传闻",
     "regulatoryRumor": "监管传闻",
@@ -484,21 +480,6 @@
       "productHeat": "产品热度",
       "regulatoryAlert": "监管提醒"
     },
-    "dimensions": {
-      "demand": "需求侧",
-      "regulatory": "监管侧",
-      "competitive": "竞争侧"
-    },
-    "credibility": {
-      "high": "高可信",
-      "medium": "中可信",
-      "low": "低可信"
-    },
-    "horizon": {
-      "immediate": "即时",
-      "weeks": "数周",
-      "months": "数月"
-    },
     "topOpportunity": "最高机会 SKU",
     "avgOpportunity": "平均机会分",
     "signalCount": "情报信号数",
@@ -514,9 +495,9 @@
     },
     "viewSourcePost": "查看代表帖 →",
     "sourceOutputs": {
-      "news_legal": "→ 多肽产品热度、监管强度",
-      "insider": "→ 多肽发展监管趋势",
-      "social": "→ 品类喜好热度、监管趋势",
+      "news_legal": "→ 多肽产品热度、监管提醒",
+      "insider": "→ 监管发展线索",
+      "social": "→ 产品热度、监管提醒",
       "platform_2c": "→ 产品上线情况、市场热度"
     }
   },

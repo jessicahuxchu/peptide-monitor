@@ -448,6 +448,7 @@
     "regulatory": "Regulatory",
     "skuRanking": "SKU Opportunity Ranking",
     "layerHint": "Signal layer: coverage heat and regulatory chatter. Not enacted law — the compliance matrix stays factual only.",
+    "summaryEmpty": "No matching signals",
     "pendingMatrix": "Regulatory rumors",
     "regulatoryRumor": "Regulatory rumors",
     "rumorBadge": "Rumor · unverified",
@@ -476,21 +477,6 @@
       "productHeat": "Product heat",
       "regulatoryAlert": "Regulatory alert"
     },
-    "dimensions": {
-      "demand": "Demand",
-      "regulatory": "Regulatory",
-      "competitive": "Competitive"
-    },
-    "credibility": {
-      "high": "High confidence",
-      "medium": "Medium",
-      "low": "Low"
-    },
-    "horizon": {
-      "immediate": "Immediate",
-      "weeks": "Weeks",
-      "months": "Months"
-    },
     "topOpportunity": "Top Opportunity",
     "avgOpportunity": "Avg Opportunity",
     "signalCount": "Signal Count",
@@ -506,9 +492,9 @@
     },
     "viewSourcePost": "View source post →",
     "sourceOutputs": {
-      "news_legal": "→ Product heat & regulatory intensity",
-      "insider": "→ Regulatory development trends",
-      "social": "→ Category preference & regulatory trends",
+      "news_legal": "→ Product heat & regulatory alerts",
+      "insider": "→ Regulatory development leads",
+      "social": "→ Product heat & regulatory alerts",
       "platform_2c": "→ Product listings & market heat"
     }
   },
