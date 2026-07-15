@@ -1,4 +1,8 @@
+/** @deprecated Use SignalKind — kept for migration references only */
 export type SignalDimension = "demand" | "regulatory" | "competitive";
+
+/** Intelligence signal category: product mention heat vs regulatory alert. */
+export type SignalKind = "product_heat" | "regulatory_alert";
 export type SignalCredibility = "high" | "medium" | "low";
 export type SignalHorizon = "immediate" | "weeks" | "months";
 
@@ -10,8 +14,10 @@ export interface IntelSignal {
   date: string;
   region?: string;
   products: string[];
-  /** Which decision variable this signal may move */
-  dimension: SignalDimension;
+  /** Product heat vs regulatory alert */
+  kind: SignalKind;
+  /** @deprecated Use kind */
+  dimension?: SignalDimension;
   /** Human-readable impact direction */
   directionLabel: string;
   /** Deprecated: matrix is enacted-law only; intelligence never queues matrix updates */
@@ -33,7 +39,7 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-15",
     region: "AU Federal",
     products: ["BPC-157"],
-    dimension: "regulatory",
+    kind: "regulatory_alert",
     directionLabel: "监管利好 · 许可续期窗口",
     pendingMatrixUpdate: false,
     credibility: "high",
@@ -50,7 +56,7 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-12",
     region: "NSW",
     products: ["BPC-157", "TB-500"],
-    dimension: "regulatory",
+    kind: "regulatory_alert",
     directionLabel: "监管收紧 · 文档门槛上升",
     pendingMatrixUpdate: false,
     credibility: "high",
@@ -67,7 +73,7 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-04-20",
     region: "AU Federal",
     products: ["TB-500"],
-    dimension: "regulatory",
+    kind: "regulatory_alert",
     directionLabel: "监管收紧 · S4 分类",
     pendingMatrixUpdate: false,
     credibility: "high",
@@ -84,7 +90,7 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-10",
     region: "AU Federal",
     products: ["Semaglutide"],
-    dimension: "regulatory",
+    kind: "regulatory_alert",
     directionLabel: "监管利好 · 合法化预期",
     pendingMatrixUpdate: false,
     credibility: "medium",
@@ -101,7 +107,7 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-08",
     region: "NSW → QLD",
     products: ["BPC-157", "GHK-Cu"],
-    dimension: "regulatory",
+    kind: "regulatory_alert",
     directionLabel: "渠道迁移 · 州际路径变化",
     pendingMatrixUpdate: false,
     credibility: "medium",
@@ -118,7 +124,7 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-05",
     region: "VIC",
     products: ["BPC-157"],
-    dimension: "competitive",
+    kind: "product_heat",
     directionLabel: "竞争压力 · 价格下行",
     pendingMatrixUpdate: false,
     credibility: "high",
@@ -135,7 +141,7 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-14",
     region: "AU",
     products: ["BPC-157", "TB-500"],
-    dimension: "demand",
+    kind: "product_heat",
     directionLabel: "需求利好 · 讨论量上升",
     pendingMatrixUpdate: false,
     credibility: "medium",
@@ -152,7 +158,7 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-11",
     region: "AU",
     products: ["GHK-Cu"],
-    dimension: "demand",
+    kind: "product_heat",
     directionLabel: "需求利好 · 护肤场景",
     pendingMatrixUpdate: false,
     credibility: "medium",
@@ -169,7 +175,7 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-09",
     region: "AU",
     products: ["BPC-157"],
-    dimension: "regulatory",
+    kind: "regulatory_alert",
     directionLabel: "执法传闻 · 灰色渠道风险",
     pendingMatrixUpdate: false,
     credibility: "low",
@@ -186,7 +192,7 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-13",
     region: "AU",
     products: ["BPC-157", "TB-500"],
-    dimension: "demand",
+    kind: "product_heat",
     directionLabel: "需求信号 · 2C 上新",
     pendingMatrixUpdate: false,
     credibility: "high",
@@ -203,7 +209,7 @@ export const intelligenceSignals: IntelSignal[] = [
     date: "2026-06-07",
     region: "AU",
     products: ["GHK-Cu"],
-    dimension: "demand",
+    kind: "product_heat",
     directionLabel: "需求信号 · 美容品类扩展",
     pendingMatrixUpdate: false,
     credibility: "high",
@@ -221,11 +227,21 @@ export function getSignalsBySource(
   return signals.filter((s) => s.source === source);
 }
 
+export function getSignalsByKind(
+  kind: SignalKind,
+  signals: IntelSignal[] = [],
+) {
+  return signals.filter((s) => s.kind === kind);
+}
+
+/** @deprecated Use getSignalsByKind */
 export function getSignalsByDimension(
   dimension: SignalDimension,
   signals: IntelSignal[] = [],
 ) {
-  return signals.filter((s) => s.dimension === dimension);
+  const kind: SignalKind =
+    dimension === "regulatory" ? "regulatory_alert" : "product_heat";
+  return getSignalsByKind(kind, signals);
 }
 
 export function calcAggregateImpact(signals: IntelSignal[]) {
@@ -239,7 +255,7 @@ export function calcAggregateImpact(signals: IntelSignal[]) {
   return { heat, regulatory };
 }
 
-/** Count of regulatory-dimension signals (rumor / chatter). Matrix stays separate. */
+/** Count of regulatory-alert signals (rumor / chatter). Matrix stays separate. */
 export function countPendingMatrixUpdates(signals: IntelSignal[] = []) {
-  return signals.filter((s) => s.dimension === "regulatory").length;
+  return signals.filter((s) => s.kind === "regulatory_alert").length;
 }

@@ -3,8 +3,13 @@ import type { Database } from "@/lib/supabase/database.types";
 import {
   GOOGLE_NEWS_MIN_MENTIONS_7D,
   GOOGLE_NEWS_QUERIES,
-  PRODUCT_ALIASES,
 } from "./config";
+import {
+  postsForNewsGroup,
+  resolveNewsGroupKey,
+  type NewsGroupKey,
+} from "./news-group-key";
+import { pickRepresentativePost } from "./matcher";
 import {
   getApifyRunStatus,
   isApifyConfigured,
@@ -14,8 +19,8 @@ import {
   fetchGoogleNewsPeptideArticles,
   startApifyGoogleNewsRun,
 } from "./google-news-client";
-import { pickRepresentativePost, postCountsForProduct } from "./matcher";
 import { isConcreteArticleUrl } from "./news-url";
+import { newsLookbackWindowEnding } from "./news-window";
 import type { NormalizedSocialPost } from "./types";
 
 type SocialPostInsert = Database["public"]["Tables"]["social_posts"]["Insert"];
@@ -48,16 +53,6 @@ export interface GoogleNewsScanResult {
 
 function todayUtcDate(): string {
   return new Date().toISOString().slice(0, 10);
-}
-
-function utcDateFromIso(iso: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return todayUtcDate();
-  return d.toISOString().slice(0, 10);
-}
-
-function productSlug(product: string): string {
-  return product.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 }
 
 function toRow(post: NormalizedSocialPost): SocialPostInsert {
@@ -110,79 +105,52 @@ function rowToNormalizedPost(
   };
 }
 
-function buildRegulatorySignals(
-  posts: NormalizedSocialPost[],
-): SignalInsert[] {
-  const signals: SignalInsert[] = [];
-
-  for (const post of posts) {
-    if (!post.hasRegulatory) continue;
-
-    const product =
-      post.products[0] ??
-      (/\bpeptides?\b/i.test(`${post.title}\n${post.body}`) ? "Peptides" : null);
-    if (!product) continue;
-
-    const slug = productSlug(product);
-    // File under the article’s publish day — never the scrape day.
-    const signalDate = utcDateFromIso(post.postedAt);
-    signals.push({
-      id: `news-legal-${slug}-${signalDate}-${post.externalId.slice(0, 8)}`,
-      source: "news_legal",
-      title: `News — ${product}: ${post.title}`.slice(0, 200),
-      summary: [
-        post.body || post.title,
-        post.subreddit ? `来源：${post.subreddit}。` : null,
-        `发布于：${signalDate}。`,
-        "触发规则：regulatory_keyword。",
-      ]
-        .filter(Boolean)
-        .join(" "),
-      signal_date: signalDate,
-      region: post.auContext ? "AU" : "Global",
-      products: post.products.length > 0 ? post.products : [product],
-      heat_impact: 0,
-      regulatory_impact: post.auContext ? 35 : 25,
-      trend: "stable",
-      url: post.url,
-    });
-  }
-
-  return signals;
-}
-
-function buildVolumeSignals(
+function buildNewsDigestSignals(
   posts: NormalizedSocialPost[],
   signalDate: string,
 ): SignalInsert[] {
+  const window = newsLookbackWindowEnding(signalDate, 7);
+  const grouped = new Map<string, { key: NewsGroupKey; posts: NormalizedSocialPost[] }>();
+
+  for (const post of posts) {
+    const key = resolveNewsGroupKey(post);
+    if (!key) continue;
+    const bucket = grouped.get(key.slug) ?? { key, posts: [] };
+    bucket.posts.push(post);
+    grouped.set(key.slug, bucket);
+  }
+
   const signals: SignalInsert[] = [];
-  const products = PRODUCT_ALIASES.map((p) => p.product);
 
-  for (const product of products) {
-    const related = posts.filter((p) => postCountsForProduct(p, product));
-    if (related.length < GOOGLE_NEWS_MIN_MENTIONS_7D) continue;
+  for (const { key, posts: allPosts } of grouped.values()) {
+    const related = window
+      ? postsForNewsGroup(allPosts, key, window)
+      : allPosts;
+    if (related.length === 0) continue;
 
-    // Skip if already covered heavily by regulatory promotions for this product today
     const hasRegulatory = related.some((p) => p.hasRegulatory);
-    if (hasRegulatory) continue;
+    const minCount = hasRegulatory || key.isGenericPeptides ? 1 : GOOGLE_NEWS_MIN_MENTIONS_7D;
+    if (related.length < minCount) continue;
 
-    const top = pickRepresentativePost(related, product);
+    const top =
+      pickRepresentativePost(related, key.products[0] ?? "Peptides") ??
+      related[0];
     if (!top) continue;
 
     signals.push({
-      id: `news-legal-vol-${productSlug(product)}-${signalDate}`,
+      id: `news-digest-${key.slug}-${signalDate}`,
       source: "news_legal",
-      title: `News — ${product} 近 7 日报道 ${related.length} 条`,
-      summary: [
-        `近 7 日 Google News 匹配 ${related.length} 条（阈值 ≥ ${GOOGLE_NEWS_MIN_MENTIONS_7D}）。`,
-        `代表报道：${top.subreddit ? `${top.subreddit}「` : "「"}${top.title}」。`,
-        "触发规则：volume_7d。",
-      ].join(" "),
+      title: `News — ${key.label} 近 7 日报道 ${related.length} 条`,
+      summary: "",
       signal_date: signalDate,
       region: related.some((p) => p.auContext) ? "AU" : "Global",
-      products: [product],
-      heat_impact: Math.min(30, related.length * 5),
-      regulatory_impact: 0,
+      products: key.products,
+      heat_impact: hasRegulatory ? 0 : Math.min(30, related.length * 5),
+      regulatory_impact: hasRegulatory
+        ? related.some((p) => p.auContext)
+          ? 35
+          : 25
+        : 0,
       trend: related.length >= GOOGLE_NEWS_MIN_MENTIONS_7D * 2 ? "up" : "stable",
       url: top.url,
     });
@@ -196,50 +164,35 @@ async function promoteNewsSignals(
   posts: NormalizedSocialPost[],
 ): Promise<{ signalsUpserted: number; productStats: GoogleNewsScanResult["productStats"] }> {
   const crawlDate = todayUtcDate();
-  const regulatory = buildRegulatorySignals(posts);
-  // Volume digests are a crawl-day rollup over the last 7 days of stored posts.
-  const volume = buildVolumeSignals(posts, crawlDate);
-
-  // Prefer regulatory over volume for same product: drop volume ids when regulatory exists
-  const regulatoryProducts = new Set(
-    regulatory.flatMap((s) => (s.products as string[]) ?? []),
-  );
-  const filteredVolume = volume.filter((s) => {
-    const prods = (s.products as string[]) ?? [];
-    return !prods.some((p) => regulatoryProducts.has(p));
-  });
-
-  const signals = [...regulatory, ...filteredVolume];
+  const signals = buildNewsDigestSignals(posts, crawlDate);
   const keepIds = new Set(signals.map((s) => s.id));
 
-  // Drop stale article-level signals that used the scrape day instead of publish day
-  // (same article hash suffix, different date in the id). Never delete volume digests.
-  const suffixes = [
-    ...new Set(posts.map((p) => p.externalId.slice(0, 8)).filter(Boolean)),
-  ];
-  if (suffixes.length > 0) {
-    const { data: existing, error: listErr } = await supabase
+  // Drop legacy per-article and per-product volume signals for this crawl day.
+  const { data: existing, error: listErr } = await supabase
+    .from("intelligence_signals")
+    .select("id")
+    .eq("source", "news_legal")
+    .like("id", "news-%");
+  if (listErr) throw listErr;
+
+  const toDelete = (existing ?? [])
+    .map((row) => row.id)
+    .filter((id) => {
+      if (keepIds.has(id)) return false;
+      if (id.startsWith("news-digest-")) {
+        return id.endsWith(`-${crawlDate}`);
+      }
+      // Legacy per-article / per-product volume rows (no longer generated).
+      if (id.startsWith("news-legal-")) return true;
+      return false;
+    });
+
+  if (toDelete.length > 0) {
+    const { error: delErr } = await supabase
       .from("intelligence_signals")
-      .select("id")
-      .eq("source", "news_legal")
-      .like("id", "news-legal-%");
-    if (listErr) throw listErr;
-
-    const toDelete = (existing ?? [])
-      .map((row) => row.id)
-      .filter((id) => {
-        if (id.startsWith("news-legal-vol-")) return false;
-        if (keepIds.has(id)) return false;
-        return suffixes.some((suf) => id.endsWith(`-${suf}`));
-      });
-
-    if (toDelete.length > 0) {
-      const { error: delErr } = await supabase
-        .from("intelligence_signals")
-        .delete()
-        .in("id", toDelete);
-      if (delErr) throw delErr;
-    }
+      .delete()
+      .in("id", toDelete);
+    if (delErr) throw delErr;
   }
 
   if (signals.length > 0) {
@@ -249,25 +202,37 @@ async function promoteNewsSignals(
     if (error) throw error;
   }
 
-  const productStats = PRODUCT_ALIASES.map((entry) => {
-    const related = posts.filter((p) => postCountsForProduct(p, entry.product));
-    const reasons: string[] = [];
-    if (related.some((p) => p.hasRegulatory)) reasons.push("regulatory_keyword");
-    if (
-      related.length >= GOOGLE_NEWS_MIN_MENTIONS_7D &&
-      !related.some((p) => p.hasRegulatory)
-    ) {
-      reasons.push("volume_7d");
-    }
-    return {
-      product: entry.product,
-      mentions7d: related.length,
-      promote: reasons.length > 0,
-      reasons,
-    };
-  });
+  const productStats = [...groupedStats(posts)].map((entry) => ({
+    product: entry.label,
+    mentions7d: entry.count,
+    promote: entry.count >= GOOGLE_NEWS_MIN_MENTIONS_7D || entry.hasRegulatory,
+    reasons: [
+      ...(entry.hasRegulatory ? ["regulatory_keyword"] : []),
+      ...(entry.count >= GOOGLE_NEWS_MIN_MENTIONS_7D ? ["volume_7d"] : []),
+    ],
+  }));
 
   return { signalsUpserted: signals.length, productStats };
+}
+
+function groupedStats(posts: NormalizedSocialPost[]) {
+  const map = new Map<
+    string,
+    { label: string; count: number; hasRegulatory: boolean }
+  >();
+  for (const post of posts) {
+    const key = resolveNewsGroupKey(post);
+    if (!key) continue;
+    const row = map.get(key.slug) ?? {
+      label: key.label,
+      count: 0,
+      hasRegulatory: false,
+    };
+    row.count += 1;
+    row.hasRegulatory ||= post.hasRegulatory;
+    map.set(key.slug, row);
+  }
+  return map.values();
 }
 
 async function ingestGoogleNewsPosts(
@@ -286,7 +251,11 @@ async function ingestGoogleNewsPosts(
     upsertedPosts += chunk.length;
   }
 
-  const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const crawlDate = todayUtcDate();
+  const window = newsLookbackWindowEnding(crawlDate, 7);
+  const since =
+    window?.startIso ??
+    new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const { data: dbPosts, error: readErr } = await supabase
     .from("social_posts")
     .select("*")

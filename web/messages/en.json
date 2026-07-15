@@ -456,6 +456,9 @@
     "matrixDelta": "Attention",
     "confirmToMatrix": "View article →",
     "viewSourceArticle": "View article →",
+    "windowLast7": "Last 7 days",
+    "windowSingleDay": "Single day",
+    "windowDrawerTitle": "Last 7 days",
     "dayDrawerTitle": "Day’s intel",
     "dayDrawerCount": "{count} signals",
     "previewPost": "Source post",
@@ -469,6 +472,10 @@
     "previewVolumeList": "Related coverage (7d · {count})",
     "previewVolumeEmpty": "No matching stored articles for this digest yet.",
     "sourceBreakdown": "Source breakdown",
+    "kinds": {
+      "productHeat": "Product heat",
+      "regulatoryAlert": "Regulatory alert"
+    },
     "dimensions": {
       "demand": "Demand",
       "regulatory": "Regulatory",
@@ -808,7 +815,7 @@
     "categoryAdmin": "Admin",
     "chatTitle": "AI Agent",
     "chatSubtitle": "Hermes + Qwen — ask platform rules & scoring, or submit quotes, inquiries, and regulatory updates",
-    "chatWelcome": "Hello, I'm Peptide Monitor AI Agent (Hermes + Qwen). Ask about viability scoring, platform depth, operational fit, regulatory allowance, or use quick actions for quotes and updates.",
+    "chatWelcome": "Hello, I'm Peptide Monitor AI Agent. Ask about viability scoring, platform depth, operational fit, regulatory allowance, or use quick actions for quotes and updates.",
     "chatPlaceholder": "Type a message, or pick a quick action and fill in details…",
     "chatError": "Unable to reach Agent. Check Hermes/Qwen configuration.",
     "attachFile": "Attach file",
@@ -826,7 +833,8 @@
     "historySignIn": "Sign in to save chat history",
     "historyLocalOnly": "Saved in this browser only; configure Supabase for cross-device sync.",
     "newChat": "New chat",
-    "deleteChat": "Delete chat"
+    "deleteChat": "Delete chat",
+    "deleteMessage": "Delete message"
   },
   "adminPage": {
     "title": "Admin · Users & Roles",

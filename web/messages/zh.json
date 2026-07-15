@@ -464,6 +464,9 @@
     "matrixDelta": "关注度",
     "confirmToMatrix": "查看原文 →",
     "viewSourceArticle": "查看原文 →",
+    "windowLast7": "近 7 日",
+    "windowSingleDay": "单日",
+    "windowDrawerTitle": "近 7 日舆论",
     "dayDrawerTitle": "当日舆论",
     "dayDrawerCount": "{count} 条",
     "previewPost": "代表帖",
@@ -477,6 +480,10 @@
     "previewVolumeList": "近 7 日相关报道（{count}）",
     "previewVolumeEmpty": "暂未匹配到库内相关报道列表。",
     "sourceBreakdown": "来源分布",
+    "kinds": {
+      "productHeat": "产品热度",
+      "regulatoryAlert": "监管提醒"
+    },
     "dimensions": {
       "demand": "需求侧",
       "regulatory": "监管侧",
@@ -816,7 +823,7 @@
     "categoryAdmin": "Admin",
     "chatTitle": "AI Agent",
     "chatSubtitle": "Hermes + Qwen — 可问平台功能与评分规则，也可提交报价、询盘与监管更新",
-    "chatWelcome": "你好，我是 Peptide Monitor AI Agent（Hermes + Qwen）。可询问综合评判、平台覆盖深度、运营可行、合规空间等规则；也可使用快捷按钮提交报价/询盘/监管更新。",
+    "chatWelcome": "您好，我是 Peptide Monitor AI Agent。可询问综合评判、平台覆盖深度、运营可行、合规空间等规则；也可使用快捷按钮提交报价/询盘/监管更新。",
     "chatPlaceholder": "输入消息，或选择快捷按钮后补充细节…",
     "chatError": "暂时无法连接 Agent，请检查 Hermes/Qwen 配置后重试。",
     "attachFile": "添加附件",
@@ -834,7 +841,8 @@
     "historySignIn": "登录后保存聊天记录",
     "historyLocalOnly": "当前为浏览器本地保存；配置 Supabase 后可跨设备同步。",
     "newChat": "新对话",
-    "deleteChat": "删除对话"
+    "deleteChat": "删除对话",
+    "deleteMessage": "删除这条消息"
   },
   "adminPage": {
     "title": "Admin 用户与角色",

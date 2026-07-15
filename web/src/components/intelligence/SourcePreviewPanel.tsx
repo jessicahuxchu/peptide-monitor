@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { ExternalLink, ShieldAlert, X } from "lucide-react";
+import type { IntelDateMode } from "@/lib/intelligence/signal-window";
 import type { IntelSignal } from "@/lib/intelligence/seed-data";
 import { isConcreteArticleUrl } from "@/lib/social/news-url";
 import type { SocialPost } from "@/lib/social/types";
@@ -16,6 +17,9 @@ interface SourcePreviewPanelProps {
   relatedPosts?: SocialPost[];
   loading: boolean;
   dateLabel?: string | null;
+  dateMode?: IntelDateMode;
+  /** Align with left date strip (e.g. h-14). */
+  headerClassName?: string;
   onSelect: (signal: IntelSignal) => void;
   onClose: () => void;
 }
@@ -66,12 +70,16 @@ export function SourcePreviewPanel({
   relatedPosts = [],
   loading,
   dateLabel,
+  dateMode = "last7",
+  headerClassName,
   onSelect,
   onClose,
 }: SourcePreviewPanelProps) {
   const t = useTranslations("intelligencePage");
   const locale = useLocale() as "en" | "zh";
-  const isVolumeDigest = signal.id.startsWith("news-legal-vol-");
+  const isNewsDigest =
+    signal.id.startsWith("news-digest-") ||
+    signal.id.startsWith("news-legal-vol-");
   const externalUrl = post?.url ?? signal.url;
   const articleLinkOk = externalUrl ? isConcreteArticleUrl(externalUrl) : false;
   const isNews =
@@ -83,9 +91,9 @@ export function SourcePreviewPanel({
   const displayTitle = post?.title ?? signal.title;
   const displayBody = post ? postBody : signalBody;
   const hasFullBody = Boolean(displayBody);
-  const showFallbackHint = !loading && !post && !hasFullBody && !isVolumeDigest;
+  const showFallbackHint = !loading && !post && !hasFullBody && !isNewsDigest;
   const previewExpands =
-    hasFullBody || (isVolumeDigest && relatedPosts.length > 0);
+    hasFullBody || (isNewsDigest && relatedPosts.length > 0);
 
   useEffect(() => {
     activeItemRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -98,10 +106,15 @@ export function SourcePreviewPanel({
         "lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)]",
       )}
     >
-      <div className="flex shrink-0 items-start justify-between gap-2 border-b border-command-border px-3 py-2.5">
+      <div
+        className={cn(
+          "justify-between gap-2 border-b border-command-border px-3",
+          headerClassName ?? "flex h-14 shrink-0 items-center",
+        )}
+      >
         <div className="min-w-0">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
-            {t("dayDrawerTitle")}
+            {dateMode === "last7" ? t("windowDrawerTitle") : t("dayDrawerTitle")}
           </p>
           <p className="mt-0.5 text-xs text-command-text-secondary">
             {dateLabel ? `${dateLabel} · ` : ""}
@@ -134,7 +147,11 @@ export function SourcePreviewPanel({
             {signals.map((item) => {
               const active = item.id === signal.id;
               const rumored =
-                item.dimension === "regulatory" && item.source === "social";
+                item.kind === "regulatory_alert" && item.source === "social";
+              const kindKey =
+                item.kind === "regulatory_alert"
+                  ? "regulatoryAlert"
+                  : "productHeat";
               return (
                 <li key={item.id}>
                   <button
@@ -157,7 +174,7 @@ export function SourcePreviewPanel({
                             : "border-command-border text-command-text-muted",
                         )}
                       >
-                        {t(`dimensions.${item.dimension}`)}
+                        {t(`kinds.${kindKey}`)}
                       </span>
                       {rumored && (
                         <span className="text-[9px] text-command-orange">
@@ -200,7 +217,7 @@ export function SourcePreviewPanel({
       >
         <div className="shrink-0 px-3 pt-2.5">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
-            {isVolumeDigest
+            {isNewsDigest
               ? t("previewVolumeList", { count: relatedPosts.length || "—" })
               : isNews
                 ? t("previewArticle")
@@ -213,11 +230,8 @@ export function SourcePreviewPanel({
             <p className="text-xs text-command-text-muted">{t("previewLoading")}</p>
           )}
 
-          {!loading && isVolumeDigest && (
+          {!loading && isNewsDigest && (
             <div className="space-y-2">
-              <p className="text-[11px] text-command-text-muted">
-                {signal.summary}
-              </p>
               {relatedPosts.length === 0 ? (
                 <p className="text-xs text-command-text-muted">
                   {t("previewVolumeEmpty")}
@@ -260,7 +274,7 @@ export function SourcePreviewPanel({
             </div>
           )}
 
-          {!loading && !isVolumeDigest && (
+          {!loading && !isNewsDigest && (
             <>
               {post && (
                 <div className="flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-wide text-command-text-muted">

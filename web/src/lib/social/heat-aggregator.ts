@@ -56,20 +56,39 @@ function endOfUtcDay(date: string): Date {
   return new Date(`${date}T23:59:59.999Z`);
 }
 
-/** Use "now" for today so intraday backfill matches live aggregation. */
-function asOfForSignalDate(date: string): Date {
-  const today = utcDateString(new Date());
-  return date === today ? new Date() : endOfUtcDay(date);
+function startOfUtcDay(date: string): Date {
+  return new Date(`${date}T00:00:00.000Z`);
 }
 
-/** Last N calendar days in UTC (today first). */
-export function listUtcDatesBack(days: number): string[] {
+/** Latest UTC calendar day that has fully closed (00:00–24:00). */
+export function latestCompletedUtcDate(now: Date = new Date()): string {
+  const today = utcDateString(now);
+  // Still inside today → previous calendar day is the latest complete day.
+  const d = new Date(startOfUtcDay(today));
+  d.setUTCDate(d.getUTCDate() - 1);
+  return utcDateString(d);
+}
+
+/**
+ * Anchor heat stats to the end of a UTC calendar day.
+ * Never uses wall-clock “now”, so mid-day rebuilds stay identical.
+ */
+function asOfForSignalDate(date: string): Date {
+  return endOfUtcDay(date);
+}
+
+/**
+ * Last N *completed* UTC calendar days (most recent first).
+ * Omits the in-progress UTC day so heat isn’t recomputed until the day closes.
+ */
+export function listUtcDatesBack(days: number, now: Date = new Date()): string[] {
   const out: string[] = [];
-  const now = new Date();
+  let cursor = latestCompletedUtcDate(now);
   for (let i = 0; i < days; i++) {
-    const d = new Date(now);
-    d.setUTCDate(d.getUTCDate() - i);
-    out.push(utcDateString(d));
+    out.push(cursor);
+    const d = new Date(startOfUtcDay(cursor));
+    d.setUTCDate(d.getUTCDate() - 1);
+    cursor = utcDateString(d);
   }
   return out;
 }
@@ -101,7 +120,7 @@ function computeTrend(
 
 export function computeProductHeat(
   posts: NormalizedSocialPost[],
-  asOf: Date = new Date(),
+  asOf: Date = asOfForSignalDate(latestCompletedUtcDate()),
 ): ProductHeatStats[] {
   const asOfMs = asOf.getTime();
   const products = PRODUCT_ALIASES.map((p) => p.product);
@@ -185,10 +204,6 @@ export function computeProductHeat(
   });
 }
 
-function todayUtcDate(): string {
-  return new Date().toISOString().slice(0, 10);
-}
-
 function buildSignalForDate(
   stats: ProductHeatStats,
   signalDate: string,
@@ -204,11 +219,11 @@ function buildSignalForDate(
   const trendWord =
     stats.trend === "up" ? "上升" : stats.trend === "down" ? "回落" : "平稳";
 
-  const title = `Reddit — ${stats.product} 讨论热度${trendWord}（24h 提及 ${stats.mentions24h}，${liftLabel}）`;
+  const title = `Reddit — ${stats.product} 讨论热度${trendWord}（当日提及 ${stats.mentions24h}，${liftLabel}）`;
 
   const top = stats.topPost;
   const summaryParts = [
-    `过去 24h 提及 ${stats.mentions24h} 条，近 7 日共 ${stats.mentions7d} 条（日均 ${stats.baselineDaily.toFixed(1)}）。`,
+    `当日（UTC ${signalDate}）提及 ${stats.mentions24h} 条，近 7 日共 ${stats.mentions7d} 条（日均 ${stats.baselineDaily.toFixed(1)}）。`,
     `代表帖：r/${top.subreddit}「${top.title}」（score ${top.score}，评论 ${top.numComments}）。`,
   ];
   if (stats.hasRegulatory) {
@@ -239,7 +254,7 @@ function buildSignalForDate(
 }
 
 function buildSignal(stats: ProductHeatStats): SignalInsert | null {
-  return buildSignalForDate(stats, todayUtcDate());
+  return buildSignalForDate(stats, latestCompletedUtcDate());
 }
 
 function toRow(post: NormalizedSocialPost): SocialPostInsert {

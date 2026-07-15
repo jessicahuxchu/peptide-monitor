@@ -2,11 +2,19 @@
   "crons": [
     {
       "path": "/api/cron/reddit-heat-scan?phase=start",
-      "schedule": "0 2 * * *"
+      "schedule": "30 0 * * *"
     },
     {
       "path": "/api/cron/reddit-heat-scan?phase=complete",
-      "schedule": "0 3 * * *"
+      "schedule": "30 1 * * *"
+    },
+    {
+      "path": "/api/cron/reddit-engagement-refresh",
+      "schedule": "30 2 * * *"
+    },
+    {
+      "path": "/api/cron/reddit-engagement-refresh",
+      "schedule": "30 14 * * *"
     },
     {
       "path": "/api/cron/google-news-scan?phase=start",
@@ -15,10 +23,6 @@
     {
       "path": "/api/cron/google-news-scan?phase=complete",
       "schedule": "0 5 * * *"
-    },
-    {
-      "path": "/api/cron/reddit-engagement-refresh",
-      "schedule": "0 9 * * *"
     }
   ]
 }

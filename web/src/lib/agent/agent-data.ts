@@ -111,7 +111,7 @@ export async function queryAgentPlatformData(
                 date: s.date,
                 products: s.products,
                 source: s.source,
-                dimension: s.dimension,
+                kind: s.kind,
                 heatImpact: s.heatImpact,
                 regulatoryImpact: s.regulatoryImpact,
                 trend: s.trend,

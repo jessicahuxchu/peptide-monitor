@@ -162,27 +162,16 @@ export function mapIntelSignal(row: SignalRow): IntelSignal {
   const heatImpact = row.heat_impact ?? undefined;
   const source = row.source as IntelSignal["source"];
 
-  let dimension: IntelSignal["dimension"] = "demand";
-  if (source === "social") {
-    // Reddit heat signals are demand-first; regulatory only when explicitly scored.
-    dimension =
-      row.id.startsWith("reddit-heat-") && (regulatoryImpact ?? 0) <= 0
-        ? "demand"
-        : (regulatoryImpact ?? 0) > 0
-          ? "regulatory"
-          : "demand";
-  } else if (source === "news_legal") {
-    // Volume spikes = demand heat; keyword hits = regulatory chatter (rumor), not enacted law.
-    dimension = (regulatoryImpact ?? 0) > 0 ? "regulatory" : "demand";
-  } else if ((regulatoryImpact ?? 0) > 0) {
-    dimension = "regulatory";
-  } else if (source === "insider" && (heatImpact ?? 0) === 0) {
-    dimension = "competitive";
-  }
+  const isRegulatoryAlert =
+    row.id.startsWith("reddit-heat-")
+      ? false
+      : (regulatoryImpact ?? 0) > 0;
 
-  const isRegulatory = dimension === "regulatory";
-  // Only social chatter is unlabeled rumor; news is coverage, not enacted-law fact.
-  const isRegulatoryRumor = isRegulatory && source === "social";
+  const kind: IntelSignal["kind"] = isRegulatoryAlert
+    ? "regulatory_alert"
+    : "product_heat";
+
+  const isRegulatoryRumor = kind === "regulatory_alert" && source === "social";
 
   return {
     id: row.id,
@@ -192,19 +181,19 @@ export function mapIntelSignal(row: SignalRow): IntelSignal {
     date: row.signal_date,
     region: row.region ?? undefined,
     products: (row.products as string[]) ?? [],
-    dimension,
+    kind,
     directionLabel:
       source === "social"
         ? isRegulatoryRumor
-          ? "Social · regulatory chatter"
-          : "Social · demand heat"
+          ? "Social · regulatory alert"
+          : "Social · product heat"
         : source === "news_legal"
-          ? isRegulatory
+          ? kind === "regulatory_alert"
             ? "News · regulatory coverage"
-            : "News · coverage heat"
-          : isRegulatory
-            ? "Regulatory coverage"
-            : "Market signal",
+            : "News · product coverage"
+          : kind === "regulatory_alert"
+            ? "Regulatory alert"
+            : "Product heat",
     // Intelligence never auto-links to the compliance matrix (enacted law only).
     pendingMatrixUpdate: false,
     credibility:

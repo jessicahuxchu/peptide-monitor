@@ -2,16 +2,24 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { CommandCard } from "@/components/ui/CommandCard";
 import { SourcePreviewPanel } from "@/components/intelligence/SourcePreviewPanel";
 import { useDbResource } from "@/hooks/useDbResource";
 import {
+  filterSignalsByWindow,
+  type IntelDateMode,
+} from "@/lib/intelligence/signal-window";
+import {
+  getSignalsByKind,
   getSignalsBySource,
-  getSignalsByDimension,
 } from "@/lib/intelligence/seed-data";
-import type { IntelSignal, SignalDimension } from "@/lib/intelligence/seed-data";
+import type { IntelSignal, SignalKind } from "@/lib/intelligence/seed-data";
 import { normalizeRedditUrl } from "@/lib/social/post-deep-link";
-import type { SocialPost } from "@/lib/social/types";
+import {
+  newsGroupKeyFromSignal,
+  postsForNewsGroup,
+} from "@/lib/social/news-group-key";
+import { newsLookbackWindowEnding } from "@/lib/social/news-window";
+import type { NormalizedSocialPost, SocialPost } from "@/lib/social/types";
 import {
   Newspaper,
   Users,
@@ -31,13 +39,9 @@ const sourceConfig = {
   platform_2c: { icon: ShoppingBag, color: "text-command-orange", border: "border-command-orange/30" },
 } as const;
 
-const dimensionStyles: Record<
-  SignalDimension,
-  { border: string; label: string }
-> = {
-  demand: { border: "border-command-teal/30", label: "demand" },
-  regulatory: { border: "border-command-orange/30", label: "regulatory" },
-  competitive: { border: "border-purple-500/30", label: "competitive" },
+const kindStyles: Record<SignalKind, { border: string; label: string }> = {
+  product_heat: { border: "border-command-teal/30", label: "productHeat" },
+  regulatory_alert: { border: "border-command-orange/30", label: "regulatoryAlert" },
 };
 
 const intelligenceFallback = {
@@ -58,30 +62,63 @@ function matchPostByUrl(posts: SocialPost[], url: string): SocialPost | null {
   );
 }
 
-/** Volume digests only store one representative URL — expand to related articles. */
-function relatedPostsForVolumeDigest(
+function socialPostToNormalized(post: SocialPost): NormalizedSocialPost {
+  return {
+    id: post.id,
+    platform: post.platform === "google_news" ? "google_news" : "reddit",
+    externalId: post.externalId,
+    subreddit: post.subreddit ?? "",
+    title: post.title,
+    body: post.body,
+    score: post.score,
+    numComments: post.numComments,
+    author: post.author,
+    permalink: post.permalink,
+    url: post.url,
+    postedAt: post.postedAt,
+    products: post.products,
+    hasRegulatory: post.hasRegulatory,
+    engagement: post.engagement,
+    auContext: post.auContext ?? false,
+    regulatoryReason: post.regulatoryReason,
+    classifiedBy: post.classifiedBy,
+  };
+}
+
+function relatedPostsForNewsDigest(
   posts: SocialPost[],
   signal: IntelSignal,
 ): SocialPost[] {
-  if (!signal.id.startsWith("news-legal-vol-")) return [];
-  const product = signal.products[0];
-  if (!product) return [];
+  const isDigest =
+    signal.id.startsWith("news-digest-") ||
+    signal.id.startsWith("news-legal-vol-");
+  if (!isDigest) return [];
 
-  const end = new Date(`${signal.date}T23:59:59.999Z`).getTime();
-  const start = end - 7 * 24 * 60 * 60 * 1000;
+  const group = newsGroupKeyFromSignal(signal);
+  if (!group) return [];
 
-  return posts
-    .filter((p) => {
-      if (p.platform !== "google_news") return false;
-      if (!p.products.includes(product)) return false;
-      const t = new Date(p.postedAt).getTime();
-      if (Number.isNaN(t)) return false;
-      return t >= start && t <= end;
-    })
-    .sort(
-      (a, b) =>
-        new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime(),
-    );
+  const window = newsLookbackWindowEnding(signal.date, 7);
+  const normalized = posts
+    .filter((p) => p.platform === "google_news")
+    .map(socialPostToNormalized);
+
+  let related = postsForNewsGroup(normalized, group, window ?? undefined);
+
+  // Legacy per-product volume digest
+  if (related.length === 0 && signal.id.startsWith("news-legal-vol-")) {
+    const product = signal.products[0];
+    if (product) {
+      related = normalized.filter((p) => {
+        if (!p.products.includes(product)) return false;
+        if (!window) return true;
+        const t = new Date(p.postedAt).getTime();
+        return t >= window.startMs && t <= window.endMs;
+      });
+    }
+  }
+
+  const ids = new Set(related.map((p) => p.id));
+  return posts.filter((p) => ids.has(p.id));
 }
 
 export default function IntelligencePage() {
@@ -89,8 +126,9 @@ export default function IntelligencePage() {
   const { data, loading, usingDb } = useDbResource("/api/intelligence", intelligenceFallback);
   const intelligenceSignals = usingDb ? data.signals : [];
 
-  const [activeFilter, setActiveFilter] = useState<SignalDimension | "all">("all");
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<SignalKind | "all">("all");
+  const [dateMode, setDateMode] = useState<IntelDateMode>("last7");
+  const [anchorDate, setAnchorDate] = useState<string | null>(null);
   const [previewSignal, setPreviewSignal] = useState<IntelSignal | null>(null);
   const [postCache, setPostCache] = useState<SocialPost[] | null>(null);
   const [postLoading, setPostLoading] = useState(false);
@@ -103,18 +141,18 @@ export default function IntelligencePage() {
 
   useEffect(() => {
     if (availableDates.length === 0) {
-      setSelectedDate(null);
+      setAnchorDate(null);
       return;
     }
-    if (!selectedDate || !availableDates.includes(selectedDate)) {
-      setSelectedDate(availableDates[0]);
+    if (!anchorDate || !availableDates.includes(anchorDate)) {
+      setAnchorDate(availableDates[0]);
     }
-  }, [availableDates, selectedDate]);
+  }, [availableDates, anchorDate]);
 
-  const dateSignals = useMemo(() => {
-    if (!selectedDate) return intelligenceSignals;
-    return intelligenceSignals.filter((s) => s.date === selectedDate);
-  }, [intelligenceSignals, selectedDate]);
+  const windowSignals = useMemo(() => {
+    if (!anchorDate) return intelligenceSignals;
+    return filterSignalsByWindow(intelligenceSignals, dateMode, anchorDate, 7);
+  }, [intelligenceSignals, dateMode, anchorDate]);
 
   useEffect(() => {
     if (!previewSignal?.url || postCache) return;
@@ -141,13 +179,12 @@ export default function IntelligencePage() {
     };
   }, [previewSignal, postCache]);
 
-  // Keep drawer selection inside the currently selected day.
   useEffect(() => {
-    if (!previewSignal || !selectedDate) return;
-    if (previewSignal.date === selectedDate) return;
-    const next = dateSignals[0] ?? null;
-    setPreviewSignal(next);
-  }, [selectedDate, dateSignals, previewSignal]);
+    if (!previewSignal || !anchorDate) return;
+    const stillVisible = windowSignals.some((s) => s.id === previewSignal.id);
+    if (stillVisible) return;
+    setPreviewSignal(windowSignals[0] ?? null);
+  }, [anchorDate, dateMode, windowSignals, previewSignal]);
 
   const previewPost = useMemo(() => {
     if (!previewSignal?.url || !postCache) return null;
@@ -156,15 +193,19 @@ export default function IntelligencePage() {
 
   const previewRelatedPosts = useMemo(() => {
     if (!previewSignal || !postCache) return [];
-    return relatedPostsForVolumeDigest(postCache, previewSignal);
+    return relatedPostsForNewsDigest(postCache, previewSignal);
   }, [previewSignal, postCache]);
 
   const filteredSignals =
     activeFilter === "all"
-      ? dateSignals
-      : getSignalsByDimension(activeFilter, dateSignals);
+      ? windowSignals
+      : getSignalsByKind(activeFilter, windowSignals);
 
-  const regulatoryRumorCount = getSignalsByDimension("regulatory", dateSignals).length;
+  const regulatoryAlertCount = getSignalsByKind(
+    "regulatory_alert",
+    windowSignals,
+  ).length;
+  const productHeatCount = getSignalsByKind("product_heat", windowSignals).length;
   const sources = ["news_legal", "insider", "social", "platform_2c"] as const;
 
   const dateBounds = useMemo(() => {
@@ -176,20 +217,57 @@ export default function IntelligencePage() {
   }, [availableDates]);
 
   const panelOpen = previewSignal !== null;
+  const alignHeaderClass = "flex h-14 shrink-0 items-center";
+  const windowLabel =
+    dateMode === "last7"
+      ? t("intelligencePage.windowLast7")
+      : anchorDate ?? "";
 
   return (
     <div className="w-full max-w-full overflow-x-hidden p-4 md:p-6">
       <div
         className={cn(
           "gap-4",
-          panelOpen ? "lg:grid lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]" : "block",
+          panelOpen ? "lg:grid lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start" : "block",
         )}
       >
-        <div className="min-w-0 space-y-6">
-          <CommandCard>
-            <div className="mb-5 space-y-3">
-              {availableDates.length > 0 && (
-                <div className="flex flex-wrap items-center justify-end gap-2">
+        <div className="min-w-0 space-y-4">
+          {availableDates.length > 0 && (
+            <div
+              className={cn(
+                alignHeaderClass,
+                "justify-end gap-2",
+                panelOpen && "lg:px-1",
+              )}
+            >
+              <div className="flex items-center gap-1 rounded-lg border border-command-border bg-command-card-elevated p-0.5">
+                <button
+                  type="button"
+                  onClick={() => setDateMode("last7")}
+                  className={cn(
+                    "rounded-md px-2.5 py-1 text-[11px] font-medium transition-colors",
+                    dateMode === "last7"
+                      ? "bg-command-teal/15 text-command-teal-bright"
+                      : "text-command-text-muted hover:text-command-text-secondary",
+                  )}
+                >
+                  {t("intelligencePage.windowLast7")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDateMode("day")}
+                  className={cn(
+                    "rounded-md px-2.5 py-1 text-[11px] font-medium transition-colors",
+                    dateMode === "day"
+                      ? "bg-command-teal/15 text-command-teal-bright"
+                      : "text-command-text-muted hover:text-command-text-secondary",
+                  )}
+                >
+                  {t("intelligencePage.windowSingleDay")}
+                </button>
+              </div>
+              {dateMode === "day" && (
+                <>
                   <label
                     htmlFor="intel-date"
                     className="text-[10px] font-medium uppercase tracking-wider text-command-text-muted"
@@ -199,11 +277,11 @@ export default function IntelligencePage() {
                   <input
                     id="intel-date"
                     type="date"
-                    value={selectedDate ?? ""}
+                    value={anchorDate ?? ""}
                     min={dateBounds.min}
                     max={dateBounds.max}
                     onChange={(e) => {
-                      if (e.target.value) setSelectedDate(e.target.value);
+                      if (e.target.value) setAnchorDate(e.target.value);
                     }}
                     className={cn(
                       "rounded-lg border border-command-border bg-command-card-elevated px-3 py-1.5",
@@ -212,196 +290,197 @@ export default function IntelligencePage() {
                       "focus:border-command-teal/40 focus:outline-none focus:ring-1 focus:ring-command-teal/30",
                     )}
                   />
-                </div>
+                </>
               )}
-
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {sources.map((src) => {
-                  const signals = getSignalsBySource(src, dateSignals);
-                  const cfg = sourceConfig[src];
-                  const Icon = cfg.icon;
-                  return (
-                    <div key={src} className={cn("rounded-xl border p-3", cfg.border)}>
-                      <div className="mb-1 flex items-center gap-1.5">
-                        <Icon className={cn("h-3.5 w-3.5", cfg.color)} />
-                        <span className="text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
-                          {t(`intelligencePage.sources.${src}`)}
-                        </span>
-                      </div>
-                      <p className="text-lg font-bold tabular-nums text-command-text">
-                        {signals.length}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
             </div>
+          )}
 
-            <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <BriefKpi label={t("intelligencePage.signalCount")} value={String(dateSignals.length)} />
-              <BriefKpi
-                label={t("intelligencePage.regulatoryRumor")}
-                value={String(regulatoryRumorCount)}
-                accent={regulatoryRumorCount > 0}
-              />
-              <BriefKpi
-                label={t("intelligencePage.dimensions.demand")}
-                value={String(getSignalsByDimension("demand", dateSignals).length)}
-              />
-              <BriefKpi
-                label={t("intelligencePage.dimensions.competitive")}
-                value={String(getSignalsByDimension("competitive", dateSignals).length)}
-              />
-            </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {sources.map((src) => {
+              const signals = getSignalsBySource(src, windowSignals);
+              const cfg = sourceConfig[src];
+              const Icon = cfg.icon;
+              return (
+                <div key={src} className={cn("rounded-xl border p-3", cfg.border)}>
+                  <div className="mb-1 flex items-center gap-1.5">
+                    <Icon className={cn("h-3.5 w-3.5", cfg.color)} />
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
+                      {t(`intelligencePage.sources.${src}`)}
+                    </span>
+                  </div>
+                  <p className="text-lg font-bold tabular-nums text-command-text">
+                    {signals.length}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
 
-            <div className="mb-4 flex flex-wrap gap-2">
-              <FilterTab active={activeFilter === "all"} onClick={() => setActiveFilter("all")} label={t("intelligencePage.allSources")} />
-              {(["demand", "regulatory", "competitive"] as SignalDimension[]).map((dim) => (
-                <FilterTab
-                  key={dim}
-                  active={activeFilter === dim}
-                  onClick={() => setActiveFilter(dim)}
-                  label={
-                    dim === "regulatory"
-                      ? `${t("intelligencePage.dimensions.regulatory")} (${regulatoryRumorCount})`
-                      : t(`intelligencePage.dimensions.${dim}`)
-                  }
-                />
-              ))}
-            </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <BriefKpi label={t("intelligencePage.signalCount")} value={String(windowSignals.length)} />
+            <BriefKpi
+              label={t("intelligencePage.kinds.productHeat")}
+              value={String(productHeatCount)}
+            />
+            <BriefKpi
+              label={t("intelligencePage.kinds.regulatoryAlert")}
+              value={String(regulatoryAlertCount)}
+              accent={regulatoryAlertCount > 0}
+            />
+          </div>
 
-            <div className="space-y-2">
-              {loading && (
+          <div className="flex flex-wrap gap-2">
+            <FilterTab active={activeFilter === "all"} onClick={() => setActiveFilter("all")} label={t("intelligencePage.allSources")} />
+            <FilterTab
+              active={activeFilter === "product_heat"}
+              onClick={() => setActiveFilter("product_heat")}
+              label={t("intelligencePage.kinds.productHeat")}
+            />
+            <FilterTab
+              active={activeFilter === "regulatory_alert"}
+              onClick={() => setActiveFilter("regulatory_alert")}
+              label={`${t("intelligencePage.kinds.regulatoryAlert")} (${regulatoryAlertCount})`}
+            />
+          </div>
+
+          <div className="space-y-2">
+            {loading && (
+              <p className="py-8 text-center text-sm text-command-text-muted">
+                {t("intelligencePage.loading")}
+              </p>
+            )}
+            {!loading &&
+              filteredSignals.length === 0 && (
                 <p className="py-8 text-center text-sm text-command-text-muted">
-                  {t("intelligencePage.loading")}
+                  {anchorDate && windowSignals.length === 0
+                    ? t("intelligencePage.noSignalsOnDate")
+                    : t("intelligencePage.summaryEmpty")}
                 </p>
               )}
-              {!loading &&
-                filteredSignals.length === 0 && (
-                  <p className="py-8 text-center text-sm text-command-text-muted">
-                    {selectedDate && dateSignals.length === 0
-                      ? t("intelligencePage.noSignalsOnDate")
-                      : t("intelligencePage.summaryEmpty")}
-                  </p>
-                )}
-              {!loading &&
-                filteredSignals.map((signal) => {
-                const cfg = sourceConfig[signal.source];
-                const Icon = cfg.icon;
-                const dim = dimensionStyles[signal.dimension];
-                const TrendIcon = signal.trend ? trendIcon[signal.trend] : Minus;
-                const isRegulatory = signal.dimension === "regulatory";
-                const isRegulatoryRumor =
-                  isRegulatory && signal.source === "social";
-                const canPreview = Boolean(signal.url);
-                const isActive = previewSignal?.id === signal.id;
-                const previewLabel =
-                  signal.source === "social"
-                    ? t("intelligencePage.viewSourcePost")
-                    : t("intelligencePage.viewSourceArticle");
+            {!loading &&
+              filteredSignals.map((signal) => {
+              const cfg = sourceConfig[signal.source];
+              const Icon = cfg.icon;
+              const kindStyle = kindStyles[signal.kind];
+              const TrendIcon = signal.trend ? trendIcon[signal.trend] : Minus;
+              const isRegulatoryAlert = signal.kind === "regulatory_alert";
+              const isRegulatoryRumor =
+                isRegulatoryAlert && signal.source === "social";
+              const isNewsDigest =
+                signal.id.startsWith("news-digest-") ||
+                signal.id.startsWith("news-legal-vol-");
+              const canPreview = Boolean(signal.url);
+              const isActive = previewSignal?.id === signal.id;
+              const previewLabel =
+                signal.source === "social"
+                  ? t("intelligencePage.viewSourcePost")
+                  : t("intelligencePage.viewSourceArticle");
 
-                return (
-                  <article
-                    key={signal.id}
-                    className={cn(
-                      "rounded-xl border p-3 transition-colors hover:bg-command-card-elevated/50",
-                      isActive
-                        ? "border-command-teal/50 bg-command-teal/5 ring-1 ring-command-teal/25"
-                        : isRegulatory
-                          ? "border-command-orange/50 bg-command-orange/5 ring-1 ring-command-orange/20"
-                          : cfg.border,
-                    )}
-                  >
-                    <div className="flex flex-wrap items-start justify-between gap-2">
-                      <div className="min-w-0 flex-1">
-                        <div className="mb-2 flex flex-wrap items-center gap-1.5">
-                          <Icon className={cn("h-3.5 w-3.5", isRegulatory ? "text-command-orange" : cfg.color)} />
-                          <span className={cn("rounded border px-1.5 py-0.5 text-[9px] font-medium", dim.border)}>
-                            {t(`intelligencePage.dimensions.${dim.label}`)}
+              return (
+                <article
+                  key={signal.id}
+                  className={cn(
+                    "rounded-xl border p-3 transition-colors hover:bg-command-card-elevated/50",
+                    isActive
+                      ? "border-command-teal/50 bg-command-teal/5 ring-1 ring-command-teal/25"
+                      : isRegulatoryAlert
+                        ? "border-command-orange/50 bg-command-orange/5 ring-1 ring-command-orange/20"
+                        : cfg.border,
+                  )}
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="mb-2 flex flex-wrap items-center gap-1.5">
+                        <Icon className={cn("h-3.5 w-3.5", isRegulatoryAlert ? "text-command-orange" : cfg.color)} />
+                        <span className={cn("rounded border px-1.5 py-0.5 text-[9px] font-medium", kindStyle.border)}>
+                          {t(`intelligencePage.kinds.${kindStyle.label}`)}
+                        </span>
+                        {isRegulatoryRumor && (
+                          <span className="rounded border border-command-orange/40 bg-command-orange/10 px-1.5 py-0.5 text-[9px] font-medium text-command-orange">
+                            {t("intelligencePage.rumorBadge")}
                           </span>
-                          {isRegulatoryRumor && (
-                            <span className="rounded border border-command-orange/40 bg-command-orange/10 px-1.5 py-0.5 text-[9px] font-medium text-command-orange">
-                              {t("intelligencePage.rumorBadge")}
-                            </span>
-                          )}
-                          <span className="text-[10px] text-command-text-muted">{signal.date}</span>
-                          {signal.region && (
-                            <span className="text-[10px] text-command-text-muted">· {signal.region}</span>
-                          )}
-                          {signal.trend && (
-                            <TrendIcon className="h-3 w-3 text-command-text-muted" />
-                          )}
-                        </div>
-
-                        <h4 className="text-sm font-semibold text-command-text">{signal.title}</h4>
-                        <p className="mt-1 text-xs text-command-text-secondary">{signal.summary}</p>
-
-                        <div className="mt-2 flex flex-wrap gap-1">
-                          {signal.products.map((p) => (
-                            <span
-                              key={p}
-                              className="rounded border border-command-border px-1.5 py-0.5 text-[10px] text-command-teal-bright"
-                            >
-                              {p}
-                            </span>
-                          ))}
-                        </div>
-
-                        <div className="mt-2 flex flex-wrap gap-2 text-[10px] text-command-text-muted">
-                          <span>{signal.directionLabel}</span>
-                          <span>· {t(`intelligencePage.credibility.${signal.credibility}`)}</span>
-                          <span>· {t(`intelligencePage.horizon.${signal.horizon}`)}</span>
-                        </div>
+                        )}
+                        <span className="text-[10px] text-command-text-muted">{signal.date}</span>
+                        {signal.region && (
+                          <span className="text-[10px] text-command-text-muted">· {signal.region}</span>
+                        )}
+                        {signal.trend && (
+                          <TrendIcon className="h-3 w-3 text-command-text-muted" />
+                        )}
                       </div>
 
-                      <div className="flex shrink-0 flex-col items-end gap-1.5 text-[10px]">
-                        {isRegulatory && signal.regulatoryImpact !== undefined && (
+                      <h4 className="text-sm font-semibold text-command-text">{signal.title}</h4>
+                      {signal.summary.trim() && !isNewsDigest && (
+                        <p className="mt-1 text-xs text-command-text-secondary">
+                          {signal.summary}
+                        </p>
+                      )}
+
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {signal.products.map((p) => (
                           <span
-                            title={t("intelligencePage.rumorIntensityTooltip")}
-                            className="cursor-help rounded border border-command-orange/30 bg-command-orange/5 px-2 py-0.5 text-command-orange"
+                            key={p}
+                            className="rounded border border-command-border px-1.5 py-0.5 text-[10px] text-command-teal-bright"
                           >
-                            {t("intelligencePage.rumorIntensity")}{" "}
-                            {signal.regulatoryImpact > 0 ? "+" : ""}
-                            {signal.regulatoryImpact}
+                            {p}
                           </span>
-                        )}
-                        {signal.dimension === "demand" && signal.heatImpact !== undefined && (
-                          <span
-                            title={t("intelligencePage.heatTooltip")}
-                            className={cn(
-                              "cursor-help",
-                              signal.heatImpact >= 0 ? "text-command-green" : "text-command-red",
-                            )}
-                          >
-                            {t("intelligencePage.heat")} {signal.heatImpact > 0 ? "+" : ""}
-                            {signal.heatImpact}
-                          </span>
-                        )}
-                        {canPreview && (
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setPreviewSignal((current) =>
-                                current?.id === signal.id ? null : signal,
-                              )
-                            }
-                            className={cn(
-                              "rounded border px-2 py-1 text-[10px] font-medium transition-colors",
-                              isActive
-                                ? "border-command-teal/60 bg-command-teal/20 text-command-teal-bright"
-                                : "border-command-teal/40 bg-command-teal/10 text-command-teal-bright hover:bg-command-teal/20",
-                            )}
-                          >
-                            {previewLabel}
-                          </button>
-                        )}
+                        ))}
+                      </div>
+
+                      <div className="mt-2 flex flex-wrap gap-2 text-[10px] text-command-text-muted">
+                        <span>{signal.directionLabel}</span>
+                        <span>· {t(`intelligencePage.credibility.${signal.credibility}`)}</span>
+                        <span>· {t(`intelligencePage.horizon.${signal.horizon}`)}</span>
                       </div>
                     </div>
-                  </article>
-                );
-              })}
-            </div>
-          </CommandCard>
+
+                    <div className="flex shrink-0 flex-col items-end gap-1.5 text-[10px]">
+                      {isRegulatoryAlert && signal.regulatoryImpact !== undefined && (
+                        <span
+                          title={t("intelligencePage.rumorIntensityTooltip")}
+                          className="cursor-help rounded border border-command-orange/30 bg-command-orange/5 px-2 py-0.5 text-command-orange"
+                        >
+                          {t("intelligencePage.rumorIntensity")}{" "}
+                          {signal.regulatoryImpact > 0 ? "+" : ""}
+                          {signal.regulatoryImpact}
+                        </span>
+                      )}
+                      {signal.kind === "product_heat" && signal.heatImpact !== undefined && (
+                        <span
+                          title={t("intelligencePage.heatTooltip")}
+                          className={cn(
+                            "cursor-help",
+                            signal.heatImpact >= 0 ? "text-command-green" : "text-command-red",
+                          )}
+                        >
+                          {t("intelligencePage.heat")} {signal.heatImpact > 0 ? "+" : ""}
+                          {signal.heatImpact}
+                        </span>
+                      )}
+                      {canPreview && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setPreviewSignal((current) =>
+                              current?.id === signal.id ? null : signal,
+                            )
+                          }
+                          className={cn(
+                            "rounded border px-2 py-1 text-[10px] font-medium transition-colors",
+                            isActive
+                              ? "border-command-teal/60 bg-command-teal/20 text-command-teal-bright"
+                              : "border-command-teal/40 bg-command-teal/10 text-command-teal-bright hover:bg-command-teal/20",
+                          )}
+                        >
+                          {previewLabel}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
         </div>
 
         {panelOpen && previewSignal && (
@@ -418,12 +497,14 @@ export default function IntelligencePage() {
               )}
             >
               <SourcePreviewPanel
-                signals={dateSignals}
+                signals={windowSignals}
                 signal={previewSignal}
                 post={previewPost}
                 relatedPosts={previewRelatedPosts}
                 loading={postLoading && !postCache}
-                dateLabel={selectedDate}
+                dateLabel={windowLabel}
+                dateMode={dateMode}
+                headerClassName={alignHeaderClass}
                 onSelect={setPreviewSignal}
                 onClose={() => setPreviewSignal(null)}
               />
