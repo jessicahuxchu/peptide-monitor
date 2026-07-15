@@ -142,6 +142,13 @@ export const APIFY_GOOGLE_NEWS_ACTOR_DEFAULT = "crawlerbros/google-news-scraper"
 /** Max articles per Google News query (MVP cost control). */
 export const GOOGLE_NEWS_MAX_PER_QUERY = 12;
 
+/**
+ * Apify Google News recency window. Keep `7d` so re-scrapes can refresh
+ * `posted_at` for recent articles; intelligence still files each article under
+ * its real publish day (not the scrape day).
+ */
+export const GOOGLE_NEWS_DATE_RANGE = "7d";
+
 /** 7d volume threshold to promote non-regulatory product news. */
 export const GOOGLE_NEWS_MIN_MENTIONS_7D = 3;
 

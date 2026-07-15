@@ -58,6 +58,32 @@ function matchPostByUrl(posts: SocialPost[], url: string): SocialPost | null {
   );
 }
 
+/** Volume digests only store one representative URL — expand to related articles. */
+function relatedPostsForVolumeDigest(
+  posts: SocialPost[],
+  signal: IntelSignal,
+): SocialPost[] {
+  if (!signal.id.startsWith("news-legal-vol-")) return [];
+  const product = signal.products[0];
+  if (!product) return [];
+
+  const end = new Date(`${signal.date}T23:59:59.999Z`).getTime();
+  const start = end - 7 * 24 * 60 * 60 * 1000;
+
+  return posts
+    .filter((p) => {
+      if (p.platform !== "google_news") return false;
+      if (!p.products.includes(product)) return false;
+      const t = new Date(p.postedAt).getTime();
+      if (Number.isNaN(t)) return false;
+      return t >= start && t <= end;
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime(),
+    );
+}
+
 export default function IntelligencePage() {
   const t = useTranslations();
   const { data, loading, usingDb } = useDbResource("/api/intelligence", intelligenceFallback);
@@ -126,6 +152,11 @@ export default function IntelligencePage() {
   const previewPost = useMemo(() => {
     if (!previewSignal?.url || !postCache) return null;
     return matchPostByUrl(postCache, previewSignal.url);
+  }, [previewSignal, postCache]);
+
+  const previewRelatedPosts = useMemo(() => {
+    if (!previewSignal || !postCache) return [];
+    return relatedPostsForVolumeDigest(postCache, previewSignal);
   }, [previewSignal, postCache]);
 
   const filteredSignals =
@@ -259,7 +290,9 @@ export default function IntelligencePage() {
                 const Icon = cfg.icon;
                 const dim = dimensionStyles[signal.dimension];
                 const TrendIcon = signal.trend ? trendIcon[signal.trend] : Minus;
-                const isRegulatoryRumor = signal.dimension === "regulatory";
+                const isRegulatory = signal.dimension === "regulatory";
+                const isRegulatoryRumor =
+                  isRegulatory && signal.source === "social";
                 const canPreview = Boolean(signal.url);
                 const isActive = previewSignal?.id === signal.id;
                 const previewLabel =
@@ -274,7 +307,7 @@ export default function IntelligencePage() {
                       "rounded-xl border p-3 transition-colors hover:bg-command-card-elevated/50",
                       isActive
                         ? "border-command-teal/50 bg-command-teal/5 ring-1 ring-command-teal/25"
-                        : isRegulatoryRumor
+                        : isRegulatory
                           ? "border-command-orange/50 bg-command-orange/5 ring-1 ring-command-orange/20"
                           : cfg.border,
                     )}
@@ -282,7 +315,7 @@ export default function IntelligencePage() {
                     <div className="flex flex-wrap items-start justify-between gap-2">
                       <div className="min-w-0 flex-1">
                         <div className="mb-2 flex flex-wrap items-center gap-1.5">
-                          <Icon className={cn("h-3.5 w-3.5", isRegulatoryRumor ? "text-command-orange" : cfg.color)} />
+                          <Icon className={cn("h-3.5 w-3.5", isRegulatory ? "text-command-orange" : cfg.color)} />
                           <span className={cn("rounded border px-1.5 py-0.5 text-[9px] font-medium", dim.border)}>
                             {t(`intelligencePage.dimensions.${dim.label}`)}
                           </span>
@@ -322,7 +355,7 @@ export default function IntelligencePage() {
                       </div>
 
                       <div className="flex shrink-0 flex-col items-end gap-1.5 text-[10px]">
-                        {isRegulatoryRumor && signal.regulatoryImpact !== undefined && (
+                        {isRegulatory && signal.regulatoryImpact !== undefined && (
                           <span
                             title={t("intelligencePage.rumorIntensityTooltip")}
                             className="cursor-help rounded border border-command-orange/30 bg-command-orange/5 px-2 py-0.5 text-command-orange"
@@ -388,6 +421,7 @@ export default function IntelligencePage() {
                 signals={dateSignals}
                 signal={previewSignal}
                 post={previewPost}
+                relatedPosts={previewRelatedPosts}
                 loading={postLoading && !postCache}
                 dateLabel={selectedDate}
                 onSelect={setPreviewSignal}

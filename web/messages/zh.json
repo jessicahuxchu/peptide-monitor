@@ -460,7 +460,7 @@
     "regulatoryRumor": "监管传闻",
     "rumorBadge": "传闻 · 未证实",
     "rumorIntensity": "关注度",
-    "rumorIntensityTooltip": "关键词命中强度（用于排序与高亮），不是合规矩阵分值",
+    "rumorIntensityTooltip": "监管相关信号的关注强度（用于排序与高亮），不是合规矩阵分值",
     "matrixDelta": "关注度",
     "confirmToMatrix": "查看原文 →",
     "viewSourceArticle": "查看原文 →",
@@ -473,6 +473,9 @@
     "previewNoBody": "暂无正文摘要",
     "previewFallback": "未在库中匹配到完整帖子，先展示情报摘要。",
     "previewOpenExternal": "在新标签打开原文",
+    "previewWeakLink": "原链接只到网站首页，无法定位具体文章（多为 SEO 聚合站）。",
+    "previewVolumeList": "近 7 日相关报道（{count}）",
+    "previewVolumeEmpty": "暂未匹配到库内相关报道列表。",
     "sourceBreakdown": "来源分布",
     "dimensions": {
       "demand": "需求侧",

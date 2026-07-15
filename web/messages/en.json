@@ -452,7 +452,7 @@
     "regulatoryRumor": "Regulatory rumors",
     "rumorBadge": "Rumor · unverified",
     "rumorIntensity": "Attention",
-    "rumorIntensityTooltip": "Keyword-hit intensity for ranking/highlight only — not a compliance matrix score",
+    "rumorIntensityTooltip": "Attention intensity for regulatory-related signals (ranking/highlight only) — not a compliance matrix score",
     "matrixDelta": "Attention",
     "confirmToMatrix": "View article →",
     "viewSourceArticle": "View article →",
@@ -465,6 +465,9 @@
     "previewNoBody": "No body text available",
     "previewFallback": "No matching stored post — showing the signal summary.",
     "previewOpenExternal": "Open original in new tab",
+    "previewWeakLink": "Stored link is only a site homepage — no specific article URL (often SEO farms).",
+    "previewVolumeList": "Related coverage (7d · {count})",
+    "previewVolumeEmpty": "No matching stored articles for this digest yet.",
     "sourceBreakdown": "Source breakdown",
     "dimensions": {
       "demand": "Demand",

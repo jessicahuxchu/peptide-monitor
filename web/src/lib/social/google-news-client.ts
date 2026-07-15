@@ -2,6 +2,7 @@ import { createHash } from "crypto";
 import {
   APIFY_GOOGLE_NEWS_ACTOR_DEFAULT,
   BODY_MAX_CHARS,
+  GOOGLE_NEWS_DATE_RANGE,
   GOOGLE_NEWS_MAX_PER_QUERY,
   GOOGLE_NEWS_QUERIES,
   SCAN_LOOKBACK_DAYS,
@@ -17,6 +18,7 @@ import {
   hasRegulatoryKeyword,
   matchProducts,
 } from "./matcher";
+import { isConcreteArticleUrl, unwrapGoogleNewsUrl } from "./news-url";
 import type { GoogleNewsFetchResult, NormalizedSocialPost } from "./types";
 
 interface ApifyGoogleNewsItem {
@@ -24,6 +26,9 @@ interface ApifyGoogleNewsItem {
   title?: string;
   url?: string;
   link?: string;
+  articleUrl?: string;
+  sourceUrl?: string;
+  redirectUrl?: string;
   source?: string;
   domain?: string;
   publishedAt?: string;
@@ -47,7 +52,7 @@ function buildGoogleNewsInput() {
     maxResultsPerQuery: GOOGLE_NEWS_MAX_PER_QUERY,
     language: "en",
     country: "US",
-    dateRange: "7d",
+    dateRange: GOOGLE_NEWS_DATE_RANGE,
     extractFullText: false,
     includeImages: false,
   };
@@ -58,8 +63,24 @@ function stableUrlHash(url: string): string {
 }
 
 function articleUrl(item: ApifyGoogleNewsItem): string {
-  const raw = (item.url || item.link || "").trim();
-  return raw.startsWith("http") ? raw : "";
+  const candidates = [
+    item.articleUrl,
+    item.sourceUrl,
+    item.url,
+    item.link,
+    item.redirectUrl,
+  ]
+    .map((v) => (typeof v === "string" ? unwrapGoogleNewsUrl(v) : ""))
+    .filter((v) => v.startsWith("http"));
+
+  // Prefer the most path-specific candidate that looks like an article.
+  const ranked = [...candidates].sort(
+    (a, b) => b.replace(/\/+$/, "").length - a.replace(/\/+$/, "").length,
+  );
+  for (const candidate of ranked) {
+    if (isConcreteArticleUrl(candidate)) return candidate;
+  }
+  return "";
 }
 
 function mentionsPeptide(text: string): boolean {
@@ -69,6 +90,45 @@ function mentionsPeptide(text: string): boolean {
 function withinLookback(postedAt: string, days: number): boolean {
   const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
   return new Date(postedAt).getTime() >= cutoff;
+}
+
+/**
+ * Parse Google News publish time into ISO. Never falls back to “now”
+ * (that would mis-file older articles under the scrape day).
+ */
+export function parseGoogleNewsPublishedAt(
+  raw?: string | null,
+): string | null {
+  if (!raw?.trim()) return null;
+  const s = raw.trim();
+
+  const relative = s.match(
+    /^(\d+)\s+(minute|minutes|min|hour|hours|hr|hrs|day|days|week|weeks)\s+ago$/i,
+  );
+  if (relative) {
+    const n = Number(relative[1]);
+    const unit = relative[2].toLowerCase();
+    const ms =
+      unit.startsWith("min")
+        ? n * 60_000
+        : unit.startsWith("hour") || unit.startsWith("hr")
+          ? n * 3_600_000
+          : unit.startsWith("day")
+            ? n * 86_400_000
+            : n * 7 * 86_400_000;
+    return new Date(Date.now() - ms).toISOString();
+  }
+
+  if (/^yesterday$/i.test(s)) {
+    return new Date(Date.now() - 86_400_000).toISOString();
+  }
+  if (/^today$/i.test(s)) {
+    return new Date().toISOString();
+  }
+
+  const parsed = Date.parse(s);
+  if (!Number.isNaN(parsed)) return new Date(parsed).toISOString();
+  return null;
 }
 
 export function normalizeGoogleNewsItem(
@@ -85,10 +145,11 @@ export function normalizeGoogleNewsItem(
   const products = matchProducts(text);
   if (products.length === 0 && !mentionsPeptide(text)) return null;
 
-  const postedRaw = item.publishedAt || item.date;
-  const postedAt = postedRaw
-    ? new Date(postedRaw).toISOString()
-    : new Date().toISOString();
+  const postedAt = parseGoogleNewsPublishedAt(
+    item.publishedAt || item.date,
+  );
+  // Without a real publish time we refuse the item — avoid labeling crawl day as publish day.
+  if (!postedAt) return null;
 
   const externalId = stableUrlHash(url);
   const publisher = (item.source || item.domain || "").trim();

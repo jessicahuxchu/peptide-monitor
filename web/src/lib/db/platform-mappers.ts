@@ -180,7 +180,9 @@ export function mapIntelSignal(row: SignalRow): IntelSignal {
     dimension = "competitive";
   }
 
-  const isRegulatoryRumor = dimension === "regulatory";
+  const isRegulatory = dimension === "regulatory";
+  // Only social chatter is unlabeled rumor; news is coverage, not enacted-law fact.
+  const isRegulatoryRumor = isRegulatory && source === "social";
 
   return {
     id: row.id,
@@ -197,20 +199,16 @@ export function mapIntelSignal(row: SignalRow): IntelSignal {
           ? "Social · regulatory chatter"
           : "Social · demand heat"
         : source === "news_legal"
-          ? isRegulatoryRumor
-            ? "News · regulatory rumor"
+          ? isRegulatory
+            ? "News · regulatory coverage"
             : "News · coverage heat"
-          : isRegulatoryRumor
-            ? "Regulatory chatter · unverified"
+          : isRegulatory
+            ? "Regulatory coverage"
             : "Market signal",
     // Intelligence never auto-links to the compliance matrix (enacted law only).
     pendingMatrixUpdate: false,
     credibility:
-      source === "news_legal"
-        ? isRegulatoryRumor
-          ? "medium"
-          : "high"
-        : "medium",
+      source === "news_legal" ? "high" : "medium",
     horizon: source === "social" ? "immediate" : "weeks",
     heatImpact,
     regulatoryImpact,

@@ -15,6 +15,7 @@ import {
   startApifyGoogleNewsRun,
 } from "./google-news-client";
 import { pickRepresentativePost, postCountsForProduct } from "./matcher";
+import { isConcreteArticleUrl } from "./news-url";
 import type { NormalizedSocialPost } from "./types";
 
 type SocialPostInsert = Database["public"]["Tables"]["social_posts"]["Insert"];
@@ -47,6 +48,12 @@ export interface GoogleNewsScanResult {
 
 function todayUtcDate(): string {
   return new Date().toISOString().slice(0, 10);
+}
+
+function utcDateFromIso(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return todayUtcDate();
+  return d.toISOString().slice(0, 10);
 }
 
 function productSlug(product: string): string {
@@ -105,7 +112,6 @@ function rowToNormalizedPost(
 
 function buildRegulatorySignals(
   posts: NormalizedSocialPost[],
-  signalDate: string,
 ): SignalInsert[] {
   const signals: SignalInsert[] = [];
 
@@ -118,6 +124,8 @@ function buildRegulatorySignals(
     if (!product) continue;
 
     const slug = productSlug(product);
+    // File under the article’s publish day — never the scrape day.
+    const signalDate = utcDateFromIso(post.postedAt);
     signals.push({
       id: `news-legal-${slug}-${signalDate}-${post.externalId.slice(0, 8)}`,
       source: "news_legal",
@@ -125,6 +133,7 @@ function buildRegulatorySignals(
       summary: [
         post.body || post.title,
         post.subreddit ? `来源：${post.subreddit}。` : null,
+        `发布于：${signalDate}。`,
         "触发规则：regulatory_keyword。",
       ]
         .filter(Boolean)
@@ -186,9 +195,10 @@ async function promoteNewsSignals(
   supabase: ReturnType<typeof createServiceClient>,
   posts: NormalizedSocialPost[],
 ): Promise<{ signalsUpserted: number; productStats: GoogleNewsScanResult["productStats"] }> {
-  const signalDate = todayUtcDate();
-  const regulatory = buildRegulatorySignals(posts, signalDate);
-  const volume = buildVolumeSignals(posts, signalDate);
+  const crawlDate = todayUtcDate();
+  const regulatory = buildRegulatorySignals(posts);
+  // Volume digests are a crawl-day rollup over the last 7 days of stored posts.
+  const volume = buildVolumeSignals(posts, crawlDate);
 
   // Prefer regulatory over volume for same product: drop volume ids when regulatory exists
   const regulatoryProducts = new Set(
@@ -200,6 +210,38 @@ async function promoteNewsSignals(
   });
 
   const signals = [...regulatory, ...filteredVolume];
+  const keepIds = new Set(signals.map((s) => s.id));
+
+  // Drop stale article-level signals that used the scrape day instead of publish day
+  // (same article hash suffix, different date in the id). Never delete volume digests.
+  const suffixes = [
+    ...new Set(posts.map((p) => p.externalId.slice(0, 8)).filter(Boolean)),
+  ];
+  if (suffixes.length > 0) {
+    const { data: existing, error: listErr } = await supabase
+      .from("intelligence_signals")
+      .select("id")
+      .eq("source", "news_legal")
+      .like("id", "news-legal-%");
+    if (listErr) throw listErr;
+
+    const toDelete = (existing ?? [])
+      .map((row) => row.id)
+      .filter((id) => {
+        if (id.startsWith("news-legal-vol-")) return false;
+        if (keepIds.has(id)) return false;
+        return suffixes.some((suf) => id.endsWith(`-${suf}`));
+      });
+
+    if (toDelete.length > 0) {
+      const { error: delErr } = await supabase
+        .from("intelligence_signals")
+        .delete()
+        .in("id", toDelete);
+      if (delErr) throw delErr;
+    }
+  }
+
   if (signals.length > 0) {
     const { error } = await supabase
       .from("intelligence_signals")
@@ -253,7 +295,10 @@ async function ingestGoogleNewsPosts(
     .gte("posted_at", since);
   if (readErr) throw readErr;
 
-  const normalized = (dbPosts ?? []).map(rowToNormalizedPost);
+  const normalized = (dbPosts ?? [])
+    .map(rowToNormalizedPost)
+    // Drop homepage-only “articles” (e.g. SEO farms resolving to news36 root).
+    .filter((p) => isConcreteArticleUrl(p.url));
   const { signalsUpserted, productStats } = await promoteNewsSignals(
     supabase,
     normalized,
