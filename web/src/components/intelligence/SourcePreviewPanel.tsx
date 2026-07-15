@@ -37,7 +37,6 @@ function resolveBody(title: string, body: string | null | undefined): string | n
   const bl = b.toLowerCase();
   if (bl === tl) return null;
   if (bl.includes(tl) || tl.includes(bl)) {
-    // Nearly the same SEO title repeated as snippet — treat as no body.
     const shorter = Math.min(tl.length, bl.length);
     const longer = Math.max(tl.length, bl.length);
     if (shorter > 0 && shorter / longer >= 0.7) return null;
@@ -92,20 +91,13 @@ export function SourcePreviewPanel({
   const displayBody = post ? postBody : signalBody;
   const hasFullBody = Boolean(displayBody);
   const showFallbackHint = !loading && !post && !hasFullBody && !isNewsDigest;
-  const previewExpands =
-    hasFullBody || (isNewsDigest && relatedPosts.length > 0);
 
   useEffect(() => {
     activeItemRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }, [signal.id]);
 
   return (
-    <aside
-      className={cn(
-        "flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-command-border bg-command-card-elevated",
-        "lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)]",
-      )}
-    >
+    <aside className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-command-border bg-command-card-elevated">
       <div
         className={cn(
           "justify-between gap-2 border-b border-command-border px-3",
@@ -131,13 +123,8 @@ export function SourcePreviewPanel({
         </button>
       </div>
 
-      {/* Day list — grows when preview is short (no body) */}
-      <div
-        className={cn(
-          "min-h-0 overflow-y-auto border-b border-command-border",
-          previewExpands ? "flex-[2]" : "flex-1",
-        )}
-      >
+      {/* Compact signal index — capped so the detail pane owns most of the height */}
+      <div className="min-h-0 max-h-[28%] shrink-0 overflow-y-auto border-b border-command-border">
         {signals.length === 0 ? (
           <p className="px-3 py-4 text-xs text-command-text-muted">
             {t("summaryEmpty")}
@@ -159,13 +146,13 @@ export function SourcePreviewPanel({
                     ref={active ? activeItemRef : undefined}
                     onClick={() => onSelect(item)}
                     className={cn(
-                      "w-full px-3 py-2.5 text-left transition-colors",
+                      "w-full px-3 py-2 text-left transition-colors",
                       active
                         ? "bg-command-teal/10"
                         : "hover:bg-command-card",
                     )}
                   >
-                    <div className="mb-1 flex flex-wrap items-center gap-1.5">
+                    <div className="mb-0.5 flex flex-wrap items-center gap-1.5">
                       <span
                         className={cn(
                           "rounded border px-1 py-0.5 text-[9px] font-medium",
@@ -192,7 +179,7 @@ export function SourcePreviewPanel({
                     </div>
                     <p
                       className={cn(
-                        "line-clamp-2 text-[11px] leading-snug",
+                        "line-clamp-1 text-[11px] leading-snug",
                         active
                           ? "font-medium text-command-text"
                           : "text-command-text-secondary",
@@ -208,14 +195,9 @@ export function SourcePreviewPanel({
         )}
       </div>
 
-      {/* Preview — content-sized when empty; expands when there is a body / volume list */}
-      <div
-        className={cn(
-          "flex flex-col border-t border-command-border/0",
-          previewExpands ? "min-h-0 flex-[3] overflow-y-auto" : "shrink-0",
-        )}
-      >
-        <div className="shrink-0 px-3 pt-2.5">
+      {/* Detail / source — majority of panel height */}
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+        <div className="shrink-0 px-3 pt-3">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-command-text-muted">
             {isNewsDigest
               ? t("previewVolumeList", { count: relatedPosts.length || "—" })
@@ -225,25 +207,25 @@ export function SourcePreviewPanel({
           </p>
         </div>
 
-        <div className="space-y-2.5 px-3 py-2.5">
+        <div className="space-y-3 px-3 py-3">
           {loading && (
             <p className="text-xs text-command-text-muted">{t("previewLoading")}</p>
           )}
 
           {!loading && isNewsDigest && (
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {relatedPosts.length === 0 ? (
                 <p className="text-xs text-command-text-muted">
                   {t("previewVolumeEmpty")}
                 </p>
               ) : (
-                <ul className="space-y-2">
+                <ul className="space-y-2.5">
                   {relatedPosts.map((item) => {
                     const linkOk = isConcreteArticleUrl(item.url);
                     return (
                       <li
                         key={item.id}
-                        className="rounded-lg border border-command-border/70 bg-command-card/40 p-2.5"
+                        className="rounded-lg border border-command-border/70 bg-command-card/40 p-3"
                       >
                         <div className="mb-1 flex flex-wrap items-center gap-1.5 text-[10px] text-command-text-muted">
                           {item.subreddit && (
@@ -251,18 +233,18 @@ export function SourcePreviewPanel({
                           )}
                           <span>{formatDate(item.postedAt, locale)}</span>
                         </div>
-                        <p className="text-[11px] font-medium leading-snug text-command-text">
+                        <p className="text-xs font-medium leading-snug text-command-text">
                           {item.title}
                         </p>
                         {linkOk ? (
-                          <div className="mt-1.5">
+                          <div className="mt-2">
                             <ExternalLinkRow
                               href={item.url}
                               label={t("previewOpenExternal")}
                             />
                           </div>
                         ) : (
-                          <p className="mt-1.5 text-[10px] text-command-orange/90">
+                          <p className="mt-2 text-[10px] text-command-orange/90">
                             {t("previewWeakLink")}
                           </p>
                         )}
@@ -311,7 +293,7 @@ export function SourcePreviewPanel({
               </h3>
 
               {hasFullBody ? (
-                <p className="whitespace-pre-wrap text-xs leading-relaxed text-command-text-secondary">
+                <p className="whitespace-pre-wrap text-sm leading-relaxed text-command-text-secondary">
                   {displayBody}
                 </p>
               ) : (
@@ -321,7 +303,7 @@ export function SourcePreviewPanel({
               )}
 
               {post?.hasRegulatory && post.regulatoryReason && (
-                <p className="rounded-lg border border-command-orange/25 bg-command-orange/5 p-2 text-[11px] text-command-orange/90">
+                <p className="rounded-lg border border-command-orange/25 bg-command-orange/5 p-2.5 text-[11px] text-command-orange/90">
                   {post.regulatoryReason}
                 </p>
               )}
@@ -340,12 +322,12 @@ export function SourcePreviewPanel({
               )}
 
               {externalUrl && articleLinkOk && (
-                <div className="pt-0.5">
+                <div className="pt-1">
                   <ExternalLinkRow href={externalUrl} label={t("previewOpenExternal")} />
                 </div>
               )}
               {externalUrl && !articleLinkOk && (
-                <p className="pt-0.5 text-[11px] text-command-orange/90">
+                <p className="pt-1 text-[11px] text-command-orange/90">
                   {t("previewWeakLink")}
                 </p>
               )}

@@ -224,14 +224,14 @@ export default function IntelligencePage() {
       : anchorDate ?? "";
 
   return (
-    <div className="w-full max-w-full overflow-x-hidden p-4 md:p-6">
+    <div className="w-full max-w-full p-4 md:p-6">
       <div
         className={cn(
           "gap-4",
-          panelOpen ? "lg:grid lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start" : "block",
+          panelOpen ? "lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(22rem,28rem)] lg:items-start" : "block",
         )}
       >
-        <div className="min-w-0 space-y-4">
+        <div className={cn("min-w-0 space-y-4", panelOpen && "lg:min-w-0")}>
           {availableDates.length > 0 && (
             <div
               className={cn(
@@ -488,10 +488,16 @@ export default function IntelligencePage() {
               onClick={() => setPreviewSignal(null)}
               aria-hidden
             />
+            {/*
+              Desktop: fixed viewport dock so the panel stays visible while the
+              left list scrolls. Sticky is unreliable under AppShell overflow-x.
+            */}
             <div
               className={cn(
                 "z-50 min-h-0",
-                "fixed inset-y-0 right-0 w-[min(100%,22rem)] p-3 lg:static lg:w-auto lg:p-0",
+                "fixed inset-y-0 right-0 w-[min(100%,22rem)] p-3",
+                // Below sticky header (h-14); keep panel in viewport while left column scrolls.
+                "lg:sticky lg:top-[4.5rem] lg:inset-auto lg:right-auto lg:z-auto lg:h-[calc(100vh-5.5rem)] lg:w-auto lg:self-start lg:p-0",
               )}
             >
               <SourcePreviewPanel

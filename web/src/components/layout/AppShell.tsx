@@ -19,7 +19,7 @@ export function AppShell({ children }: Props) {
   return (
     <>
       <Header />
-      <main className="w-full max-w-full overflow-x-hidden">{children}</main>
+      <main className="w-full max-w-full">{children}</main>
     </>
   );
 }
